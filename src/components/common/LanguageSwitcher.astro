@@ -1,0 +1,30 @@
+---
+// src/components/common/LanguageSwitcher.astro
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { languages, type Language } from "../../utils/i18n";
+
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const altLang: Language = lang === "en" ? "ru" : "en";
+
+// Use the current pathname; the helper applies base and locale rules
+const altUrl = getRelativeLocaleUrl(altLang, Astro.url.pathname);
+---
+
+<a
+  href={altUrl}
+  class="relative p-2 rounded-lg bg-light-elevated dark:bg-dark-elevated text-light-text dark:text-dark-text hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 flex items-center gap-2 text-sm font-medium"
+  aria-label={`Switch to ${languages[altLang]}`}
+>
+  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+    ></path>
+  </svg>
+  <span class="hidden sm:inline">{altLang.toUpperCase()}</span>
+</a>

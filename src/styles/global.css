@@ -1,0 +1,306 @@
+/* src/styles/global.css */
+@import "tailwindcss";
+
+/* 2) Load fonts via HTML instead of CSS @import to silence PostCSS warning
+   Add this to <head> in BaseLayout.astro instead of @import in CSS:
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+*/
+
+/* 3) Theme tokens create valid utilities like bg-light-bg, text-dark-text, etc. */
+@theme {
+    --color-primary-50: #f0f9ff;
+    --color-primary-100: #e0f2fe;
+    --color-primary-200: #bae6fd;
+    --color-primary-300: #7dd3fc;
+    --color-primary-400: #38bdf8;
+    --color-primary-500: #0ea5e9;
+    --color-primary-600: #0284c7;
+    --color-primary-700: #0369a1;
+    --color-primary-800: #075985;
+    --color-primary-900: #0c4a6e;
+    --color-primary-950: #082f49;
+
+    --color-accent-50: #fdf4ff;
+    --color-accent-100: #fae8ff;
+    --color-accent-200: #f5d0fe;
+    --color-accent-300: #f0abfc;
+    --color-accent-400: #e879f9;
+    --color-accent-500: #d946ef;
+    --color-accent-600: #c026d3;
+    --color-accent-700: #a21caf;
+    --color-accent-800: #86198f;
+    --color-accent-900: #701a75;
+
+    --color-light-bg: #ffffff;
+    --color-light-surface: #f9fafb;
+    --color-light-elevated: #f3f4f6;
+    --color-light-border: #e5e7eb;
+    --color-light-text: #111827;
+    --color-light-text-muted: #6b7280;
+
+    --color-dark-bg: #0a0a0a;
+    --color-dark-surface: #111111;
+    --color-dark-elevated: #1a1a1a;
+    --color-dark-border: #2a2a2a;
+    --color-dark-text: #e5e5e5;
+    --color-dark-text-muted: #a3a3a3;
+}
+
+/* 4) Register the `.link` utility (optional) */
+@utility link {
+    color: var(--color-primary-600);
+    text-decoration-line: underline;
+    text-decoration-color: var(--color-primary-300);
+    text-underline-offset: 4px;
+    transition: color 200ms, text-decoration-color 200ms;
+}
+
+@variant hover {
+    .link {
+        color: var(--color-primary-700);
+    }
+}
+
+@variant dark {
+    .link {
+        color: var(--color-primary-400);
+        text-decoration-color: var(--color-primary-700);
+    }
+}
+
+@variant dark {
+    .link:hover {
+        color: var(--color-primary-300);
+    }
+}
+
+/* 5) If you referenced a custom background pattern class, define it as a utility */
+@layer utilities {
+    .bg-grid-pattern {
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+}
+
+/* For prose content, do not @apply link — just target anchors directly */
+.prose a {
+    @apply text-primary-600 underline decoration-primary-300 underline-offset-4 transition-colors duration-200;
+}
+
+@variant dark {
+    .prose a {
+        @apply text-primary-400 decoration-primary-700;
+    }
+}
+
+.prose a:hover {
+    @apply text-primary-700;
+}
+
+@variant dark {
+    .prose a:hover {
+        @apply text-primary-300;
+    }
+}
+
+
+@layer base {
+
+    /* Root variables */
+    :root {
+        --transition-speed: 200ms;
+    }
+
+    /* Smooth scrolling */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Base body styles */
+    body {
+        @apply bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text;
+        @apply transition-colors duration-200;
+        @apply antialiased;
+        font-family: var(--font-sans);
+        font-feature-settings: 'cv11', 'ss01';
+    }
+
+    /* Selection styles */
+    ::selection {
+        @apply bg-primary-500/20 text-primary-700 dark:text-primary-300;
+    }
+
+    /* Scrollbar styles */
+    ::-webkit-scrollbar {
+        @apply w-2;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply bg-light-surface dark:bg-dark-surface;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-light-border dark:bg-dark-border rounded-full;
+        @apply hover:bg-primary-500/50;
+    }
+}
+
+@layer components {
+
+    /* Container utility */
+    .container-custom {
+        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    }
+
+    /* Gradient text effect */
+    .gradient-text {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-accent-600;
+    }
+
+    /* Glass morphism effect */
+    .glass {
+        @apply bg-white/80 dark:bg-dark-elevated/80 backdrop-blur-xl;
+        @apply border border-light-border/50 dark:border-dark-border/50;
+    }
+
+    /* Card styles */
+    .card {
+        @apply bg-light-surface dark:bg-dark-surface;
+        @apply border border-light-border dark:border-dark-border;
+        @apply rounded-2xl p-6;
+        @apply transition-all duration-200;
+    }
+
+    .card-hover {
+        @apply hover:scale-[1.02];
+        @apply hover:border-primary-500/50;
+        box-shadow: 0 2px 8px -2px rgb(0 0 0 / 0.05);
+    }
+
+    .card-hover:hover {
+        box-shadow: var(--shadow-soft);
+    }
+
+    .dark .card-hover:hover {
+        box-shadow: var(--shadow-glow);
+    }
+
+    /* Button styles */
+    .btn {
+        @apply inline-flex items-center justify-center;
+        @apply px-6 py-3 rounded-xl;
+        @apply font-medium text-sm;
+        @apply transition-all duration-200;
+        @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+        @apply disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .btn-primary {
+        @apply bg-primary-600 text-white;
+        @apply hover:bg-primary-700;
+        @apply dark:bg-primary-500 dark:hover:bg-primary-600;
+    }
+
+    .btn-secondary {
+        @apply bg-light-elevated dark:bg-dark-elevated;
+        @apply text-light-text dark:text-dark-text;
+        @apply border border-light-border dark:border-dark-border;
+        @apply hover:border-primary-500;
+    }
+
+    /* Section title */
+    .section-title {
+        @apply text-3xl md:text-4xl font-bold;
+        @apply text-light-text dark:text-dark-text;
+        @apply mb-8;
+    }
+
+    /* Badge styles */
+    .badge {
+        @apply inline-flex items-center;
+        @apply px-3 py-1 rounded-full;
+        @apply text-xs font-medium;
+        @apply bg-primary-100 dark:bg-primary-900/30;
+        @apply text-primary-700 dark:text-primary-300;
+        @apply border border-primary-200 dark:border-primary-800;
+    }
+
+    /* Link styles */
+    .link {
+        @apply text-primary-600 dark:text-primary-400;
+        @apply hover:text-primary-700 dark:hover:text-primary-300;
+        @apply underline decoration-primary-300 dark:decoration-primary-700;
+        @apply underline-offset-4;
+        @apply transition-colors duration-200;
+    }
+
+    /* Timeline connector */
+    .timeline-line {
+        @apply absolute left-0 top-0 bottom-0 w-0.5;
+        @apply bg-gradient-to-b from-primary-500 to-accent-500;
+        @apply opacity-20;
+    }
+}
+
+@layer utilities {
+
+    /* Custom background pattern */
+    .bg-grid-pattern {
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    /* Text gradients */
+    .text-gradient-primary {
+        @apply bg-clip-text text-transparent;
+        @apply bg-gradient-to-r from-primary-600 via-primary-500 to-accent-600;
+    }
+
+    .text-gradient-accent {
+        @apply bg-clip-text text-transparent;
+        @apply bg-gradient-to-r from-accent-600 to-primary-600;
+    }
+
+    /* Animations */
+    .animate-on-scroll {
+        @apply opacity-0 translate-y-8;
+        @apply transition-all duration-700 ease-out;
+    }
+
+    .animate-on-scroll.visible {
+        @apply opacity-100 translate-y-0;
+    }
+}
+
+/* Prose (typography) customization for markdown */
+.prose {
+    @apply max-w-none;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+    @apply text-light-text dark:text-dark-text;
+}
+
+.prose p {
+    @apply text-light-text-muted dark:text-dark-text-muted;
+}
+
+.prose a {
+    @apply link;
+}
+
+.prose code {
+    @apply px-1.5 py-0.5 rounded;
+    @apply bg-light-elevated dark:bg-dark-elevated;
+    @apply text-primary-600 dark:text-primary-400;
+    @apply text-sm font-mono;
+}
+
+.prose pre {
+    @apply bg-dark-surface;
+    @apply border border-dark-border;
+    @apply rounded-xl;
+}

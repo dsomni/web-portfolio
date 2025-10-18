@@ -1,0 +1,184 @@
+---
+import { ClientRouter } from "astro:transitions";
+import Header from "../components/common/Header.astro";
+import Footer from "../components/common/Footer.astro";
+import "../styles/global.css";
+
+export interface Props {
+  title: string;
+  description?: string;
+  lang?: "en" | "ru";
+}
+
+const {
+  title,
+  description = "ML Engineer & Data Scientist specializing in AI, Deep Reinforcement Learning, and Mathematical Optimization",
+  lang = "en",
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#0ea5e9" />
+
+    <!-- CRITICAL: Theme initialization BEFORE any rendering -->
+    <script is:inline>
+      // Run before any paint
+      (function () {
+        function getTheme() {
+          if (typeof localStorage !== "undefined") {
+            const stored = localStorage.getItem("theme");
+            if (stored) return stored;
+          }
+          return window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        }
+
+        function applyTheme(theme) {
+          const root = document.documentElement;
+          if (theme === "dark") {
+            root.classList.add("dark");
+          } else {
+            root.classList.remove("dark");
+          }
+        }
+
+        // Apply immediately
+        const theme = getTheme();
+        applyTheme(theme);
+
+        // Store for consistency
+        try {
+          localStorage.setItem("theme", theme);
+        } catch (e) {
+          console.warn("localStorage not available");
+        }
+      })();
+    </script>
+
+    <!-- View Transitions -->
+    <ClientRouter />
+  </head>
+
+  <body
+    class="min-h-screen bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text transition-colors duration-200"
+  >
+    <!-- Background decorations -->
+    <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+      <div class="absolute inset-0 bg-grid-pattern opacity-30 dark:opacity-10">
+      </div>
+      <div
+        class="absolute top-0 -left-4 w-72 h-72 bg-primary-500 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-20 dark:opacity-10 animate-pulse-slow"
+      >
+      </div>
+      <div
+        class="absolute top-0 -right-4 w-72 h-72 bg-accent-500 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-20 dark:opacity-10 animate-pulse-slow animation-delay-2000"
+      >
+      </div>
+      <div
+        class="absolute -bottom-8 left-20 w-72 h-72 bg-primary-400 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-20 dark:opacity-10 animate-pulse-slow animation-delay-4000"
+      >
+      </div>
+    </div>
+
+    <Header lang={lang} />
+
+    <main class="relative">
+      <slot />
+    </main>
+
+    <Footer lang={lang} />
+
+    <!-- Scroll to top button -->
+    <button
+      id="scroll-to-top"
+      class="fixed bottom-8 right-8 p-3 rounded-full bg-primary-600 text-white shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 z-50"
+      aria-label="Scroll to top"
+    >
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+      </svg>
+    </button>
+
+    <script>
+      // Scroll to top functionality
+      const scrollButton = document.getElementById("scroll-to-top");
+
+      if (scrollButton) {
+        window.addEventListener("scroll", () => {
+          if (window.scrollY > 300) {
+            scrollButton.classList.remove("opacity-0", "invisible");
+            scrollButton.classList.add("opacity-100", "visible");
+          } else {
+            scrollButton.classList.add("opacity-0", "invisible");
+            scrollButton.classList.remove("opacity-100", "visible");
+          }
+        });
+
+        scrollButton.addEventListener("click", () => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+
+      // Intersection Observer for animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll(".animate-on-scroll").forEach((el) => {
+        observer.observe(el);
+      });
+
+      // Re-apply theme after view transitions
+      document.addEventListener("astro:after-swap", () => {
+        const theme = localStorage.getItem("theme") || "dark";
+        if (theme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      });
+    </script>
+  </body>
+</html>

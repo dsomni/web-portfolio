@@ -1,0 +1,106 @@
+---
+// src/components/sections/Education.astro
+import { getCollection } from "astro:content";
+import { useTranslations, type Language } from "../../utils/i18n";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Get all education entries for this language
+const allEducation = await getCollection("education");
+const education = allEducation
+  .filter((entry) => entry.id.endsWith(`-${lang}`))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<section id="education" class="py-20 bg-light-surface dark:bg-dark-surface">
+  <div class="container-custom">
+    <h2 class="section-title text-center animate-on-scroll">
+      {t("section.education")}
+    </h2>
+
+    <div class="max-w-4xl mx-auto space-y-8">
+      {
+        education.map((entry, index) => {
+          const edu = entry.data;
+          return (
+            <div
+              class={`card card-hover animate-on-scroll`}
+              style={`animation-delay: ${index * 100}ms`}
+            >
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex-1">
+                  <h3 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">
+                    {edu.degree}
+                  </h3>
+                  <p class="text-primary-600 dark:text-primary-400 font-semibold text-lg">
+                    {edu.institution}
+                  </p>
+                  <p class="text-sm text-light-text-muted dark:text-dark-text-muted">
+                    {edu.location}
+                  </p>
+                </div>
+                <div class="text-right">
+                  <span class="inline-block px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm font-medium">
+                    {edu.period}
+                  </span>
+                  {edu.gpa && (
+                    <div class="mt-2">
+                      <span class="text-2xl font-bold text-accent-600 dark:text-accent-400">
+                        {edu.gpa}
+                      </span>
+                      <p class="text-xs text-light-text-muted dark:text-dark-text-muted">
+                        GPA
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <p class="text-light-text dark:text-dark-text font-medium mb-4">
+                <span class="text-light-text-muted dark:text-dark-text-muted">
+                  {t("common.fieldOfStudy")}:
+                </span>{" "}
+                {edu.field}
+              </p>
+
+              {edu.thesis && (
+                <div class="mb-4 p-3 rounded-lg bg-accent-50 dark:bg-accent-900/10 border border-accent-200 dark:border-accent-800">
+                  <p class="text-sm font-semibold text-accent-700 dark:text-accent-300 mb-1">
+                    {t("common.thesis")}:
+                  </p>
+                  <p class="text-sm text-accent-600 dark:text-accent-400">
+                    {edu.thesis}
+                  </p>
+                  {edu.adviser && (
+                    <p class="text-sm text-accent-600 dark:text-accent-400 mt-1">
+                      <span class="font-medium">{t("common.adviser")}:</span>{" "}
+                      {edu.adviser}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              <div>
+                <p class="text-sm font-semibold text-light-text dark:text-dark-text mb-3">
+                  {t("common.relevantCoursework")}:
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  {edu.coursework.map((course) => (
+                    <span class="text-sm px-3 py-1 rounded-full bg-light-elevated dark:bg-dark-elevated text-light-text dark:text-dark-text border border-light-border dark:border-dark-border">
+                      {course}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>

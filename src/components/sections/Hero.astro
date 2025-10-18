@@ -1,0 +1,214 @@
+---
+import { useTranslations, type Language } from "../../utils/i18n";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Get base URL from environment
+const base = import.meta.env.BASE_URL;
+---
+
+<section
+  id="hero"
+  class="relative min-h-screen flex items-center justify-center pt-20 pb-16 overflow-hidden"
+>
+  <div class="container-custom">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <!-- Text Content -->
+      <div class="space-y-8 animate-fade-up">
+        <div class="space-y-4">
+          <p class="text-primary-600 dark:text-primary-400 font-medium text-lg">
+            {t("hero.greeting")}
+          </p>
+          <h1
+            class="text-5xl md:text-6xl lg:text-7xl font-bold text-light-text dark:text-dark-text"
+          >
+            <span class="block">{lang === "en" ? "Dmitry" : "Дмитрий"}</span>
+            <span class="block text-gradient-primary"
+              >{lang === "en" ? "Beresnev" : "Береснев"}</span
+            >
+          </h1>
+          <h2
+            class="text-2xl md:text-3xl font-semibold text-light-text-muted dark:text-dark-text-muted"
+          >
+            {t("hero.title")}
+          </h2>
+        </div>
+
+        <p
+          class="text-lg text-light-text-muted dark:text-dark-text-muted max-w-2xl leading-relaxed"
+        >
+          {t("hero.description")}
+        </p>
+
+        <!-- Key Interests -->
+        <div class="flex flex-wrap gap-3">
+          {
+            [
+              "Deep RL",
+              "ML Optimization",
+              "PyTorch",
+              "Data Science",
+              "AI Research",
+            ].map((skill) => <span class="badge">{skill}</span>)
+          }
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-wrap gap-4">
+          <a href="#projects" class="btn btn-primary">
+            <span>{t("hero.cta.primary")}</span>
+            <svg
+              class="w-5 h-5 ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+          </a>
+          <a href="#contact" class="btn btn-secondary">
+            <svg
+              class="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              ></path>
+            </svg>
+            <span>{t("hero.cta.secondary")}</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Image/Visual -->
+      <div class="relative lg:block animate-fade-up animation-delay-200">
+        <div class="relative z-10">
+          <!-- Profile photo with correct base path -->
+          <div class="relative w-full max-w-md mx-auto aspect-square">
+            <div
+              class="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-3xl blur-2xl opacity-20"
+            >
+            </div>
+            <div class="relative card card-hover overflow-hidden">
+              <!-- FIXED: Use base path for image -->
+              <img
+                src={`${base}images/profile/photo.jpg`}
+                alt="Dmitry Beresnev"
+                class="w-full h-full object-cover"
+                loading="eager"
+              />
+            </div>
+          </div>
+
+          <!-- Floating badges -->
+          <div
+            class="absolute -top-4 -right-4 card p-4 animate-float animation-delay-100"
+          >
+            <div class="flex items-center gap-3">
+              <svg
+                class="w-8 h-8 text-primary-600"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"
+                ></path>
+              </svg>
+              <div>
+                <div class="text-2xl font-bold text-primary-600">MSc</div>
+                <div
+                  class="text-xs text-light-text-muted dark:text-dark-text-muted"
+                >
+                  AI & DS
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="absolute -bottom-4 -left-4 card p-4 animate-float animation-delay-300"
+          >
+            <div class="flex items-center gap-3">
+              <svg
+                class="w-8 h-8 text-accent-600"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"></path>
+              </svg>
+              <div>
+                <div class="text-2xl font-bold text-accent-600">GPA</div>
+                <div
+                  class="text-xs text-light-text-muted dark:text-dark-text-muted"
+                >
+                  4.95/5.0
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+    <svg
+      class="w-6 h-6 text-light-text-muted dark:text-dark-text-muted"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+    </svg>
+  </div>
+</section>
+
+<style>
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .animation-delay-100 {
+    animation-delay: 0.1s;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 0.3s;
+  }
+</style>
