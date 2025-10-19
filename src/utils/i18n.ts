@@ -25,6 +25,12 @@ export function getLocalizedContent<T>(content: LocalizedContent, lang: Language
 // Translation keys interface
 export interface Translations {
 
+    // Personal
+    'personal.name': string;
+    'personal.surname': string;
+    'personal.fullname': string;
+    'personal.specialty': string;
+
     // Navigation
     'nav.home': string;
     'nav.projects': string;
@@ -33,9 +39,6 @@ export interface Translations {
 
     // Hero section
     'hero.greeting': string;
-    'hero.name': string;
-    'hero.surname': string;
-    'hero.title': string;
     'hero.description': string;
     'hero.cta.primary': string;
     'hero.cta.secondary': string;
@@ -67,7 +70,6 @@ export interface Translations {
 
     // Footer
     'footer.rights': string;
-    'footer.built': string;
     'footer.quickLinks': string;
     'footer.connect': string;
 }
@@ -122,6 +124,10 @@ export function formatDateRange(
 // All translations
 const translations: Record<Language, Translations> = {
     en: {
+        'personal.name': 'Dmitry',
+        'personal.surname': 'Beresnev',
+        'personal.fullname': 'Dmitry Beresnev',
+        'personal.specialty': 'ML Engineer & Data Scientist',
 
         'nav.home': 'Home',
         'nav.projects': 'Projects',
@@ -129,9 +135,6 @@ const translations: Record<Language, Translations> = {
         'nav.contact': 'Contact',
 
         'hero.greeting': 'Hi, I\'m',
-        'hero.name': 'Dmitry',
-        'hero.surname': 'Beresnev',
-        'hero.title': 'ML Engineer & Data Scientist',
         'hero.description': 'MSc student specializing in AI and Data Science with deep expertise in Deep Reinforcement Learning and Mathematical Optimization. Building state-of-the-art ML solutions.',
         'hero.cta.primary': 'View Projects',
         'hero.cta.secondary': 'Contact Me',
@@ -160,20 +163,23 @@ const translations: Record<Language, Translations> = {
         'common.thesis': 'Bachelor Thesis',
 
         'footer.rights': 'All rights reserved',
-        'footer.built': 'Built with Astro & Tailwind CSS',
         'footer.quickLinks': 'Quick Links',
         'footer.connect': 'Connect',
     },
     ru: {
+
+        'personal.name': 'Дмитрий',
+        'personal.surname': 'Береснев',
+        'personal.fullname': 'Dmitry Beresnev',
+        'personal.specialty': 'ML-инженер и Data Scientist',
+
         'nav.home': 'Главная',
         'nav.projects': 'Проекты',
         'nav.about': 'О себе',
         'nav.contact': 'Контакты',
 
         'hero.greeting': 'Привет, я',
-        'hero.name': 'Дмитрий',
-        'hero.surname': 'Береснев',
-        'hero.title': 'ML-инженер и Data Scientist',
+
         'hero.description': 'Магистр Computer Science, специализирующийся на ИИ и науке о данных с глубокой экспертизой в Deep Reinforcement Learning и математической оптимизации. Создаю передовые ML-решения.',
         'hero.cta.primary': 'Проекты',
         'hero.cta.secondary': 'Связаться',
@@ -202,7 +208,6 @@ const translations: Record<Language, Translations> = {
         'common.thesis': 'Дипломная работа',
 
         'footer.rights': 'Все права защищены',
-        'footer.built': 'Создано с Astro & Tailwind CSS',
         'footer.quickLinks': 'Быстрые ссылки',
         'footer.connect': 'Связаться',
     },

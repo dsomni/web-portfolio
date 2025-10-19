@@ -1,0 +1,26 @@
+<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <!-- Adjust these colors to match your primary-600 and accent-600 values -->
+      <stop offset="0%" style="stop-color:#0284c7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c026d3;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded rectangle background -->
+  <rect x="0" y="0" width="40" height="40" rx="8" ry="8" fill="url(#logoGradient)"/>
+
+  <!-- DB text -->
+  <text
+    x="50%"
+    y="50%"
+    dominant-baseline="middle"
+    text-anchor="middle"
+    fill="white"
+    font-family="system-ui, -apple-system, sans-serif"
+    font-weight="bold"
+    font-size="20"
+  >
+    DB
+  </text>
+</svg>

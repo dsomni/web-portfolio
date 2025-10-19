@@ -1,6 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { languages, type Language } from "../../utils/i18n";
+import { Icon } from "astro-icon/components";
 
 const currentLang = (Astro.currentLocale || "en") as Language;
 const altLang: Language = currentLang === "en" ? "ru" : "en";
@@ -41,17 +42,10 @@ if (altUrl.endsWith("/") && altUrl.length > 1) {
 <a
   href={altUrl}
   id="language-switcher"
-  class="relative p-2 rounded-lg bg-light-elevated dark:bg-dark-elevated text-light-text dark:text-dark-text hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 flex items-center gap-2 text-sm font-medium"
+  class="relative p-2 rounded-lg text-light-text dark:text-dark-text hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 flex items-center gap-2 text-sm font-medium"
   aria-label={`Switch to ${languages[altLang]}`}
 >
-  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-      d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
-    ></path>
-  </svg>
+  <Icon class="w-5 h-5" name="mdi:language" />
   <span class="hidden sm:inline">{altLang.toUpperCase()}</span>
 </a>
 

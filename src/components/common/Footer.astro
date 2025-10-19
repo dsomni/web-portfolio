@@ -1,6 +1,12 @@
 ---
-import { useTranslations, type Language } from "../../utils/i18n";
-import { localizedUrl } from "../../utils/url";
+import {
+  useTranslations,
+  type Language,
+  type Translations,
+} from "../../utils/i18n";
+import { localizedUrl, url } from "../../utils/url";
+import { Icon } from "astro-icon/components";
+import { getCollection } from "astro:content";
 
 interface Props {
   lang: Language;
@@ -9,22 +15,17 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
-const socialLinks = [
-  {
-    name: "GitHub",
-    url: "https://github.com/dsomni",
-    icon: "github",
-  },
-  {
-    name: "Telegram",
-    url: "https://t.me/dsomni",
-    icon: "telegram",
-  },
-  {
-    name: "Email",
-    url: "mailto:d.beresnev.work@gmail.com",
-    icon: "email",
-  },
+let social = await getCollection("social");
+social = social.sort(
+  (a: any, b: any) => (a.data.order ?? 999) - (b.data.order ?? 999)
+);
+
+// Define your links once
+const quickLinks: { locale_key: keyof Translations; href: string }[] = [
+  { locale_key: "nav.home", href: "/" },
+  { locale_key: "nav.projects", href: "/#projects" },
+  { locale_key: "nav.about", href: "/#about" },
+  { locale_key: "nav.contact", href: "/#contact" },
 ];
 
 const currentYear = new Date().getFullYear();
@@ -35,22 +36,18 @@ const currentYear = new Date().getFullYear();
 >
   <div class="container-custom py-12">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <!-- Brand -->
       <div class="space-y-4">
         <div class="flex items-center gap-2">
-          <div
-            class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-600 to-accent-600 flex items-center justify-center text-white font-bold text-lg"
-          >
-            DB
-          </div>
-          <span class="font-bold text-lg">Dmitry Beresnev</span>
+          <img
+            src={url("/images/logo.svg")}
+            alt="logo"
+            class="w-10 h-10 group-hover:scale-110 transition-transform"
+            loading="eager"
+          />
+          <span class="font-bold text-lg">{t("personal.fullname")}</span>
         </div>
         <p class="text-sm text-light-text-muted dark:text-dark-text-muted">
-          {
-            lang === "en"
-              ? "ML Engineer & Data Scientist"
-              : "ML-инженер и Data Scientist"
-          }
+          {t("personal.specialty")}
         </p>
       </div>
 
@@ -59,62 +56,41 @@ const currentYear = new Date().getFullYear();
         <h3
           class="font-semibold text-sm uppercase tracking-wider text-light-text dark:text-dark-text"
         >
-          {lang === "en" ? "Quick Links" : "Быстрые ссылки"}
+          {t("footer.quickLinks")}
         </h3>
         <ul class="space-y-2">
-          <li>
-            <a
-              href={localizedUrl(lang, "/")}
-              class="text-sm text-light-text-muted dark:text-dark-text-muted hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            >
-              {t("nav.home")}
-            </a>
-          </li>
-          <li>
-            <a
-              href={localizedUrl(lang, "/projects")}
-              class="text-sm text-light-text-muted dark:text-dark-text-muted hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            >
-              {t("nav.projects")}
-            </a>
-          </li>
-          <li>
-            <a
-              href={localizedUrl(lang, "/#about")}
-              class="text-sm text-light-text-muted dark:text-dark-text-muted hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            >
-              {t("nav.about")}
-            </a>
-          </li>
-          <li>
-            <a
-              href={localizedUrl(lang, "/#contact")}
-              class="text-sm text-light-text-muted dark:text-dark-text-muted hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            >
-              {t("nav.contact")}
-            </a>
-          </li>
+          {
+            quickLinks.map((link) => (
+              <li>
+                <a
+                  href={localizedUrl(lang, link.href)}
+                  class="text-sm text-light-text-muted dark:text-dark-text-muted hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                >
+                  {t(link.locale_key)}
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </div>
 
-      <!-- Social Links -->
       <div class="space-y-4">
         <h3
           class="font-semibold text-sm uppercase tracking-wider text-light-text dark:text-dark-text"
         >
-          {lang === "en" ? "Connect" : "Связаться"}
+          {t("footer.connect")}
         </h3>
         <div class="flex gap-4">
           {
-            socialLinks.map((social) => (
+            social.map(({ data }: { data: any }) => (
               <a
-                href={social.url}
+                href={data.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 class="w-10 h-10 rounded-full bg-light-elevated dark:bg-dark-elevated flex items-center justify-center text-light-text dark:text-dark-text hover:bg-primary-600 hover:text-white dark:hover:bg-primary-500 transition-all hover:scale-110"
-                aria-label={social.name}
+                aria-label={data.name}
               >
-                {/* SVG icons here - same as before */}
+                <Icon name={data.icon} size="20" />
               </a>
             ))
           }
@@ -122,15 +98,12 @@ const currentYear = new Date().getFullYear();
       </div>
     </div>
 
-    <!-- Bottom Bar -->
     <div
       class="mt-8 pt-8 border-t border-light-border dark:border-dark-border flex flex-col md:flex-row justify-between items-center gap-4"
     >
       <p class="text-sm text-light-text-muted dark:text-dark-text-muted">
-        © {currentYear} Dmitry Beresnev. {t("footer.rights")}.
-      </p>
-      <p class="text-sm text-light-text-muted dark:text-dark-text-muted">
-        {t("footer.built")}
+        © {currentYear}
+        {t("personal.fullname")}. {t("footer.rights")}.
       </p>
     </div>
   </div>

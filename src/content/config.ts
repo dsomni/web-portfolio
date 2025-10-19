@@ -1,7 +1,6 @@
 // src/content/config.ts
 import { defineCollection, z } from 'astro:content';
 
-// About content collection
 const about = defineCollection({
     type: 'content',
     schema: z.object({
@@ -18,7 +17,6 @@ const about = defineCollection({
     }),
 });
 
-// Experience collection
 const experience = defineCollection({
     type: 'content',
     schema: z.object({
@@ -37,7 +35,6 @@ const experience = defineCollection({
     }),
 });
 
-// Projects collection
 const projects = defineCollection({
     type: 'content',
     schema: z.object({
@@ -56,7 +53,6 @@ const projects = defineCollection({
     }),
 });
 
-// Education collection
 const education = defineCollection({
     type: 'content',
     schema: z.object({
@@ -73,7 +69,6 @@ const education = defineCollection({
     }),
 });
 
-// Skills collection
 const skills = defineCollection({
     type: 'content',
     schema: z.object({
@@ -87,10 +82,23 @@ const skills = defineCollection({
     }),
 });
 
+const social = defineCollection({
+    type: "content",
+    schema: z.object({
+        name: z.string(),
+        url: z.string(),
+        icon: z.string(),
+        order: z.number().optional(),
+    }),
+});
+
+
+
 export const collections = {
     about,
     experience,
     projects,
     education,
     skills,
+    social
 };

@@ -5,6 +5,7 @@ import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
 import { loadEnv } from 'vite';
 
+
 const env = loadEnv(process.env.NODE_ENV || 'development', process.cwd(), '');
 
 // Use env variables with fallback to GitHub Pages defaults
