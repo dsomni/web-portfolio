@@ -20,7 +20,7 @@ export function localizedUrl(locale: Language, path: string): string {
 
     // Add back the hash if it exists
     if (hashPart) {
-        url += `#${hashPart}`;
+        url += `/#${hashPart}`;
     }
 
     return url;
