@@ -32,9 +32,9 @@ export default defineConfig({
         },
         fallback: { ru: 'en' },
     },
-    // output: 'static',
-    // build: {
-    //     format: 'file',
-    //     inlineStylesheets: 'auto'
-    // }
+    output: 'static',
+    build: {
+        format: 'file',
+        inlineStylesheets: 'auto'
+    }
 });
