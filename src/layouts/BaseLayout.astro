@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import Header from "../components/common/Header.astro";
 import Footer from "../components/common/Footer.astro";
 import "../styles/global.css";
+import { url } from "@/utils/url";
 
 export interface Props {
   title: string;
@@ -17,6 +18,7 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const base = import.meta.env.BASE_URL;
 ---
 
 <!doctype html>
@@ -24,7 +26,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={url("/favicon.svg")} />
     <meta name="generator" content={Astro.generator} />
 
     <!-- SEO -->
@@ -45,7 +47,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <!-- CRITICAL: Theme initialization BEFORE any rendering -->
     <script is:inline>
-      // Run before any paint
+      // Run before any paint to prevent FOUC
       (function () {
         function getTheme() {
           if (typeof localStorage !== "undefined") {
@@ -79,7 +81,37 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       })();
     </script>
 
-    <!-- View Transitions -->
+    <script is:inline>
+      (function () {
+        // Restore scroll position after page load
+        window.addEventListener("load", () => {
+          const scrollPos = sessionStorage.getItem("scrollPos");
+
+          if (scrollPos !== null) {
+            // If there's a hash, let the browser handle scrolling to it
+            if (window.location.hash) {
+              setTimeout(() => {
+                const element = document.querySelector(window.location.hash);
+                if (element) {
+                  element.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }
+              }, 100);
+            } else {
+              // Otherwise restore the saved scroll position
+              window.scrollTo(0, parseInt(scrollPos));
+            }
+
+            // Clean up
+            sessionStorage.removeItem("scrollPos");
+          }
+        });
+      })();
+    </script>
+
+    <!-- ClientRouter (replaces ViewTransitions in Astro 5) -->
     <ClientRouter />
   </head>
 
@@ -133,11 +165,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </button>
 
     <script>
-      // Scroll to top functionality
-      const scrollButton = document.getElementById("scroll-to-top");
+      // Setup scroll to top functionality
+      function setupScrollButton() {
+        const scrollButton = document.getElementById("scroll-to-top");
+        if (!scrollButton) return;
 
-      if (scrollButton) {
-        window.addEventListener("scroll", () => {
+        // Remove old listeners to avoid duplicates
+        const handleScroll = () => {
           if (window.scrollY > 300) {
             scrollButton.classList.remove("opacity-0", "invisible");
             scrollButton.classList.add("opacity-100", "visible");
@@ -145,32 +179,52 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
             scrollButton.classList.add("opacity-0", "invisible");
             scrollButton.classList.remove("opacity-100", "visible");
           }
-        });
+        };
 
-        scrollButton.addEventListener("click", () => {
+        const handleClick = () => {
           window.scrollTo({ top: 0, behavior: "smooth" });
+        };
+
+        // Clean up old listeners
+        window.removeEventListener("scroll", handleScroll);
+        scrollButton.removeEventListener("click", handleClick);
+
+        // Add new listeners
+        window.addEventListener("scroll", handleScroll);
+        scrollButton.addEventListener("click", handleClick);
+      }
+
+      // Setup Intersection Observer for animations
+      function setupAnimations() {
+        const observerOptions = {
+          threshold: 0.1,
+          rootMargin: "0px 0px -50px 0px",
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+            }
+          });
+        }, observerOptions);
+
+        document.querySelectorAll(".animate-on-scroll").forEach((el) => {
+          observer.observe(el);
         });
       }
 
-      // Intersection Observer for animations
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px",
-      };
+      // Initial setup on page load
+      setupScrollButton();
+      setupAnimations();
 
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-          }
-        });
-      }, observerOptions);
-
-      document.querySelectorAll(".animate-on-scroll").forEach((el) => {
-        observer.observe(el);
+      // Re-setup after ClientRouter navigation (astro:page-load)
+      document.addEventListener("astro:page-load", () => {
+        setupScrollButton();
+        setupAnimations();
       });
 
-      // Re-apply theme after view transitions
+      // Re-apply theme immediately after swap (before paint)
       document.addEventListener("astro:after-swap", () => {
         const theme = localStorage.getItem("theme") || "dark";
         if (theme === "dark") {

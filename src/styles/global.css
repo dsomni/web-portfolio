@@ -1,6 +1,8 @@
 /* src/styles/global.css */
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* 2) Load fonts via HTML instead of CSS @import to silence PostCSS warning
    Add this to <head> in BaseLayout.astro instead of @import in CSS:
    <link rel="preconnect" href="https://fonts.googleapis.com">

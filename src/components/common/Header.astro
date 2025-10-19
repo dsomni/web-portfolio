@@ -1,20 +1,19 @@
 ---
-import {
-  getLangFromUrl,
-  useTranslations,
-  getLocalizedPath,
-} from "../../utils/i18n";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { useTranslations, type Language } from "../../utils/i18n";
+import { localizedUrl } from "../../utils/url";
 import ThemeToggle from "./ThemeToggle.astro";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
 
-const lang = getLangFromUrl(Astro.url);
+// Use Astro's built-in locale detection
+const lang = (Astro.currentLocale || "en") as Language;
 const t = useTranslations(lang);
 
 const navItems = [
-  { href: getLocalizedPath("/", lang), label: t("nav.home") },
-  { href: getLocalizedPath("/projects", lang), label: t("nav.projects") },
-  { href: getLocalizedPath("/#about", lang), label: t("nav.about") },
-  { href: getLocalizedPath("/#contact", lang), label: t("nav.contact") },
+  { href: localizedUrl(lang, "/"), label: t("nav.home") },
+  { href: localizedUrl(lang, "/projects"), label: t("nav.projects") },
+  { href: localizedUrl(lang, "/#about"), label: t("nav.about") },
+  { href: localizedUrl(lang, "/#contact"), label: t("nav.contact") },
 ];
 ---
 
@@ -25,7 +24,7 @@ const navItems = [
     <div class="flex items-center justify-between">
       <!-- Logo -->
       <a
-        href={getLocalizedPath("/", lang)}
+        href={localizedUrl(lang, "/")}
         class="text-xl font-bold text-light-text dark:text-dark-text hover:text-primary-600 dark:hover:text-primary-400 transition-colors group"
       >
         <span class="inline-flex items-center gap-2">
@@ -59,14 +58,14 @@ const navItems = [
         <!-- Theme & Language -->
         <div class="flex items-center gap-3">
           <ThemeToggle />
-          <LanguageSwitcher lang={lang} />
+          <LanguageSwitcher />
         </div>
       </div>
 
       <!-- Mobile Menu Button -->
       <div class="flex md:hidden items-center gap-3">
         <ThemeToggle />
-        <LanguageSwitcher lang={lang} />
+        <LanguageSwitcher />
         <button
           id="mobile-menu-button"
           class="p-2 text-light-text dark:text-dark-text hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
@@ -112,30 +111,50 @@ const navItems = [
 </header>
 
 <script>
-  // Mobile menu toggle
-  const menuButton = document.getElementById("mobile-menu-button");
-  const mobileMenu = document.getElementById("mobile-menu");
+  function setupMobileMenu() {
+    const menuButton = document.getElementById("mobile-menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
 
-  if (menuButton && mobileMenu) {
-    menuButton.addEventListener("click", () => {
+    if (!menuButton || !mobileMenu) return;
+
+    // Toggle menu
+    const toggleMenu = () => {
       mobileMenu.classList.toggle("hidden");
-    });
+    };
 
     // Close menu when clicking outside
-    document.addEventListener("click", (e) => {
+    const closeMenuOutside = (e: Event) => {
       if (
         !menuButton.contains(e.target as Node) &&
         !mobileMenu.contains(e.target as Node)
       ) {
         mobileMenu.classList.add("hidden");
       }
-    });
+    };
+
+    // Close menu when clicking a link
+    const closeMenuOnLink = () => {
+      mobileMenu.classList.add("hidden");
+    };
+
+    // Remove old listeners
+    menuButton.removeEventListener("click", toggleMenu);
+    document.removeEventListener("click", closeMenuOutside);
+
+    // Add new listeners
+    menuButton.addEventListener("click", toggleMenu);
+    document.addEventListener("click", closeMenuOutside);
 
     // Close menu when clicking a link
     mobileMenu.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        mobileMenu.classList.add("hidden");
-      });
+      link.removeEventListener("click", closeMenuOnLink);
+      link.addEventListener("click", closeMenuOnLink);
     });
   }
+
+  // Setup on page load
+  setupMobileMenu();
+
+  // Re-setup after ClientRouter navigation
+  document.addEventListener("astro:page-load", setupMobileMenu);
 </script>

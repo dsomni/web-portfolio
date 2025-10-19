@@ -3,18 +3,44 @@
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { languages, type Language } from "../../utils/i18n";
 
-interface Props {
-  lang: Language;
-}
-const { lang } = Astro.props;
-const altLang: Language = lang === "en" ? "ru" : "en";
+// Use Astro.currentLocale instead of prop - this is more reliable
+const currentLang = (Astro.currentLocale || "en") as Language;
+const altLang: Language = currentLang === "en" ? "ru" : "en";
 
-// Use the current pathname; the helper applies base and locale rules
-const altUrl = getRelativeLocaleUrl(altLang, Astro.url.pathname);
+// Get current pathname
+let currentPath = Astro.url.pathname;
+
+// Remove base path if present
+const basePath = import.meta.env.BASE_URL;
+if (basePath && basePath !== "/" && currentPath.startsWith(basePath)) {
+  currentPath = currentPath.substring(basePath.length);
+  if (!currentPath.startsWith("/")) {
+    currentPath = "/" + currentPath;
+  }
+}
+
+// Remove locale prefix (only /ru/ since en has no prefix)
+if (currentPath.startsWith("/ru/")) {
+  currentPath = currentPath.substring(3);
+  if (!currentPath.startsWith("/")) {
+    currentPath = "/" + currentPath;
+  }
+} else if (currentPath === "/ru") {
+  currentPath = "/";
+}
+
+// Generate alternate URL
+let altUrl = getRelativeLocaleUrl(altLang, currentPath);
+
+// Remove trailing slash if not root
+if (altUrl.endsWith("/") && altUrl.length > 1) {
+  altUrl = altUrl.slice(0, -1);
+}
 ---
 
 <a
   href={altUrl}
+  id="language-switcher"
   class="relative p-2 rounded-lg bg-light-elevated dark:bg-dark-elevated text-light-text dark:text-dark-text hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 flex items-center gap-2 text-sm font-medium"
   aria-label={`Switch to ${languages[altLang]}`}
 >
@@ -28,3 +54,48 @@ const altUrl = getRelativeLocaleUrl(altLang, Astro.url.pathname);
   </svg>
   <span class="hidden sm:inline">{altLang.toUpperCase()}</span>
 </a>
+
+<script>
+  function setupLanguageSwitcher() {
+    const switcher = document.getElementById("language-switcher");
+    if (!switcher) return;
+
+    const handleClick = (e: Event) => {
+      e.preventDefault();
+
+      const link = e.currentTarget as HTMLAnchorElement;
+      let targetUrl = link.getAttribute("href");
+      if (!targetUrl) return;
+
+      // Save scroll position
+      sessionStorage.setItem("scrollPos", window.scrollY.toString());
+
+      // Preserve hash fragment if it exists
+      const currentHash = window.location.hash;
+
+      // Add hash if it exists and targetUrl doesn't already have one
+      if (currentHash && !targetUrl.includes("#")) {
+        targetUrl = targetUrl + currentHash;
+      }
+
+      // Navigate to new URL
+      window.location.href = targetUrl;
+    };
+
+    // Remove old listener to avoid duplicates
+    const newSwitcher = switcher.cloneNode(true) as HTMLElement;
+    switcher.parentNode?.replaceChild(newSwitcher, switcher);
+
+    // Add listener to new element
+    const finalSwitcher = document.getElementById("language-switcher");
+    if (finalSwitcher) {
+      finalSwitcher.addEventListener("click", handleClick);
+    }
+  }
+
+  // Setup on page load
+  setupLanguageSwitcher();
+
+  // Re-setup after ClientRouter navigation
+  document.addEventListener("astro:page-load", setupLanguageSwitcher);
+</script>
