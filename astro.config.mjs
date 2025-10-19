@@ -32,9 +32,5 @@ export default defineConfig({
         },
         fallback: { ru: 'en' },
     },
-    output: 'static',
-    build: {
-        format: 'file',
-        inlineStylesheets: 'auto'
-    }
+
 });
