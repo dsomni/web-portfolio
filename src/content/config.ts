@@ -89,6 +89,7 @@ const social = defineCollection({
         url: z.string(),
         icon: z.string(),
         order: z.number().optional(),
+        copy_content: z.boolean().default(false),
     }),
 });
 
