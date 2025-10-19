@@ -1,36 +1,36 @@
 ---
-// src/components/common/LanguageSwitcher.astro
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { languages, type Language } from "../../utils/i18n";
 
-// Use Astro.currentLocale instead of prop - this is more reliable
 const currentLang = (Astro.currentLocale || "en") as Language;
 const altLang: Language = currentLang === "en" ? "ru" : "en";
 
-// Get current pathname
-let currentPath = Astro.url.pathname;
+// Get pathname and remove any .html extension
+let pathname = Astro.url.pathname.replace(/\.html$/, "");
 
 // Remove base path if present
 const basePath = import.meta.env.BASE_URL;
-if (basePath && basePath !== "/" && currentPath.startsWith(basePath)) {
-  currentPath = currentPath.substring(basePath.length);
-  if (!currentPath.startsWith("/")) {
-    currentPath = "/" + currentPath;
+if (basePath && basePath !== "/" && pathname.startsWith(basePath)) {
+  pathname = pathname.substring(basePath.length);
+  if (!pathname.startsWith("/")) {
+    pathname = "/" + pathname;
   }
 }
 
-// Remove locale prefix (only /ru/ since en has no prefix)
-if (currentPath.startsWith("/ru/")) {
-  currentPath = currentPath.substring(3);
-  if (!currentPath.startsWith("/")) {
-    currentPath = "/" + currentPath;
-  }
-} else if (currentPath === "/ru") {
-  currentPath = "/";
+// Remove locale prefix
+if (pathname.startsWith("/ru/")) {
+  pathname = pathname.substring(3);
+} else if (pathname === "/ru") {
+  pathname = "/";
+}
+
+// Ensure pathname starts with /
+if (!pathname.startsWith("/")) {
+  pathname = "/" + pathname;
 }
 
 // Generate alternate URL
-let altUrl = getRelativeLocaleUrl(altLang, currentPath);
+let altUrl = getRelativeLocaleUrl(altLang, pathname);
 
 // Remove trailing slash if not root
 if (altUrl.endsWith("/") && altUrl.length > 1) {
@@ -67,35 +67,31 @@ if (altUrl.endsWith("/") && altUrl.length > 1) {
       let targetUrl = link.getAttribute("href");
       if (!targetUrl) return;
 
+      // Remove any .html extensions from the URL
+      targetUrl = targetUrl.replace(/\.html($|#)/, "$1");
+
+      // Preserve hash fragment
+      const currentHash = window.location.hash;
+      if (currentHash) {
+        targetUrl = targetUrl.split("#")[0] + currentHash;
+      }
+
       // Save scroll position
       sessionStorage.setItem("scrollPos", window.scrollY.toString());
-
-      // Preserve hash fragment if it exists
-      const currentHash = window.location.hash;
-
-      // Add hash if it exists and targetUrl doesn't already have one
-      if (currentHash && !targetUrl.includes("#")) {
-        targetUrl = targetUrl + currentHash;
-      }
 
       // Navigate to new URL
       window.location.href = targetUrl;
     };
 
-    // Remove old listener to avoid duplicates
     const newSwitcher = switcher.cloneNode(true) as HTMLElement;
     switcher.parentNode?.replaceChild(newSwitcher, switcher);
 
-    // Add listener to new element
     const finalSwitcher = document.getElementById("language-switcher");
     if (finalSwitcher) {
       finalSwitcher.addEventListener("click", handleClick);
     }
   }
 
-  // Setup on page load
   setupLanguageSwitcher();
-
-  // Re-setup after ClientRouter navigation
   document.addEventListener("astro:page-load", setupLanguageSwitcher);
 </script>

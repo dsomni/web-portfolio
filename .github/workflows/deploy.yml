@@ -24,8 +24,8 @@ jobs:
         uses: withastro/action@v3
         env:
           SITE: https://dsomni.github.io
-          BASE: /web-portfolio
-          # BASE: /
+          # BASE: /web-portfolio
+          BASE: /
 
   deploy:
     needs: build

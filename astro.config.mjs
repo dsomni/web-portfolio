@@ -32,5 +32,8 @@ export default defineConfig({
         },
         fallback: { ru: 'en' },
     },
-
+    // output: 'static',
+    build: {
+        format: 'directory',
+    }
 });
