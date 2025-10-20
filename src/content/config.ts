@@ -39,10 +39,9 @@ const experience = defineCollection({
         }
         )).optional(),
         links: z.array(z.object({
-            href: z.string(),
+            href: z.string().url(),
             icon: z.string(),
             label: z.string().optional(),
-
         }
         )).optional(),
         order: z.number().default(999),
@@ -58,12 +57,24 @@ const projects = defineCollection({
         subtitle: z.string().optional(),
         description: z.string(),
         achievements: z.array(z.string()).optional(),
-        highlights: z.array(z.string()),
+        responsibilities: z.array(z.string()).optional(),
         stack: z.array(z.string()),
-        featured: z.boolean().default(false),
-        github: z.string().url().optional(),
-        demo: z.string().url().optional(),
-        order: z.number().default(999),
+        featured: z.boolean().optional(),
+        githubs: z.array(z.object({
+            href: z.string(),
+            label: z.string().optional(),
+        })).optional(),
+        demos: z.array(z.object({
+            href: z.string(),
+            icon: z.string().optional(),
+            label: z.string().optional(),
+        })).optional(),
+        files: z.array(z.object({
+            title: z.string(),
+            path: z.string(),
+        })).optional(),
+        company: z.string().optional(),
+        order: z.number(),
     }),
 });
 

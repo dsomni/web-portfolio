@@ -61,11 +61,15 @@ export interface Translations {
     'experience.responsibilities': string;
     'experience.supervisor': string;
     'experience.concepts': string;
-    'experience.stack': string;
-    'experience.resources': string;
+
+
+    // Projects
+    "projects.featured": string;
+    "projects.achievements": string;
 
 
     // Common
+    'common.resources': string;
     'common.readMore': string;
     'common.viewProject': string;
     'common.sourceCode': string;
@@ -82,6 +86,8 @@ export interface Translations {
     'common.fieldOfStudy': string;
     'common.relevantCoursework': string;
     'common.thesis': string;
+    'common.demo': string;
+
 
     // Contacts
     'contacts.emailMe': string;
@@ -177,12 +183,13 @@ Building state-of-the-art ML solutions.`,
         'experience.responsibilities': 'Responsibilities',
         'experience.supervisor': 'Supervisor',
         'experience.concepts': 'Concepts',
-        'experience.stack': 'Stack',
-        'experience.resources': 'Resources',
 
+        "projects.featured": 'Featured',
+        "projects.achievements": '✨ Achievements',
 
         'subsection.languages': 'Languages',
 
+        'common.resources': 'Resources',
         'common.readMore': 'Read more',
         'common.viewProject': 'View Project',
         'common.sourceCode': 'Source Code',
@@ -198,7 +205,10 @@ Building state-of-the-art ML solutions.`,
         'common.co-advisors': 'Co-supervisors',
         'common.fieldOfStudy': 'Field of study',
         'common.relevantCoursework': 'Relevant Coursework',
-        'common.thesis': 'Bachelor Thesis',
+        'common.thesis': 'Thesis',
+        'common.demo': 'Demo',
+
+
 
         'contacts.emailMe': "Send me an email",
         'contacts.target': "I'm currently seeking interesting R&D opportunities in Machine Learning and AI. Feel free to reach out!",
@@ -243,9 +253,12 @@ Building state-of-the-art ML solutions.`,
         'experience.responsibilities': 'Обязанности',
         'experience.supervisor': 'Руководитель',
         'experience.concepts': 'Концепции',
-        'experience.stack': 'Стек',
-        'experience.resources': 'Ресурсы',
 
+
+        "projects.featured": 'Избранное',
+        "projects.achievements": '✨ Достижения',
+
+        'common.resources': 'Ресурсы',
         'common.readMore': 'Подробнее',
         'common.viewProject': 'Смотреть проект',
         'common.sourceCode': 'Исходный код',
@@ -262,6 +275,8 @@ Building state-of-the-art ML solutions.`,
         'common.fieldOfStudy': 'Специализация',
         'common.relevantCoursework': 'Ключевые курсы',
         'common.thesis': 'Дипломная работа',
+        'common.demo': 'Демо',
+
 
         'contacts.emailMe': "Написать мне",
         'contacts.target': "В настоящее время ищу интересные R&D возможности в области машинного обучения и ИИ. Буду рад связи!",

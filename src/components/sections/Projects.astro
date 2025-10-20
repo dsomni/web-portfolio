@@ -2,6 +2,20 @@
 // src/components/sections/Projects.astro
 import { getCollection } from "astro:content";
 import { useTranslations, type Language } from "../../utils/i18n";
+import { Icon } from "astro-icon/components";
+import PDFButton from "../ui/PDFButton.astro";
+import { localizedUrl } from "@/utils/url";
+
+interface File {
+  title: string;
+  path: string;
+}
+
+interface Link {
+  href: string;
+  icon: string;
+  label?: string;
+}
 
 interface Props {
   lang: Language;
@@ -11,10 +25,21 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 
 // Get all project entries for this language
-const allProjects = await getCollection("projects");
-const projects = allProjects
-  .filter((entry) => entry.id.endsWith(`-${lang}`))
-  .sort((a, b) => a.data.order - b.data.order);
+const projects = (await getCollection("projects"))
+  .filter((entry: any) => entry.id.split(".")[0].endsWith(`-${lang}`))
+  .map((entry: any) => entry.data)
+  .sort((a: any, b: any) => a.order - b.order);
+
+const sectionLabel =
+  "text-xs font-bold uppercase tracking-wider text-light-text dark:text-dark-text mb-3 flex items-center gap-2";
+
+// Icon-only style (when no label)
+const linkIcon =
+  "inline-flex items-center justify-center w-9 h-9 rounded-lg text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors";
+
+// Icon with label style (when label exists)
+const linkBadge =
+  "inline-flex items-center gap-2 text-xs px-3 py-2 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800 font-medium hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors";
 ---
 
 <section id="projects" class="py-20">
@@ -23,131 +48,175 @@ const projects = allProjects
       {t("section.projects")}
     </h2>
 
-    <div class="grid md:grid-cols-2 gap-8">
+    <!-- Masonry Grid Layout -->
+    <div class="columns-1 md:columns-2 xl:columns-3 gap-8 space-y-8">
       {
-        projects.map((entry, index) => {
-          const project = entry.data;
-          return (
-            <div
-              class={`card card-hover animate-on-scroll`}
-              style={`animation-delay: ${index * 100}ms`}
-            >
+        projects.map((project: any, index: number) => (
+          <div
+            class="break-inside-avoid animate-on-scroll"
+            style={`animation-delay: ${index * 100}ms`}
+          >
+            <div class="card card-hover mb-8">
+              {/* Featured Badge */}
               {project.featured && (
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 text-xs font-medium mb-4">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                  {lang === "en" ? "Featured" : "Избранное"}
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 text-xs font-semibold border border-accent-200 dark:border-accent-800 mb-4">
+                  <Icon class="w-4 h-4" name="mdi:star" />
+                  {t("projects.featured")}
                 </div>
               )}
 
-              <div class="flex items-start justify-between mb-4">
-                <div>
-                  <h3 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">
+              {/* Header Section */}
+              <div class="pb-4 border-b border-light-border dark:border-dark-border">
+                <div class="flex items-start justify-between gap-3 mb-3">
+                  <h3 class="text-2xl font-bold text-light-text dark:text-dark-text">
                     {project.title}
                   </h3>
-                  <p class="text-primary-600 dark:text-primary-400 font-medium mb-1">
-                    {project.role}
-                  </p>
-                  {project.company && (
-                    <p class="text-sm text-light-text-muted dark:text-dark-text-muted">
-                      {project.company}
-                    </p>
-                  )}
+                  <span class="text-sm font-semibold text-light-text-muted dark:text-dark-text-muted bg-light-border/30 dark:bg-dark-border/30 px-3 py-1.5 rounded-full whitespace-nowrap">
+                    {project.period}
+                  </span>
                 </div>
-                <span class="text-sm text-light-text-muted dark:text-dark-text-muted">
-                  {project.period}
-                </span>
+                <p class="text-primary-600 dark:text-primary-400 font-semibold text-lg mb-1">
+                  {project.role}
+                </p>
+                {project.company && (
+                  <p class="text-sm text-light-text-muted dark:text-dark-text-muted font-medium">
+                    {project.company}
+                  </p>
+                )}
               </div>
 
-              <p class="text-light-text-muted dark:text-dark-text-muted mb-4">
+              {/* Description */}
+              <p class="text-base text-light-text-muted dark:text-dark-text-muted leading-relaxed mt-4">
                 {project.description}
               </p>
 
+              {/* Achievements */}
               {project.achievements && project.achievements.length > 0 && (
-                <div class="mb-4 p-3 rounded-lg bg-primary-50 dark:bg-primary-900/10 border border-primary-200 dark:border-primary-800">
-                  <p class="text-sm font-semibold text-primary-700 dark:text-primary-300 mb-2">
-                    {lang === "en" ? "✨ Achievements" : "✨ Достижения"}
-                  </p>
-                  <ul class="space-y-1">
-                    {project.achievements.map((achievement) => (
-                      <li class="text-sm text-primary-600 dark:text-primary-400">
-                        • {achievement}
+                <div class="mt-6 p-4 bg-primary-50 dark:bg-primary-900/10 rounded-lg border border-primary-200 dark:border-primary-800">
+                  <h4 class={sectionLabel}>
+                    <span class="w-1 h-4 bg-primary-500 rounded-full" />
+                    {t("projects.achievements")}
+                  </h4>
+                  <ul class="space-y-2 text-sm text-primary-700 dark:text-primary-300">
+                    {project.achievements.map((achievement: string) => (
+                      <li class="flex items-start gap-3">
+                        <span class="text-primary-500 mt-1">▸</span>
+                        <span class="flex-1">{achievement}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
 
-              {project.highlights && project.highlights.length > 0 && (
-                <div class="mb-4">
-                  <p class="text-sm font-semibold text-light-text dark:text-dark-text mb-2">
-                    {lang === "en" ? "Key Features:" : "Основные возможности:"}
-                  </p>
-                  <ul class="space-y-1 text-sm text-light-text-muted dark:text-dark-text-muted">
-                    {project.highlights.map((highlight) => (
-                      <li class="flex items-start gap-2">
-                        <span class="text-primary-600 dark:text-primary-400 mt-1">
-                          →
-                        </span>
-                        <span>{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
+              {/* Key Features / responsibilities */}
+              {project.responsibilities &&
+                project.responsibilities.length > 0 && (
+                  <div class="mt-6">
+                    <h4 class={sectionLabel}>
+                      <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                      {t("common.responsibilities")}
+                    </h4>
+                    <ul class="space-y-2 text-sm text-light-text-muted dark:text-dark-text-muted">
+                      {project.responsibilities.map((highlight: string) => (
+                        <li class="flex items-start gap-3">
+                          <span class="text-accent-500 mt-1">▸</span>
+                          <span class="flex-1">{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+              {/* Tech Stack */}
+              <div class="mt-6">
+                <h4 class={sectionLabel}>
+                  <span class="w-1 h-4 bg-primary-500 rounded-full" />
+                  {t("common.stack")}
+                </h4>
+                <div class="flex flex-wrap gap-2">
+                  {project.stack.map((tech: string) => (
+                    <span class="badge text-xs">{tech}</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Resources (GitHub repos, demos, files) */}
+              {((project.githubs && project.githubs.length > 0) ||
+                (project.demos && project.demos.length > 0) ||
+                (project.files && project.files.length > 0)) && (
+                <div class="mt-6 pt-4 border-t border-light-border dark:border-dark-border">
+                  <h4 class={sectionLabel}>
+                    <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                    {t("common.resources")}
+                  </h4>
+
+                  {/* Two-column layout: Links left, Files right - PROPERLY ALIGNED */}
+                  <div class="flex flex-row flex-wrap gap-x-4 gap-y-3 justify-between">
+                    {/* External Links - Left Side */}
+                    {((project.githubs && project.githubs.length > 0) ||
+                      (project.demos && project.demos.length > 0)) && (
+                      <div class="flex flex-wrap gap-2 items-start">
+                        {/* GitHub repos */}
+                        {project.githubs &&
+                          project.githubs.length > 0 &&
+                          project.githubs.map((github: Link) => (
+                            <a
+                              href={github.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class={github.label ? linkBadge : linkIcon}
+                              aria-label={
+                                github.label || t("common.sourceCode")
+                              }
+                              title={github.label || t("common.sourceCode")}
+                            >
+                              <Icon name="mdi:github" class="w-4 h-4" />
+                              {github.label && <span>{github.label}</span>}
+                            </a>
+                          ))}
+
+                        {/* Demo links */}
+                        {project.demos &&
+                          project.demos.length > 0 &&
+                          project.demos.map((demo: Link) => (
+                            <a
+                              href={demo.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class={demo.label ? linkBadge : linkIcon}
+                              aria-label={demo.label || t("common.demo")}
+                              title={demo.label || t("common.demo")}
+                            >
+                              <Icon
+                                name={demo.icon || "mdi:external-link"}
+                                class="w-4 h-4"
+                              />
+                              {demo.label && <span>{demo.label}</span>}
+                            </a>
+                          ))}
+                      </div>
+                    )}
+
+                    {/* Files - Right Side */}
+                    {project.files && project.files.length > 0 && (
+                      <div class="flex flex-wrap gap-2 items-start ml-auto">
+                        {project.files.map((file: File) => (
+                          <PDFButton
+                            filename={file.path}
+                            label={file.title}
+                            colorScheme="primary"
+                            variant="outline"
+                            size="sm"
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
-
-              <div class="flex flex-wrap gap-2 mb-4">
-                {project.stack.map((tech) => (
-                  <span class="badge text-xs">{tech}</span>
-                ))}
-              </div>
-
-              <div class="flex gap-3 pt-4 border-t border-light-border dark:border-dark-border">
-                {project.github && (
-                  <a
-                    href={project.github}
-                    class="btn btn-secondary text-sm py-2 px-4"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <svg
-                      class="w-4 h-4 mr-2"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                    </svg>
-                    {t("common.sourceCode")}
-                  </a>
-                )}
-                {project.demo && (
-                  <a
-                    href={project.demo}
-                    class="btn btn-primary text-sm py-2 px-4"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <svg
-                      class="w-4 h-4 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                      />
-                    </svg>
-                    {t("common.viewProject")}
-                  </a>
-                )}
-              </div>
             </div>
-          );
-        })
+          </div>
+        ))
       }
     </div>
   </div>
