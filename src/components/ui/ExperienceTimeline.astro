@@ -1,10 +1,17 @@
 ---
+import { Icon } from "astro-icon/components";
 import { useTranslations, type Language } from "../../utils/i18n";
 import PDFButton from "./PDFButton.astro";
 
 interface File {
     title: string;
     path: string;
+}
+
+interface Link {
+    href: string;
+    icon: string;
+    label?: string;
 }
 
 interface Experience {
@@ -16,9 +23,11 @@ interface Experience {
     achievements?: string[];
     responsibilities?: string[];
     supervisor?: string;
+    coSupervisors?: string[];
     concepts?: string[];
     stack: string[];
     files?: File[];
+    links?: Link[];
 }
 
 interface Props {
@@ -36,6 +45,11 @@ const subtitleColor = colorScheme === 'primary'
     : 'text-accent-600 dark:text-accent-400';
 const sectionLabel = 'text-xs font-bold uppercase tracking-wider text-light-text dark:text-dark-text mb-3 flex items-center gap-2';
 const conceptBadge = 'text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 border border-accent-200 dark:border-accent-800 font-medium';
+
+// Subtle icon-only links similar to social media icons
+const linkIcon = colorScheme === 'primary'
+    ? 'inline-flex items-center justify-center w-9 h-9 rounded-lg text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors'
+    : 'inline-flex items-center justify-center w-9 h-9 rounded-lg text-accent-600 dark:text-accent-400 hover:bg-accent-100 dark:hover:bg-accent-900/30 transition-colors';
 ---
 
 <div class="max-w-4xl mx-auto relative">
@@ -78,19 +92,37 @@ const conceptBadge = 'text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-acc
                         {exp.description}
                     </p>
 
-                <!-- Supervisor -->
-                    {exp.supervisor && (
-                        <div class="mt-6 p-3 bg-light-border/20 dark:bg-dark-border/20 rounded-lg border border-light-border dark:border-dark-border">
-                            <p class="text-sm text-light-text-muted dark:text-dark-text-muted">
-                                <span class="font-bold text-light-text dark:text-dark-text">
-                                    {t('experience.supervisor')}:
-                                </span> {exp.supervisor}
-                            </p>
+                    <!-- Supervisor & Co-Supervisors -->
+                    {(exp.supervisor || (exp.coSupervisors && exp.coSupervisors.length > 0)) && (
+                        <div class="mt-6 p-4 bg-light-border/20 dark:bg-dark-border/20 rounded-lg border border-light-border dark:border-dark-border">
+                            {exp.supervisor && (
+                                <p class="text-sm text-light-text-muted dark:text-dark-text-muted">
+                                    <span class="font-bold text-light-text dark:text-dark-text">
+                                        {t('experience.supervisor')}:
+                                    </span> {exp.supervisor}
+                                </p>
+                            )}
+
+                            {exp.coSupervisors && exp.coSupervisors.length > 0 && (
+                                <div class={exp.supervisor ? 'mt-3' : ''}>
+                                    <p class="text-sm font-bold text-light-text dark:text-dark-text mb-1">
+                                        {t('common.co-advisors')}:
+                                    </p>
+                                    <ul class="space-y-1 text-sm text-light-text-muted dark:text-dark-text-muted">
+                                        {exp.coSupervisors.map(coSupervisor => (
+                                            <li class="flex items-start gap-2 ml-2">
+                                                <span class="text-primary-500 mt-0.5">▸</span>
+                                                <span class="flex-1">{coSupervisor}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
                         </div>
                     )}
 
                     <!-- Achievements -->
-                    {exp.achievements && (
+                    {exp.achievements && exp.achievements.length > 0 && (
                         <div class="mt-6">
                             <h4 class={sectionLabel}>
                                 <span class="w-1 h-4 bg-primary-500 rounded-full"></span>
@@ -108,7 +140,7 @@ const conceptBadge = 'text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-acc
                     )}
 
                     <!-- Responsibilities -->
-                    {exp.responsibilities && (
+                    {exp.responsibilities && exp.responsibilities.length > 0 && (
                         <div class="mt-6">
                             <h4 class={sectionLabel}>
                                 <span class="w-1 h-4 bg-accent-500 rounded-full"></span>
@@ -125,9 +157,8 @@ const conceptBadge = 'text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-acc
                         </div>
                     )}
 
-
-
-                    {exp.concepts && (
+                    <!-- Concepts -->
+                    {exp.concepts && exp.concepts.length > 0 && (
                         <div class="mt-6">
                             <h4 class={sectionLabel}>
                                 <span class="w-1 h-4 bg-accent-500 rounded-full"></span>
@@ -143,7 +174,7 @@ const conceptBadge = 'text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-acc
                         </div>
                     )}
 
-
+                    <!-- Stack -->
                     <div class="mt-6">
                         <h4 class={sectionLabel}>
                             <span class="w-1 h-4 bg-primary-500 rounded-full"></span>
@@ -156,15 +187,17 @@ const conceptBadge = 'text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-acc
                         </div>
                     </div>
 
-
-                    {exp.files && exp.files.length > 0 && (
+                    <!-- Resources -->
+                    {((exp.files && exp.files.length > 0) || (exp.links && exp.links.length > 0)) && (
                         <div class="mt-6 pt-4 border-t border-light-border dark:border-dark-border">
                             <h4 class={sectionLabel}>
                                 <span class="w-1 h-4 bg-accent-500 rounded-full"></span>
                                 {t('experience.resources')}
                             </h4>
-                            <div class="flex flex-wrap gap-2">
-                                {exp.files.map(file => (
+
+                            <div class="flex flex-wrap items-center gap-3">
+                                {/* Files - Outlined badges */}
+                                {exp.files && exp.files.length > 0 && exp.files.map(file => (
                                     <PDFButton
                                         filename={file.path}
                                         label={file.title}
@@ -173,6 +206,22 @@ const conceptBadge = 'text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-acc
                                         size="sm"
                                     />
                                 ))}
+
+                                {/* External Links - Icon-only style like social media */}
+                                {exp.links && exp.links.length > 0 && exp.links.map(link => (
+                                    <a
+                                        href={link.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class={linkIcon}
+                                        aria-label={link.label || link.href}
+                                        title={link.label || link.href}
+                                    >
+                                        <Icon name={link.icon} class="w-5 h-5" />
+                                    </a>
+                                ))}
+
+
                             </div>
                         </div>
                     )}

@@ -31,9 +31,17 @@ const experience = defineCollection({
         concepts: z.array(z.string()).optional(),
         stack: z.array(z.string()),
         supervisor: z.string().optional(),
+        coSupervisors: z.array(z.string()).optional(),
         files: z.array(z.object({
             title: z.string(),
             path: z.string(),
+
+        }
+        )).optional(),
+        links: z.array(z.object({
+            href: z.string(),
+            icon: z.string(),
+            label: z.string().optional(),
 
         }
         )).optional(),
@@ -69,7 +77,8 @@ const education = defineCollection({
         field: z.string(),
         gpa: z.string().optional(),
         thesis: z.string().optional(),
-        adviser: z.string().optional(),
+        advisor: z.string().optional(),
+        coAdvisors: z.array(z.string()).optional(),
         coursework: z.array(z.string()),
         order: z.number().default(999),
     }),

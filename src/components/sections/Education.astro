@@ -5,16 +5,26 @@ import { useTranslations, type Language } from "../../utils/i18n";
 
 interface Props {
   lang: Language;
+  colorScheme?: 'primary' | 'accent';
 }
 
-const { lang } = Astro.props;
+const { lang, colorScheme = 'primary' } = Astro.props;
 const t = useTranslations(lang);
 
 // Get all education entries for this language
-const allEducation = await getCollection("education");
-const education = allEducation
-  .filter((entry) => entry.id.endsWith(`-${lang}`))
-  .sort((a, b) => a.data.order - b.data.order);
+const education = (await getCollection("education"))
+  .filter((entry: any) => entry.id.split(".")[0].endsWith(`-${lang}`))
+  .map((entry: any) => entry.data)
+  .sort((a: any, b: any) => a.order - b.order);
+
+const dotColor = colorScheme === 'primary' ? 'bg-primary-600' : 'bg-accent-600';
+const accentColor = colorScheme === 'primary'
+    ? 'text-primary-600 dark:text-primary-400'
+    : 'text-accent-600 dark:text-accent-400';
+const sectionLabel = 'text-xs font-bold uppercase tracking-wider text-light-text dark:text-dark-text mb-3 flex items-center gap-2';
+const gpaColor = colorScheme === 'primary'
+    ? 'text-primary-700 dark:text-primary-300 bg-primary-100 dark:bg-primary-900/30'
+    : 'text-accent-700 dark:text-accent-300 bg-accent-100 dark:bg-accent-900/30';
 ---
 
 <section id="education" class="py-20 bg-light-surface dark:bg-dark-surface">
@@ -23,84 +33,128 @@ const education = allEducation
       {t("section.education")}
     </h2>
 
-    <div class="max-w-4xl mx-auto space-y-8">
-      {
-        education.map((entry, index) => {
-          const edu = entry.data;
-          return (
-            <div
-              class={`card card-hover animate-on-scroll`}
-              style={`animation-delay: ${index * 100}ms`}
-            >
-              <div class="flex items-start justify-between mb-4">
+    <div class="max-w-4xl mx-auto relative">
+      <!-- Timeline line -->
+      <div class={`absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b ${
+        colorScheme === 'primary'
+          ? 'from-primary-500 to-accent-500'
+          : 'from-accent-500 to-primary-500'
+      } opacity-20`}></div>
+
+      <div class="space-y-12">
+        {education.map((edu: any, index: number) => (
+          <div class="relative pl-20 animate-on-scroll" style={`animation-delay: ${index * 100}ms`}>
+            <!-- Timeline dot -->
+            <div class={`absolute left-6 top-6 w-4 h-4 rounded-full ${dotColor} border-4 border-light-surface dark:border-dark-surface shadow-lg`}></div>
+
+            <div class="card card-hover">
+              <!-- Header Section -->
+              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 pb-4 border-b border-light-border dark:border-dark-border">
                 <div class="flex-1">
                   <h3 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">
                     {edu.degree}
                   </h3>
-                  <p class="text-primary-600 dark:text-primary-400 font-semibold text-lg">
+                  <p class={`${accentColor} font-semibold text-lg mb-1`}>
                     {edu.institution}
                   </p>
-                  <p class="text-sm text-light-text-muted dark:text-dark-text-muted">
+                  <p class="text-sm text-light-text-muted dark:text-dark-text-muted font-medium">
                     {edu.location}
                   </p>
                 </div>
-                <div class="text-right">
-                  <span class="inline-block px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm font-medium">
+
+                <div class="flex flex-col items-end gap-2">
+                  <span class="text-sm font-semibold text-light-text-muted dark:text-dark-text-muted bg-light-border/30 dark:bg-dark-border/30 px-3 py-1.5 rounded-full whitespace-nowrap">
                     {edu.period}
                   </span>
                   {edu.gpa && (
-                    <div class="mt-2">
-                      <span class="text-2xl font-bold text-accent-600 dark:text-accent-400">
-                        {edu.gpa}
-                      </span>
-                      <p class="text-xs text-light-text-muted dark:text-dark-text-muted">
-                        GPA
-                      </p>
+                    <div class={`px-4 py-2 rounded-lg ${gpaColor} border border-current/20`}>
+                      <div class="text-center">
+                        <span class="text-2xl font-bold block">
+                          {edu.gpa}
+                        </span>
+                        <span class="text-xs font-semibold uppercase tracking-wide">
+                          GPA
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
               </div>
 
-              <p class="text-light-text dark:text-dark-text font-medium mb-4">
-                <span class="text-light-text-muted dark:text-dark-text-muted">
-                  {t("common.fieldOfStudy")}:
-                </span>{" "}
-                {edu.field}
-              </p>
+              <!-- Field of Study -->
+              <div class="mt-4">
+                <p class="text-base text-light-text dark:text-dark-text">
+                  <span class="font-bold text-light-text-muted dark:text-dark-text-muted">
+                    {t("common.fieldOfStudy")}:
+                  </span>{" "}
+                  <span class="text-light-text dark:text-dark-text">
+                    {edu.field}
+                  </span>
+                </p>
+              </div>
 
+              <!-- Thesis Section -->
               {edu.thesis && (
-                <div class="mb-4 p-3 rounded-lg bg-accent-50 dark:bg-accent-900/10 border border-accent-200 dark:border-accent-800">
-                  <p class="text-sm font-semibold text-accent-700 dark:text-accent-300 mb-1">
-                    {t("common.thesis")}:
-                  </p>
-                  <p class="text-sm text-accent-600 dark:text-accent-400">
+                <div class="mt-6 p-4 bg-accent-50 dark:bg-accent-900/10 rounded-lg border border-accent-200 dark:border-accent-800">
+                  <h4 class={sectionLabel}>
+                    <span class="w-1 h-4 bg-accent-500 rounded-full "></span>
+                    {t("common.thesis")}
+                  </h4>
+                  <p class="font-bold text-md text-accent-700 dark:text-accent-300 leading-relaxed">
                     {edu.thesis}
                   </p>
-                  {edu.adviser && (
-                    <p class="text-sm text-accent-600 dark:text-accent-400 mt-1">
-                      <span class="font-medium">{t("common.adviser")}:</span>{" "}
-                      {edu.adviser}
-                    </p>
+
+                  {/* Advisor */}
+                  {edu.advisor && (
+                    <div class="mt-3">
+                      <p class="text-sm text-accent-600 dark:text-accent-400">
+                        <span class="font-bold">
+                          {t("common.advisor")}:
+                        </span>{" "}
+                        {edu.advisor}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Co-advisors */}
+                  {edu.coAdvisors && edu.coAdvisors.length > 0 && (
+                    <div class="mt-3">
+                      <p class="text-sm text-accent-600 dark:text-accent-400">
+                        <span class="font-bold">
+                          {t("common.co-advisors")}:
+                        </span>
+                      </p>
+                      <ul class="mt-1 space-y-1 text-sm text-accent-600 dark:text-accent-400">
+                        {edu.coAdvisors.map((coAdvisor: string) => (
+                          <li class="flex items-start gap-2 ml-2">
+                            <span class="text-accent-500 mt-0.5">▸</span>
+                            <span class="flex-1">{coAdvisor}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   )}
                 </div>
               )}
 
-              <div>
-                <p class="text-sm font-semibold text-light-text dark:text-dark-text mb-3">
-                  {t("common.relevantCoursework")}:
-                </p>
+              <!-- Relevant Coursework -->
+              <div class="mt-6">
+                <h4 class={sectionLabel}>
+                  <span class="w-1 h-4 bg-primary-500 rounded-full"></span>
+                  {t("common.relevantCoursework")}
+                </h4>
                 <div class="flex flex-wrap gap-2">
-                  {edu.coursework.map((course) => (
-                    <span class="text-sm px-3 py-1 rounded-full bg-light-elevated dark:bg-dark-elevated text-light-text dark:text-dark-text border border-light-border dark:border-dark-border">
+                  {edu.coursework.map((course: string) => (
+                    <span class="badge text-xs">
                       {course}
                     </span>
                   ))}
                 </div>
               </div>
             </div>
-          );
-        })
-      }
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 </section>

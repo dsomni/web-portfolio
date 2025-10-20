@@ -76,7 +76,9 @@ export interface Translations {
     'common.responsibilities': string;
     'common.concepts': string;
     'common.supervisor': string;
-    'common.adviser': string;
+    'common.co-supervisors': string;
+    'common.advisor': string;
+    'common.co-advisors': string;
     'common.fieldOfStudy': string;
     'common.relevantCoursework': string;
     'common.thesis': string;
@@ -191,7 +193,9 @@ Building state-of-the-art ML solutions.`,
         'common.responsibilities': 'Responsibilities',
         'common.concepts': 'Concepts',
         'common.supervisor': 'Supervisor',
-        'common.adviser': 'Adviser',
+        'common.co-supervisors': 'Co-supervisors',
+        'common.advisor': 'Supervisor',
+        'common.co-advisors': 'Co-supervisors',
         'common.fieldOfStudy': 'Field of study',
         'common.relevantCoursework': 'Relevant Coursework',
         'common.thesis': 'Bachelor Thesis',
@@ -235,7 +239,6 @@ Building state-of-the-art ML solutions.`,
         'section.contact': 'Связаться',
 
         'subsection.languages': 'Языки',
-
         'experience.achievements': 'Достижения',
         'experience.responsibilities': 'Обязанности',
         'experience.supervisor': 'Руководитель',
@@ -253,7 +256,9 @@ Building state-of-the-art ML solutions.`,
         'common.responsibilities': 'Обязанности',
         'common.concepts': 'Концепции',
         'common.supervisor': 'Руководитель',
-        'common.adviser': 'Научный руководитель',
+        'common.co-supervisors': 'Со-руководители',
+        'common.advisor': 'Научный руководитель',
+        'common.co-advisors': 'Со-руководители',
         'common.fieldOfStudy': 'Специализация',
         'common.relevantCoursework': 'Ключевые курсы',
         'common.thesis': 'Дипломная работа',
