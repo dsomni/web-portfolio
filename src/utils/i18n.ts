@@ -135,7 +135,9 @@ const translations: Record<Language, Translations> = {
         'nav.contact': 'Contact',
 
         'hero.greeting': 'Hi, I\'m',
-        'hero.description': 'MSc student specializing in AI and Data Science with deep expertise in Deep Reinforcement Learning and Mathematical Optimization. Building state-of-the-art ML solutions.',
+        'hero.description': `MSc student specializing in AI and Data Science with
+deep research interest in Mathematical Optimization, LLMs and Deep Reinforcement Learning.
+Building state-of-the-art ML solutions.`,
         'hero.cta.primary': 'View Projects',
         'hero.cta.secondary': 'Contact Me',
 
@@ -180,7 +182,9 @@ const translations: Record<Language, Translations> = {
 
         'hero.greeting': 'Привет, я',
 
-        'hero.description': 'Магистр Computer Science, специализирующийся на ИИ и науке о данных с глубокой экспертизой в Deep Reinforcement Learning и математической оптимизации. Создаю передовые ML-решения.',
+        'hero.description': `Магистр Computer Science, специализирующийся на ИИ и науке о данных
+с глубокой исследовательским интересом в математической оптимизации, LLMs и Deep Reinforcement Learning.
+Создаю передовые ML-решения.`,
         'hero.cta.primary': 'Проекты',
         'hero.cta.secondary': 'Связаться',
 
