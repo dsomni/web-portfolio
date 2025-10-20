@@ -42,6 +42,7 @@ export interface Translations {
     'hero.description': string;
     'hero.cta.primary': string;
     'hero.cta.secondary': string;
+    'hero.cta.resume': string;
 
     // Sections
     'section.about': string;
@@ -62,6 +63,7 @@ export interface Translations {
     'experience.supervisor': string;
     'experience.concepts': string;
     'experience.stack': string;
+    'experience.resources': string;
 
     // Common
     'common.readMore': string;
@@ -151,6 +153,7 @@ deep research interest in Mathematical Optimization, LLMs and Deep Reinforcement
 Building state-of-the-art ML solutions.`,
         'hero.cta.primary': 'View Projects',
         'hero.cta.secondary': 'Contact Me',
+        'hero.cta.resume': 'Resume',
 
         'section.about': 'About Me',
         'section.experience': 'Work Experience',
@@ -166,6 +169,8 @@ Building state-of-the-art ML solutions.`,
         'experience.supervisor': 'Supervisor',
         'experience.concepts': 'Concepts',
         'experience.stack': 'Stack',
+        'experience.resources': 'Resources',
+
 
         'subsection.languages': 'Languages',
 
@@ -207,6 +212,7 @@ Building state-of-the-art ML solutions.`,
 Создаю передовые ML-решения.`,
         'hero.cta.primary': 'Проекты',
         'hero.cta.secondary': 'Связаться',
+        'hero.cta.resume': 'Резюме',
 
         'section.about': 'О себе',
         'section.experience': 'Опыт работы',
@@ -223,6 +229,7 @@ Building state-of-the-art ML solutions.`,
         'experience.supervisor': 'Руководитель',
         'experience.concepts': 'Концепции',
         'experience.stack': 'Стек',
+        'experience.resources': 'Ресурсы',
 
         'common.readMore': 'Подробнее',
         'common.viewProject': 'Смотреть проект',

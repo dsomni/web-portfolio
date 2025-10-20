@@ -31,6 +31,12 @@ const experience = defineCollection({
         concepts: z.array(z.string()).optional(),
         stack: z.array(z.string()),
         supervisor: z.string().optional(),
+        files: z.array(z.object({
+            title: z.string(),
+            path: z.string(),
+
+        }
+        )).optional(),
         order: z.number().default(999),
     }),
 });

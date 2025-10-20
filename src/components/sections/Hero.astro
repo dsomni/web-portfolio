@@ -2,6 +2,7 @@
 import Icon from "node_modules/astro-icon/components/Icon.astro";
 import { useTranslations, type Language } from "../../utils/i18n";
 import { url } from "../../utils/url";
+import PDFButton from "../ui/PDFButton.astro";
 
 interface Props {
   lang: Language;
@@ -16,25 +17,50 @@ const t = useTranslations(lang);
   class="relative min-h-screen flex items-center justify-center pt-20 pb-16 overflow-hidden"
 >
   <div class="container-custom">
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
       <div class="space-y-8 animate-fade-up">
-        <div class="space-y-4">
-          <p class="text-primary-600 dark:text-primary-400 font-medium text-lg">
-            {t("hero.greeting")}
-          </p>
-          <h1
-            class="text-5xl md:text-6xl lg:text-7xl font-bold text-light-text dark:text-dark-text"
-          >
-            <span class="block">{t("personal.name")}</span>
-            <span class="block text-gradient-primary"
-              >{t("personal.surname")}</span
+        <div class="flex items-start justify-between gap-6 lg:block">
+          <div class="space-y-4 flex-1">
+            <p
+              class="text-primary-600 dark:text-primary-400 font-medium text-lg tracking-wide uppercase"
             >
-          </h1>
-          <h2
-            class="text-2xl md:text-3xl font-semibold text-light-text-muted dark:text-dark-text-muted"
-          >
-            {t("personal.specialty")}
-          </h2>
+              {t("hero.greeting")}
+            </p>
+            <h1
+              class="text-4xl md:text-6xl lg:text-7xl font-bold text-light-text dark:text-dark-text leading-tight"
+            >
+              <span class="block">{t("personal.name")}</span>
+              <span class="block text-gradient-primary"
+                >{t("personal.surname")}</span
+              >
+            </h1>
+            <h2
+              class="text-xl md:text-3xl font-semibold text-light-text-muted dark:text-dark-text-muted"
+            >
+              {t("personal.specialty")}
+            </h2>
+          </div>
+
+          <!-- Mobile Image -->
+          <div class="relative flex-shrink-0 lg:hidden">
+            <div class="relative w-32 h-32 sm:w-40 sm:h-40">
+              <div
+                class="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-full blur-xl opacity-30"
+              >
+              </div>
+
+              <div
+                class="relative overflow-hidden rounded-full w-full h-full ring-2 ring-light-bg dark:ring-dark-bg shadow-lg"
+              >
+                <img
+                  src={url("/images/profile/photo.jpg")}
+                  alt={t("personal.fullname")}
+                  class="w-full h-full object-cover"
+                  loading="eager"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         <p
@@ -43,7 +69,8 @@ const t = useTranslations(lang);
           {t("hero.description")}
         </p>
 
-        <div class="flex flex-wrap gap-3">
+        <!-- Skills -->
+        <div class="flex flex-wrap gap-2">
           {
             [
               "AI Research",
@@ -51,30 +78,63 @@ const t = useTranslations(lang);
               "ML Optimization",
               "LLM",
               "Deep Learning",
-            ].map((skill) => <span class="badge">{skill}</span>)
+            ].map((skill) => <span class="badge text-xs">{skill}</span>)
           }
         </div>
 
-        <div class="flex flex-wrap gap-4">
-          <a href="#projects" class="btn btn-primary">
-            <span>{t("hero.cta.primary")}</span>
-            <Icon class="w-5 h-5 ml-2" name="mdi:arrow-right" />
-          </a>
-          <a href="#contact" class="btn btn-secondary">
-            <Icon class="w-5 h-5 mr-2" name="mdi:email-outline" />
-            <span>{t("hero.cta.secondary")}</span>
-          </a>
+        <div class="space-y-4 pt-2">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <a href="#projects" class="btn btn-primary justify-center">
+              <span>{t("hero.cta.primary")}</span>
+              <Icon class="w-5 h-5 ml-2" name="mdi:arrow-right" />
+            </a>
+            <a href="#contact" class="btn btn-secondary justify-center">
+              <Icon class="w-5 h-5 mr-2" name="mdi:email-outline" />
+              <span>{t("hero.cta.secondary")}</span>
+            </a>
+          </div>
+
+          <div class="flex items-center gap-4 py-2">
+            <div
+              class="h-px flex-1 bg-gradient-to-r from-transparent via-light-text-muted/20 to-transparent dark:via-dark-text-muted/20"
+            >
+            </div>
+            <span
+              class="text-xs text-light-text-muted dark:text-dark-text-muted uppercase tracking-wider font-medium"
+            >
+              {t("hero.cta.resume")}
+            </span>
+            <div
+              class="h-px flex-1 bg-gradient-to-r from-transparent via-light-text-muted/20 to-transparent dark:via-dark-text-muted/20"
+            >
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <PDFButton
+              filename="cv/en_new.pdf"
+              label="CV (EN)"
+              colorScheme="primary"
+            />
+            <PDFButton
+              filename="cv/ru_new.pdf"
+              label="CV (RU)"
+              colorScheme="accent"
+            />
+          </div>
         </div>
       </div>
 
-      <div class="relative lg:block animate-fade-up animation-delay-200">
+      <!-- Desktop Profile Image -->
+      <div class="relative hidden lg:block animate-fade-up animation-delay-200">
         <div class="relative z-10">
           <div class="relative w-full max-w-md mx-auto aspect-square">
             <div
-              class="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-3xl blur-2xl opacity-20"
+              class="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-3xl blur-3xl opacity-20 animate-pulse-slow"
             >
             </div>
-            <div class="relative card card-hover overflow-hidden">
+
+            <div class="relative card card-hover overflow-hidden rounded-3xl">
               <img
                 src={url("/images/profile/photo.jpg")}
                 alt={t("personal.fullname")}
@@ -85,18 +145,23 @@ const t = useTranslations(lang);
           </div>
 
           <div
-            class="absolute -top-4 -right-4 card p-4 animate-float animation-delay-100"
+            class="absolute -top-4 -right-4 card p-4 shadow-xl animate-float animation-delay-100"
           >
             <div class="flex items-center gap-3">
-              <Icon
-                class="w-8 h-8 text-primary-600"
-                name="mdi:school-outline"
-              />
-
+              <div class="p-2 rounded-lg bg-primary-100 dark:bg-primary-900/30">
+                <Icon
+                  class="w-6 h-6 text-primary-600 dark:text-primary-400"
+                  name="mdi:school-outline"
+                />
+              </div>
               <div>
-                <div class="text-2xl font-bold text-primary-600">BSc</div>
                 <div
-                  class="text-xs text-light-text-muted dark:text-dark-text-muted"
+                  class="text-xl font-bold text-primary-600 dark:text-primary-400"
+                >
+                  BSc
+                </div>
+                <div
+                  class="text-xs text-light-text-muted dark:text-dark-text-muted font-medium"
                 >
                   AI & DS
                 </div>
@@ -105,17 +170,25 @@ const t = useTranslations(lang);
           </div>
 
           <div
-            class="absolute -bottom-4 -left-4 card p-4 animate-float animation-delay-300"
+            class="absolute -bottom-4 -left-4 card p-4 shadow-xl animate-float animation-delay-300"
           >
             <div class="flex items-center gap-3">
-              <Icon class="w-8 h-8 text-accent-600" name="mdi:check-decagram" />
-
+              <div class="p-2 rounded-lg bg-accent-100 dark:bg-accent-900/30">
+                <Icon
+                  class="w-6 h-6 text-accent-600 dark:text-accent-400"
+                  name="mdi:check-decagram"
+                />
+              </div>
               <div>
-                <div class="text-2xl font-bold text-accent-600">GPA</div>
                 <div
-                  class="text-xs text-light-text-muted dark:text-dark-text-muted"
+                  class="text-xl font-bold text-accent-600 dark:text-accent-400"
                 >
-                  4.95/5.0
+                  4.95
+                </div>
+                <div
+                  class="text-xs text-light-text-muted dark:text-dark-text-muted font-medium"
+                >
+                  GPA / 5.0
                 </div>
               </div>
             </div>
@@ -138,6 +211,20 @@ const t = useTranslations(lang);
     }
     50% {
       transform: translateY(-10px);
+    }
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse-slow {
+    0%,
+    100% {
+      opacity: 0.15;
+    }
+    50% {
+      opacity: 0.25;
     }
   }
 

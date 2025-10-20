@@ -1,144 +1,183 @@
 ---
 import { useTranslations, type Language } from "../../utils/i18n";
+import PDFButton from "./PDFButton.astro";
 
+interface File {
+    title: string;
+    path: string;
+}
 
 interface Experience {
-	title: string;
-	subtitle: string;
-	organization?: string;
-	period: string;
-	description: string;
-	achievements?: string[];
-	responsibilities?: string[];
-	supervisor?: string;
-	concepts?: string[];
-	stack: string[];
+    title: string;
+    subtitle: string;
+    organization?: string;
+    period: string;
+    description: string;
+    achievements?: string[];
+    responsibilities?: string[];
+    supervisor?: string;
+    concepts?: string[];
+    stack: string[];
+    files?: File[];
 }
 
 interface Props {
-	experiences: Experience[];
-	colorScheme: 'primary' | 'accent';
-	lang: Language;
+    experiences: Experience[];
+    colorScheme: 'primary' | 'accent';
+    lang: Language;
 }
 
 const { experiences, colorScheme, lang } = Astro.props;
-
 const t = useTranslations(lang);
-
 
 const dotColor = colorScheme === 'primary' ? 'bg-primary-600' : 'bg-accent-600';
 const subtitleColor = colorScheme === 'primary'
-		? 'text-primary-600 dark:text-primary-400'
-		: 'text-accent-600 dark:text-accent-400';
-const conceptBadge = 'text-xs px-2 py-1 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 border border-accent-200 dark:border-accent-800';
+    ? 'text-primary-600 dark:text-primary-400'
+    : 'text-accent-600 dark:text-accent-400';
+const sectionLabel = 'text-xs font-bold uppercase tracking-wider text-light-text dark:text-dark-text mb-3 flex items-center gap-2';
+const conceptBadge = 'text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 border border-accent-200 dark:border-accent-800 font-medium';
 ---
 
 <div class="max-w-4xl mx-auto relative">
-	<!-- Timeline line -->
-	<div class={`absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b ${
-		colorScheme === 'primary'
-			? 'from-primary-500 to-accent-500'
-			: 'from-accent-500 to-primary-500'
-	} opacity-20`}></div>
+    <!-- Timeline line -->
+    <div class={`absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b ${
+        colorScheme === 'primary'
+            ? 'from-primary-500 to-accent-500'
+            : 'from-accent-500 to-primary-500'
+    } opacity-20`}></div>
 
-	<div class="space-y-8">
-		{experiences.map((exp, index) => (
-			<div class="relative pl-20 animate-on-scroll" style={`animation-delay: ${index * 100}ms`}>
-				<!-- Timeline dot -->
-				<div class={`absolute left-6 top-6 w-4 h-4 rounded-full ${dotColor} border-4 border-light-bg dark:border-dark-bg`}></div>
+    <div class="space-y-12">
+        {experiences.map((exp, index) => (
+            <div class="relative pl-20 animate-on-scroll" style={`animation-delay: ${index * 100}ms`}>
+                <!-- Timeline dot -->
+                <div class={`absolute left-6 top-6 w-4 h-4 rounded-full ${dotColor} border-4 border-light-bg dark:border-dark-bg shadow-lg`}></div>
 
-				<div class="card card-hover">
-					<div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-						<div>
-							<h3 class="text-xl font-bold text-light-text dark:text-dark-text">
-								{exp.title}
-							</h3>
-							<p class={`${subtitleColor} font-medium`}>
-								{exp.subtitle}
-							</p>
-							{exp.organization && (
-								<p class="text-sm text-light-text-muted dark:text-dark-text-muted">
-									{exp.organization}
-								</p>
-							)}
-						</div>
-						<span class="text-sm text-light-text-muted dark:text-dark-text-muted mt-2 md:mt-0">
-							{exp.period}
-						</span>
-					</div>
+                <div class="card card-hover">
+                    <!-- Header Section -->
+                    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3 pb-4 border-b border-light-border dark:border-dark-border">
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-bold text-light-text dark:text-dark-text mb-1">
+                                {exp.title}
+                            </h3>
+                            <p class={`${subtitleColor} font-semibold text-lg mb-1`}>
+                                {exp.subtitle}
+                            </p>
+                            {exp.organization && (
+                                <p class="text-sm text-light-text-muted dark:text-dark-text-muted font-medium">
+                                    {exp.organization}
+                                </p>
+                            )}
+                        </div>
+                        <span class="text-sm font-semibold text-light-text-muted dark:text-dark-text-muted bg-light-border/30 dark:bg-dark-border/30 px-3 py-1.5 rounded-full whitespace-nowrap">
+                            {exp.period}
+                        </span>
+                    </div>
 
-					<p class="text-light-text-muted dark:text-dark-text-muted mb-4">
-						{exp.description}
-					</p>
+                    <!-- Description -->
+                    <p class="text-base text-light-text-muted dark:text-dark-text-muted leading-relaxed mt-4">
+                        {exp.description}
+                    </p>
 
-					{exp.achievements && (
-						<div class="mb-4">
-							<p class="text-sm font-semibold text-light-text dark:text-dark-text mb-2">
-								{t('experience.achievements')}
-							</p>
-							<ul class="list-disc list-inside space-y-1 text-sm text-light-text-muted dark:text-dark-text-muted">
-								{exp.achievements.map(achievement => (
-									<li>{achievement}</li>
-								))}
-							</ul>
-						</div>
-					)}
+                <!-- Supervisor -->
+                    {exp.supervisor && (
+                        <div class="mt-6 p-3 bg-light-border/20 dark:bg-dark-border/20 rounded-lg border border-light-border dark:border-dark-border">
+                            <p class="text-sm text-light-text-muted dark:text-dark-text-muted">
+                                <span class="font-bold text-light-text dark:text-dark-text">
+                                    {t('experience.supervisor')}:
+                                </span> {exp.supervisor}
+                            </p>
+                        </div>
+                    )}
 
-					{exp.responsibilities && (
-						<div class="mb-4">
-							<p class="text-sm font-semibold text-light-text dark:text-dark-text mb-2">
+                    <!-- Achievements -->
+                    {exp.achievements && (
+                        <div class="mt-6">
+                            <h4 class={sectionLabel}>
+                                <span class="w-1 h-4 bg-primary-500 rounded-full"></span>
+                                {t('experience.achievements')}
+                            </h4>
+                            <ul class="space-y-2 text-sm text-light-text-muted dark:text-dark-text-muted">
+                                {exp.achievements.map(achievement => (
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-primary-500 mt-1">▸</span>
+                                        <span class="flex-1">{achievement}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
 
-								{t('experience.responsibilities')}
+                    <!-- Responsibilities -->
+                    {exp.responsibilities && (
+                        <div class="mt-6">
+                            <h4 class={sectionLabel}>
+                                <span class="w-1 h-4 bg-accent-500 rounded-full"></span>
+                                {t('experience.responsibilities')}
+                            </h4>
+                            <ul class="space-y-2 text-sm text-light-text-muted dark:text-dark-text-muted">
+                                {exp.responsibilities.map(resp => (
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-accent-500 mt-1">▸</span>
+                                        <span class="flex-1">{resp}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
 
-							</p>
-							<ul class="list-disc list-inside space-y-1 text-sm text-light-text-muted dark:text-dark-text-muted">
-								{exp.responsibilities.map(resp => (
-									<li>{resp}</li>
-								))}
-							</ul>
-						</div>
-					)}
 
-					{exp.supervisor && (
-						<p class="text-sm text-light-text-muted dark:text-dark-text-muted mb-4">
-							<span class="font-bold">
-																{t('experience.supervisor')}:
 
-								</span> {exp.supervisor}
-						</p>
-					)}
+                    {exp.concepts && (
+                        <div class="mt-6">
+                            <h4 class={sectionLabel}>
+                                <span class="w-1 h-4 bg-accent-500 rounded-full"></span>
+                                {t('experience.concepts')}
+                            </h4>
+                            <div class="flex flex-wrap gap-2">
+                                {exp.concepts.map(concept => (
+                                    <span class={conceptBadge}>
+                                        {concept}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
-				{exp.concepts && (
-						<div class="mb-4">
-							<p class="text-sm font-semibold text-light-text dark:text-dark-text mb-2">
 
-								{t('experience.concepts')}
+                    <div class="mt-6">
+                        <h4 class={sectionLabel}>
+                            <span class="w-1 h-4 bg-primary-500 rounded-full"></span>
+                            {t('experience.stack')}
+                        </h4>
+                        <div class="flex flex-wrap gap-2">
+                            {exp.stack.map(tech => (
+                                <span class="badge text-xs">{tech}</span>
+                            ))}
+                        </div>
+                    </div>
 
-							</p>
-							<div class="flex flex-wrap gap-2">
-								{exp.concepts.map(concept => (
-									<span class={conceptBadge}>
-										{concept}
-									</span>
-								))}
-							</div>
-						</div>
-					)}
-			<div class="mb-4">
-					<p class="text-sm font-semibold text-light-text dark:text-dark-text mb-2">
 
-								{t('experience.stack')}
-
-						</p>
-					<div class="flex flex-wrap gap-2">
-						{exp.stack.map(tech => (
-							<span class="badge text-xs">{tech}</span>
-						))}
-					</div>
-						</div>
-
-				</div>
-			</div>
-		))}
-	</div>
+                    {exp.files && exp.files.length > 0 && (
+                        <div class="mt-6 pt-4 border-t border-light-border dark:border-dark-border">
+                            <h4 class={sectionLabel}>
+                                <span class="w-1 h-4 bg-accent-500 rounded-full"></span>
+                                {t('experience.resources')}
+                            </h4>
+                            <div class="flex flex-wrap gap-2">
+                                {exp.files.map(file => (
+                                    <PDFButton
+                                        filename={file.path}
+                                        label={file.title}
+                                        colorScheme={colorScheme}
+                                        variant="outline"
+                                        size="sm"
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+        ))}
+    </div>
 </div>
