@@ -7,6 +7,7 @@ import {
 import { localizedUrl, url } from "../../utils/url";
 import { Icon } from "astro-icon/components";
 import { getCollection } from "astro:content";
+import SocialLink from "../ui/SocialLink.astro";
 
 interface Props {
   lang: Language;
@@ -15,12 +16,10 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
-let social = await getCollection("social");
-social = social.sort(
-  (a: any, b: any) => (a.data.order ?? 999) - (b.data.order ?? 999)
-);
+const socials = (await getCollection("social"))
+  .map((entry: any) => entry.data)
+  .sort((a: any, b: any) => (a.order ?? 999) - (b.order ?? 999));
 
-// Define your links once
 const quickLinks: { locale_key: keyof Translations; href: string }[] = [
   { locale_key: "nav.home", href: "/" },
   { locale_key: "nav.projects", href: "/#projects" },
@@ -51,7 +50,6 @@ const currentYear = new Date().getFullYear();
         </p>
       </div>
 
-      <!-- Quick Links -->
       <div class="space-y-4">
         <h3
           class="font-semibold text-sm uppercase tracking-wider text-light-text dark:text-dark-text"
@@ -82,29 +80,9 @@ const currentYear = new Date().getFullYear();
         </h3>
         <div class="flex gap-4">
           {
-            social.map(({ data }: { data: any }) =>
-              data.copy_content ? (
-                <button
-                  type="button"
-                  data-copy={data.url}
-                  data-label={data.name}
-                  class="w-10 h-10 rounded-full bg-light-elevated dark:bg-dark-elevated flex items-center justify-center text-light-text dark:text-dark-text hover:bg-primary-600 hover:text-white dark:hover:bg-primary-500 transition-all hover:scale-110"
-                  aria-label={`Copy ${data.name}`}
-                >
-                  <Icon name={data.icon} size="20" />
-                </button>
-              ) : (
-                <a
-                  href={data.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="w-10 h-10 rounded-full bg-light-elevated dark:bg-dark-elevated flex items-center justify-center text-light-text dark:text-dark-text hover:bg-primary-600 hover:text-white dark:hover:bg-primary-500 transition-all hover:scale-110"
-                  aria-label={data.name}
-                >
-                  <Icon name={data.icon} size="20" />
-                </a>
-              )
-            )
+            socials.map((social: any) => (
+              <SocialLink social={social} lang={lang} variant="icon" />
+            ))
           }
         </div>
       </div>
@@ -120,70 +98,3 @@ const currentYear = new Date().getFullYear();
     </div>
   </div>
 </footer>
-
-<script>
-  function setupSocialCopy() {
-    // Idempotent init
-    if (document.documentElement.dataset.copyInit === "1") return;
-
-    // Create a simple toast container once
-    let toast = document.getElementById("copy-toast");
-    if (!toast) {
-      toast = document.createElement("div");
-      toast.id = "copy-toast";
-      toast.setAttribute("role", "status"); // announce changes
-      toast.setAttribute("aria-live", "polite"); // non-intrusive
-      toast.className =
-        "fixed bottom-12 left-1/2 -translate-x-1/2 px-4 py-3 rounded-2xl bg-green-600 text-white text-base shadow-lg transition-opacity duration-300 opacity-0 pointer-events-none";
-      document.body.appendChild(toast);
-    }
-
-    const showToast = (msg) => {
-      toast.textContent = msg;
-      toast.classList.remove("opacity-0");
-      clearTimeout(showToast._t);
-      showToast._t = setTimeout(() => toast.classList.add("opacity-0"), 1600);
-    };
-
-    // Bind copy handlers to any element with data-copy
-    document.querySelectorAll("[data-copy]").forEach((el) => {
-      if (el.dataset.copyBound === "1") return;
-      el.addEventListener(
-        "click",
-        async (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          const value = el.getAttribute("data-copy") || "";
-          const label = el.getAttribute("data-label") || "Link";
-          try {
-            await navigator.clipboard.writeText(value);
-            showToast(`${label} copied to clipboard!`);
-          } catch (err) {
-            // Fallback message if permissions/blockers prevent copy
-            showToast("Copy failed");
-          }
-        },
-        { passive: false }
-      );
-      el.dataset.copyBound = "1";
-    });
-
-    document.documentElement.dataset.copyInit = "1";
-  }
-
-  // Run on initial load
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", setupSocialCopy, {
-      once: true,
-    });
-  } else {
-    setupSocialCopy();
-  }
-
-  // Re-run after Astro client navigations
-  document.addEventListener("astro:page-load", () => {
-    // reset guard so new DOM gets bound
-    document.documentElement.dataset.copyInit = "0";
-    setupSocialCopy();
-  });
-</script>

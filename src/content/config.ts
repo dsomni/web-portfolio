@@ -80,6 +80,7 @@ const social = defineCollection({
     schema: z.object({
         name: z.string(),
         url: z.string(),
+        value: z.string().optional(),
         icon: z.string(),
         order: z.number().optional(),
         copy_content: z.boolean().default(false),

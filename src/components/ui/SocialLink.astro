@@ -1,0 +1,161 @@
+---
+import { Icon } from "astro-icon/components";
+import { useTranslations, type Language } from "../../utils/i18n";
+
+interface Props {
+  social: {
+    name: string;
+    url: string;
+    value?: string;
+    icon: string;
+    copy_content?: boolean;
+  };
+  lang: Language;
+  variant?: "card" | "icon";
+  index?: number;
+}
+
+const { social, lang, variant = "card", index = 0 } = Astro.props;
+const t = useTranslations(lang);
+
+// Get the translated message on the server-side
+const copiedMessage = t("clipboard.copied");
+---
+
+{
+  social.copy_content ? (
+    <button
+      type="button"
+      data-copy={social.url}
+      data-message={copiedMessage}
+      class={
+        variant === "card"
+          ? "card card-hover animate-on-scroll group w-full text-left cursor-pointer"
+          : "w-10 h-10 rounded-full bg-light-elevated dark:bg-dark-elevated flex items-center justify-center text-light-text dark:text-dark-text hover:bg-primary-600 hover:text-white dark:hover:bg-primary-500 transition-all hover:scale-110 cursor-pointer"
+      }
+      style={variant === "card" ? `animation-delay: ${index * 100}ms` : ""}
+      aria-label={`Copy ${social.name}`}
+    >
+      {variant === "card" ? (
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-600 group-hover:text-white transition-colors">
+            <Icon name={social.icon} size="20" />
+          </div>
+          <div>
+            <p class="text-sm font-medium text-light-text-muted dark:text-dark-text-muted">
+              {social.name}
+            </p>
+            <p class="text-lg font-semibold text-light-text dark:text-dark-text group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              {social.value || social.url}
+            </p>
+          </div>
+        </div>
+      ) : (
+        <Icon name={social.icon} size="20" />
+      )}
+    </button>
+  ) : (
+    <a
+      href={social.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class={
+        variant === "card"
+          ? "card card-hover animate-on-scroll group"
+          : "w-10 h-10 rounded-full bg-light-elevated dark:bg-dark-elevated flex items-center justify-center text-light-text dark:text-dark-text hover:bg-primary-600 hover:text-white dark:hover:bg-primary-500 transition-all hover:scale-110"
+      }
+      style={variant === "card" ? `animation-delay: ${index * 100}ms` : ""}
+      aria-label={social.name}
+    >
+      {variant === "card" ? (
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-600 group-hover:text-white transition-colors">
+            <Icon name={social.icon} size="20" />
+          </div>
+          <div>
+            <p class="text-sm font-medium text-light-text-muted dark:text-dark-text-muted">
+              {social.name}
+            </p>
+            <p class="text-lg font-semibold text-light-text dark:text-dark-text group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              {social.value || social.url}
+            </p>
+          </div>
+        </div>
+      ) : (
+        <Icon name={social.icon} size="20" />
+      )}
+    </a>
+  )
+}
+
+<script>
+  function setupCopyHandlers() {
+    // Check if already initialized to avoid duplicates
+    if (document.documentElement.dataset.copyHandlersInit === "1") return;
+
+    // Create toast element once
+    let toast = document.getElementById("copy-toast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "copy-toast";
+      toast.setAttribute("role", "status");
+      toast.setAttribute("aria-live", "polite");
+      toast.className =
+        "fixed bottom-12 left-1/2 -translate-x-1/2 px-4 py-3 rounded-2xl bg-green-600 text-white text-base shadow-lg transition-opacity duration-300 opacity-0 pointer-events-none z-50";
+      document.body.appendChild(toast);
+    }
+
+    const showToast = (message: string) => {
+      if (!toast) return;
+      toast.textContent = message;
+      toast.classList.remove("opacity-0");
+      clearTimeout((showToast as any)._timer);
+      (showToast as any)._timer = setTimeout(() => {
+        toast!.classList.add("opacity-0");
+      }, 1600);
+    };
+
+    // Attach click handlers to all copy buttons
+    document.querySelectorAll("[data-copy]").forEach((el) => {
+      if ((el as HTMLElement).dataset.copyBound === "1") return;
+
+      el.addEventListener(
+        "click",
+        async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const value = el.getAttribute("data-copy") || "";
+          const message = el.getAttribute("data-message") || "Copied!";
+
+          try {
+            await navigator.clipboard.writeText(value);
+            showToast(message);
+          } catch (err) {
+            console.error("Copy failed:", err);
+          }
+        },
+        { passive: false }
+      );
+
+      (el as HTMLElement).dataset.copyBound = "1";
+    });
+
+    document.documentElement.dataset.copyHandlersInit = "1";
+  }
+
+  // Run on initial load
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupCopyHandlers, {
+      once: true,
+    });
+  } else {
+    setupCopyHandlers();
+  }
+
+  // Re-run after Astro view transitions
+  document.addEventListener("astro:page-load", () => {
+    document.documentElement.dataset.copyHandlersInit = "0";
+    setupCopyHandlers();
+  });
+</script>

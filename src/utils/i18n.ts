@@ -57,13 +57,13 @@ export interface Translations {
     'subsection.languages': string;
 
     // Experience
-
     'experience.achievements': string;
     'experience.responsibilities': string;
     'experience.supervisor': string;
     'experience.concepts': string;
     'experience.stack': string;
     'experience.resources': string;
+
 
     // Common
     'common.readMore': string;
@@ -81,10 +81,17 @@ export interface Translations {
     'common.relevantCoursework': string;
     'common.thesis': string;
 
+    // Contacts
+    'contacts.emailMe': string;
+    'contacts.target': string;
+
     // Footer
     'footer.rights': string;
     'footer.quickLinks': string;
     'footer.connect': string;
+
+    // Utilities
+    "clipboard.copied": string;
 }
 
 // Helper function to get language from URL
@@ -189,9 +196,14 @@ Building state-of-the-art ML solutions.`,
         'common.relevantCoursework': 'Relevant Coursework',
         'common.thesis': 'Bachelor Thesis',
 
+        'contacts.emailMe': "Send me an email",
+        'contacts.target': "I'm currently seeking interesting R&D opportunities in Machine Learning and AI. Feel free to reach out!",
+
         'footer.rights': 'All rights reserved',
         'footer.quickLinks': 'Quick Links',
         'footer.connect': 'Connect',
+
+        "clipboard.copied": "Copied!",
     },
     ru: {
 
@@ -246,9 +258,15 @@ Building state-of-the-art ML solutions.`,
         'common.relevantCoursework': 'Ключевые курсы',
         'common.thesis': 'Дипломная работа',
 
+        'contacts.emailMe': "Написать мне",
+        'contacts.target': "В настоящее время ищу интересные R&D возможности в области машинного обучения и ИИ. Буду рад связи!",
+
+
         'footer.rights': 'Все права защищены',
         'footer.quickLinks': 'Быстрые ссылки',
         'footer.connect': 'Связаться',
+
+        "clipboard.copied": "Скопировано!",
     },
 };
 
