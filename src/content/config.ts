@@ -94,6 +94,16 @@ const social = defineCollection({
 });
 
 
+const languages = defineCollection({
+    type: "content",
+    schema: z.object({
+        languages: z.array(z.object({
+            title: z.string(),
+            description: z.string(),
+            level: z.number().min(0).max(100),
+        })),
+    }),
+});
 
 export const collections = {
     about,
@@ -101,5 +111,6 @@ export const collections = {
     projects,
     education,
     skills,
-    social
+    social,
+    languages
 };

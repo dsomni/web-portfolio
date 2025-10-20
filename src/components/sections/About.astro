@@ -1,7 +1,8 @@
 ---
 // src/components/sections/About.astro
-import { getEntry } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import { useTranslations, type Language } from "../../utils/i18n";
+import { Icon } from "astro-icon/components";
 
 interface Props {
   lang: Language;
@@ -10,9 +11,12 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
-// Get about content from collection
 const aboutEntry = await getEntry("about", lang);
+const languagesEntry = await getEntry("languages", lang);
 const { data: about } = aboutEntry;
+const {
+  data: { languages: languages },
+} = languagesEntry;
 ---
 
 <section id="about" class="py-20 bg-light-surface dark:bg-dark-surface">
@@ -22,7 +26,6 @@ const { data: about } = aboutEntry;
     </h2>
 
     <div class="max-w-4xl mx-auto space-y-12">
-      <!-- Main content -->
       <div
         class="space-y-6 text-lg text-light-text-muted dark:text-dark-text-muted leading-relaxed animate-on-scroll"
       >
@@ -34,7 +37,6 @@ const { data: about } = aboutEntry;
         </p>
       </div>
 
-      <!-- Highlights grid -->
       <div class="grid md:grid-cols-2 gap-6 mt-12">
         {
           about.highlights.map((item, index) => (
@@ -44,60 +46,10 @@ const { data: about } = aboutEntry;
             >
               <div class="flex items-start gap-4">
                 <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0">
-                  {item.icon === "research" && (
-                    <svg
-                      class="w-6 h-6 text-primary-600 dark:text-primary-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                      />
-                    </svg>
-                  )}
-                  {item.icon === "code" && (
-                    <svg
-                      class="w-6 h-6 text-primary-600 dark:text-primary-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-                      />
-                    </svg>
-                  )}
-                  {item.icon === "education" && (
-                    <svg
-                      class="w-6 h-6 text-primary-600 dark:text-primary-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
-                    </svg>
-                  )}
-                  {item.icon === "projects" && (
-                    <svg
-                      class="w-6 h-6 text-primary-600 dark:text-primary-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                      />
-                    </svg>
-                  )}
+                  <Icon
+                    class="w-6 h-6 text-primary-600 dark:text-primary-400"
+                    name={item.icon}
+                  />
                 </div>
                 <div>
                   <h3 class="font-semibold text-lg text-light-text dark:text-dark-text mb-2">
@@ -107,6 +59,31 @@ const { data: about } = aboutEntry;
                     {item.description}
                   </p>
                 </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <h3 class="font-bold text-2xl text-center animate-on-scroll mt-10">
+        {t("subsection.languages")}
+      </h3>
+      <div class="grid md:grid-cols-1 gap-4">
+        {
+          languages.map((language) => (
+            <div class="card card-hover animate-on-scroll">
+              <div class="flex justify-between mb-2">
+                <span class="text-md font-medium text-light-text dark:text-dark-text">
+                  {language.title}
+                </span>
+                <span class="text-md text-light-text-muted dark:text-dark-text-muted">
+                  {language.description}
+                </span>
+              </div>
+              <div class="h-3 bg-light-elevated dark:bg-dark-elevated rounded-full overflow-hidden">
+                <div
+                  class="h-full bg-gradient-to-r from-primary-600 to-accent-600 rounded-full transition-all duration-1000"
+                  style={`width: ${language.level}%`}
+                />
               </div>
             </div>
           ))

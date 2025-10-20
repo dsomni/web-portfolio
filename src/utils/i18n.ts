@@ -48,9 +48,11 @@ export interface Translations {
     'section.experience': string;
     'section.research': string;
     'section.projects': string;
-    'section.skills': string;
     'section.education': string;
     'section.contact': string;
+
+    // Subsections
+    'subsection.languages': string;
 
     // Common
     'common.readMore': string;
@@ -145,9 +147,10 @@ Building state-of-the-art ML solutions.`,
         'section.experience': 'Work Experience',
         'section.research': 'Research Experience',
         'section.projects': 'Projects',
-        'section.skills': 'Skills & Technologies',
         'section.education': 'Education',
         'section.contact': 'Get In Touch',
+
+        'subsection.languages': 'Languages',
 
         'common.readMore': 'Read more',
         'common.viewProject': 'View Project',
@@ -192,9 +195,10 @@ Building state-of-the-art ML solutions.`,
         'section.experience': 'Опыт работы',
         'section.research': 'Исследовательский опыт',
         'section.projects': 'Проекты',
-        'section.skills': 'Навыки и технологии',
         'section.education': 'Образование',
         'section.contact': 'Связаться',
+
+        'subsection.languages': 'Языки',
 
         'common.readMore': 'Подробнее',
         'common.viewProject': 'Смотреть проект',
