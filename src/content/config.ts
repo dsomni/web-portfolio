@@ -21,10 +21,10 @@ const experience = defineCollection({
     type: 'content',
     schema: z.object({
         title: z.string(),
-        company: z.string(),
+        subtitle: z.string(),
         organization: z.string().optional(),
         period: z.string(),
-        type: z.enum(['work', 'research']),
+        type: z.enum(['work', 'research', 'teaching']),
         description: z.string(),
         achievements: z.array(z.string()).optional(),
         responsibilities: z.array(z.string()),
@@ -41,7 +41,7 @@ const projects = defineCollection({
         title: z.string(),
         role: z.string(),
         period: z.string(),
-        company: z.string().optional(),
+        subtitle: z.string().optional(),
         description: z.string(),
         achievements: z.array(z.string()).optional(),
         highlights: z.array(z.string()),
@@ -65,19 +65,6 @@ const education = defineCollection({
         thesis: z.string().optional(),
         adviser: z.string().optional(),
         coursework: z.array(z.string()),
-        order: z.number().default(999),
-    }),
-});
-
-const skills = defineCollection({
-    type: 'content',
-    schema: z.object({
-        category: z.string(),
-        icon: z.string(),
-        items: z.array(z.object({
-            name: z.string(),
-            level: z.number().min(0).max(100),
-        })),
         order: z.number().default(999),
     }),
 });
@@ -110,7 +97,6 @@ export const collections = {
     experience,
     projects,
     education,
-    skills,
     social,
     languages
 };

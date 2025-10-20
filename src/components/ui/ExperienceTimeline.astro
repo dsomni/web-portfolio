@@ -1,0 +1,144 @@
+---
+import { useTranslations, type Language } from "../../utils/i18n";
+
+
+interface Experience {
+	title: string;
+	subtitle: string;
+	organization?: string;
+	period: string;
+	description: string;
+	achievements?: string[];
+	responsibilities?: string[];
+	supervisor?: string;
+	concepts?: string[];
+	stack: string[];
+}
+
+interface Props {
+	experiences: Experience[];
+	colorScheme: 'primary' | 'accent';
+	lang: Language;
+}
+
+const { experiences, colorScheme, lang } = Astro.props;
+
+const t = useTranslations(lang);
+
+
+const dotColor = colorScheme === 'primary' ? 'bg-primary-600' : 'bg-accent-600';
+const subtitleColor = colorScheme === 'primary'
+		? 'text-primary-600 dark:text-primary-400'
+		: 'text-accent-600 dark:text-accent-400';
+const conceptBadge = 'text-xs px-2 py-1 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 border border-accent-200 dark:border-accent-800';
+---
+
+<div class="max-w-4xl mx-auto relative">
+	<!-- Timeline line -->
+	<div class={`absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b ${
+		colorScheme === 'primary'
+			? 'from-primary-500 to-accent-500'
+			: 'from-accent-500 to-primary-500'
+	} opacity-20`}></div>
+
+	<div class="space-y-8">
+		{experiences.map((exp, index) => (
+			<div class="relative pl-20 animate-on-scroll" style={`animation-delay: ${index * 100}ms`}>
+				<!-- Timeline dot -->
+				<div class={`absolute left-6 top-6 w-4 h-4 rounded-full ${dotColor} border-4 border-light-bg dark:border-dark-bg`}></div>
+
+				<div class="card card-hover">
+					<div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+						<div>
+							<h3 class="text-xl font-bold text-light-text dark:text-dark-text">
+								{exp.title}
+							</h3>
+							<p class={`${subtitleColor} font-medium`}>
+								{exp.subtitle}
+							</p>
+							{exp.organization && (
+								<p class="text-sm text-light-text-muted dark:text-dark-text-muted">
+									{exp.organization}
+								</p>
+							)}
+						</div>
+						<span class="text-sm text-light-text-muted dark:text-dark-text-muted mt-2 md:mt-0">
+							{exp.period}
+						</span>
+					</div>
+
+					<p class="text-light-text-muted dark:text-dark-text-muted mb-4">
+						{exp.description}
+					</p>
+
+					{exp.achievements && (
+						<div class="mb-4">
+							<p class="text-sm font-semibold text-light-text dark:text-dark-text mb-2">
+								{t('experience.achievements')}
+							</p>
+							<ul class="list-disc list-inside space-y-1 text-sm text-light-text-muted dark:text-dark-text-muted">
+								{exp.achievements.map(achievement => (
+									<li>{achievement}</li>
+								))}
+							</ul>
+						</div>
+					)}
+
+					{exp.responsibilities && (
+						<div class="mb-4">
+							<p class="text-sm font-semibold text-light-text dark:text-dark-text mb-2">
+
+								{t('experience.responsibilities')}
+
+							</p>
+							<ul class="list-disc list-inside space-y-1 text-sm text-light-text-muted dark:text-dark-text-muted">
+								{exp.responsibilities.map(resp => (
+									<li>{resp}</li>
+								))}
+							</ul>
+						</div>
+					)}
+
+					{exp.supervisor && (
+						<p class="text-sm text-light-text-muted dark:text-dark-text-muted mb-4">
+							<span class="font-bold">
+																{t('experience.supervisor')}:
+
+								</span> {exp.supervisor}
+						</p>
+					)}
+
+				{exp.concepts && (
+						<div class="mb-4">
+							<p class="text-sm font-semibold text-light-text dark:text-dark-text mb-2">
+
+								{t('experience.concepts')}
+
+							</p>
+							<div class="flex flex-wrap gap-2">
+								{exp.concepts.map(concept => (
+									<span class={conceptBadge}>
+										{concept}
+									</span>
+								))}
+							</div>
+						</div>
+					)}
+			<div class="mb-4">
+					<p class="text-sm font-semibold text-light-text dark:text-dark-text mb-2">
+
+								{t('experience.stack')}
+
+						</p>
+					<div class="flex flex-wrap gap-2">
+						{exp.stack.map(tech => (
+							<span class="badge text-xs">{tech}</span>
+						))}
+					</div>
+						</div>
+
+				</div>
+			</div>
+		))}
+	</div>
+</div>

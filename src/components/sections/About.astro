@@ -1,6 +1,5 @@
 ---
-// src/components/sections/About.astro
-import { getCollection, getEntry } from "astro:content";
+import { getEntry } from "astro:content";
 import { useTranslations, type Language } from "../../utils/i18n";
 import { Icon } from "astro-icon/components";
 
@@ -19,7 +18,7 @@ const {
 } = languagesEntry;
 ---
 
-<section id="about" class="py-20 bg-light-surface dark:bg-dark-surface">
+<section id="about" class="py-10 bg-light-surface dark:bg-dark-surface">
   <div class="container-custom">
     <h2 class="section-title text-center animate-on-scroll">
       {t("section.about")}

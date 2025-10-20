@@ -47,12 +47,21 @@ export interface Translations {
     'section.about': string;
     'section.experience': string;
     'section.research': string;
+    'section.teaching': string;
     'section.projects': string;
     'section.education': string;
     'section.contact': string;
 
     // Subsections
     'subsection.languages': string;
+
+    // Experience
+
+    'experience.achievements': string;
+    'experience.responsibilities': string;
+    'experience.supervisor': string;
+    'experience.concepts': string;
+    'experience.stack': string;
 
     // Common
     'common.readMore': string;
@@ -146,9 +155,17 @@ Building state-of-the-art ML solutions.`,
         'section.about': 'About Me',
         'section.experience': 'Work Experience',
         'section.research': 'Research Experience',
+        'section.teaching': 'Teaching Experience',
         'section.projects': 'Projects',
         'section.education': 'Education',
         'section.contact': 'Get In Touch',
+
+
+        'experience.achievements': 'Achievements',
+        'experience.responsibilities': 'Responsibilities',
+        'experience.supervisor': 'Supervisor',
+        'experience.concepts': 'Concepts',
+        'experience.stack': 'Stack',
 
         'subsection.languages': 'Languages',
 
@@ -194,11 +211,18 @@ Building state-of-the-art ML solutions.`,
         'section.about': 'О себе',
         'section.experience': 'Опыт работы',
         'section.research': 'Исследовательский опыт',
+        'section.teaching': 'Опыт преподавания',
         'section.projects': 'Проекты',
         'section.education': 'Образование',
         'section.contact': 'Связаться',
 
         'subsection.languages': 'Языки',
+
+        'experience.achievements': 'Достижения',
+        'experience.responsibilities': 'Обязанности',
+        'experience.supervisor': 'Руководитель',
+        'experience.concepts': 'Концепции',
+        'experience.stack': 'Стек',
 
         'common.readMore': 'Подробнее',
         'common.viewProject': 'Смотреть проект',

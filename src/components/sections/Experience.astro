@@ -1,5 +1,7 @@
 ---
-import { useTranslations, type Language } from '../../utils/i18n';
+import { useTranslations, type Language } from "../../utils/i18n";
+import { getCollection } from "astro:content";
+import ExperienceTimeline from "../ui//ExperienceTimeline.astro";
 
 interface Props {
   lang: Language;
@@ -8,325 +10,55 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
-// Work Experience Data
-const workExperience = lang === 'en' ? [
-  {
-    title: 'ML Developer',
-    company: 'Innopolis CIPR',
-    period: '2025',
-    type: 'work',
-    description: 'Designing and implementing RAG pipeline over proprietary Angular frontend repositories',
-    responsibilities: [
-      'Building indexers (BallTree with pre-computed embeddings and partially Faiss)',
-      'Connecting local generative models'
-    ],
-    stack: ['PyTorch', 'Docker', 'FastAPI']
-  },
-  {
-    title: 'ML Engineer',
-    company: 'Gazprom CPS',
-    period: '2024',
-    type: 'work',
-    description: 'Designed and trained predictive ML model to identify causes of defects in construction facilities',
-    achievements: ['Achieving 80% accuracy on proprietary dataset'],
-    responsibilities: [
-      'Data preprocessing and feature engineering',
-      'Model building and validation',
-      'Full working pipeline development'
-    ],
-    concepts: ['Tree-based models', 'MLP-based models', 'Ensemble methods', 'Transformers'],
-    stack: ['PyTorch', 'Numpy', 'Scikit-learn', 'Pandas']
-  },
-  {
-    title: 'ML Developer',
-    company: 'Advanced Engineering School IU',
-    period: '2023',
-    type: 'work',
-    description: 'Developing code generation model using transformer-based architecture',
-    responsibilities: [
-      'Fine-tuning Gorilla model on proprietary dataset'
-    ],
-    concepts: ['LLMs', 'Transformers', 'LoRa'],
-    stack: ['PyTorch', 'Numpy', 'Pandas']
-  }
-] : [
-  {
-    title: 'ML-разработчик',
-    company: 'ЦИПР Иннополис',
-    period: '2025',
-    type: 'work',
-    description: 'Проектирование и реализация RAG-пайплайна для проприетарных репозиториев фронтенда на Angular',
-    responsibilities: [
-      'Создание индексаторов (BallTree с предварительно вычисленными эмбеддингами и частично Faiss)',
-      'Подключение локальных генеративных моделей'
-    ],
-    stack: ['PyTorch', 'Docker', 'FastAPI']
-  },
-  {
-    title: 'ML-инженер',
-    company: 'Газпром ЦПС',
-    period: '2024',
-    type: 'work',
-    description: 'Разработка и обучение предсказательной ML-модели для выявления причин дефектов на строительных объектах',
-    achievements: ['Достижение точности 80% на проприетарном наборе данных'],
-    responsibilities: [
-      'Предварительная обработка данных и инжиниринг признаков',
-      'Создание и валидация модели',
-      'Разработка полного рабочего пайплайна'
-    ],
-    concepts: ['Модели на основе деревьев', 'MLP-модели', 'Ансамблевые методы', 'Трансформеры'],
-    stack: ['PyTorch', 'Numpy', 'Scikit-learn', 'Pandas']
-  },
-  {
-    title: 'ML-разработчик',
-    company: 'Передовая инженерная школа ИУ',
-    period: '2023',
-    type: 'work',
-    description: 'Разработка модели генерации кода с использованием трансформерной архитектуры',
-    responsibilities: [
-      'Дообучение (fine-tuning) модели Gorilla на проприетарном наборе данных'
-    ],
-    concepts: ['LLM', 'Трансформеры', 'LoRa'],
-    stack: ['PyTorch', 'Numpy', 'Pandas']
-  }
-];
+const experienceEntry = (await getCollection("experience"))
+  .filter((entry: any) => entry.id.split(".")[0].endsWith(`-${lang}`))
+  .map((entry: any) => entry.data)
+  .sort((a: any, b: any) => a.order - b.order);
 
-// Research Experience Data
-const researchExperience = lang === 'en' ? [
-  {
-    title: 'Researcher, Data Scientist, ML Engineer',
-    company: 'Huawei Wireless Project',
-    organization: 'ISP RAS & Innopolis University',
-    period: '2024 — Present',
-    type: 'research',
-    description: 'Designing and simulating AI models for wireless distribution devices to cell stations under time and resource constraints for Huawei',
-    responsibilities: [
-      'Developing and implementing PyTorch models',
-      'Creating and extension of training-testing pipeline',
-      'Conducting experiments'
-    ],
-    stack: ['PyTorch', 'Numpy'],
-    supervisor: 'Aleksandr Beznosikov'
-  },
-  {
-    title: 'Researcher',
-    company: 'Text Plagiarism Detection in LLMs Using DRL',
-    organization: 'Innopolis University',
-    period: '2024',
-    type: 'research',
-    description: 'Bachelor thesis research on novel approach for text plagiarism detection using Deep Reinforcement Learning',
-    achievements: [
-      'Best MSE of 0.108 on synthetic dataset',
-      'Proposed three architectures based on DQN, A2C, and REINFORCE',
-      'Best results achieved by REINFORCE model'
-    ],
-    stack: ['PyTorch', 'Numpy', 'Pandas']
-  }
-] : [
-  {
-    title: 'Исследователь, Data Scientist, ML-инженер',
-    company: 'Проект Huawei Wireless',
-    organization: 'ИСП РАН и Университет Иннополис',
-    period: '2024 — Настоящее время',
-    type: 'research',
-    description: 'Проектирование и симуляция моделей ИИ для устройств беспроводной связи для сотовых станций с учетом временных и ресурсных ограничений для Huawei',
-    responsibilities: [
-      'Разработка и внедрение моделей на PyTorch',
-      'Создание и расширение пайплайна обучения-тестирования',
-      'Проведение экспериментов'
-    ],
-    stack: ['PyTorch', 'Numpy'],
-    supervisor: 'Александр Безносиков'
-  },
-  {
-    title: 'Исследователь',
-    company: 'Обнаружение текстового плагиата в области LLM с использованием DRL',
-    organization: 'Университет Иннополис',
-    period: '2024',
-    type: 'research',
-    description: 'Исследование для дипломной работы бакалавра о новом подходе к обнаружению текстового плагиата с использованием Deep Reinforcement Learning',
-    achievements: [
-      'Наилучший MSE 0.108 на синтетическом наборе данных',
-      'Предложены три архитектуры на основе DQN, A2C и REINFORCE',
-      'Наилучшие результаты достигнуты моделью на основе REINFORCE'
-    ],
-    stack: ['PyTorch', 'Numpy', 'Pandas']
-  }
-];
+const researchExperience = experienceEntry.filter(
+  (entry: any) => entry.type == "research"
+);
+const workExperience = experienceEntry.filter(
+  (entry: any) => entry.type == "work"
+);
+const teachingExperience = experienceEntry.filter(
+  (entry: any) => entry.type == "teaching"
+);
 ---
 
 <section id="experience" class="py-20 bg-light-surface dark:bg-dark-surface">
   <div class="container-custom">
-    <!-- Research Experience -->
-    <div class="mb-20">
+    <div class="mb-20" id="research-experience">
       <h2 class="section-title text-center animate-on-scroll">
-        {t('section.research')}
+        {t("section.research")}
       </h2>
-
-      <div class="max-w-4xl mx-auto relative">
-        <!-- Timeline line -->
-        <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary-500 to-accent-500 opacity-20"></div>
-
-        <div class="space-y-8">
-          {researchExperience.map((exp, index) => (
-            <div class={`relative pl-20 animate-on-scroll`} style={`animation-delay: ${index * 100}ms`}>
-              <!-- Timeline dot -->
-              <div class="absolute left-6 top-6 w-4 h-4 rounded-full bg-primary-600 border-4 border-light-bg dark:border-dark-bg"></div>
-
-              <div class="card card-hover">
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                  <div>
-                    <h3 class="text-xl font-bold text-light-text dark:text-dark-text">
-                      {exp.title}
-                    </h3>
-                    <p class="text-primary-600 dark:text-primary-400 font-medium">
-                      {exp.company}
-                    </p>
-                    {exp.organization && (
-                      <p class="text-sm text-light-text-muted dark:text-dark-text-muted">
-                        {exp.organization}
-                      </p>
-                    )}
-                  </div>
-                  <span class="text-sm text-light-text-muted dark:text-dark-text-muted mt-2 md:mt-0">
-                    {exp.period}
-                  </span>
-                </div>
-
-                <p class="text-light-text-muted dark:text-dark-text-muted mb-4">
-                  {exp.description}
-                </p>
-
-                {exp.achievements && (
-                  <div class="mb-4">
-                    <p class="text-sm font-semibold text-light-text dark:text-dark-text mb-2">
-                      {lang === 'en' ? 'Achievements:' : 'Достижения:'}
-                    </p>
-                    <ul class="list-disc list-inside space-y-1 text-sm text-light-text-muted dark:text-dark-text-muted">
-                      {exp.achievements.map(achievement => (
-                        <li>{achievement}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {exp.responsibilities && (
-                  <div class="mb-4">
-                    <p class="text-sm font-semibold text-light-text dark:text-dark-text mb-2">
-                      {lang === 'en' ? 'Responsibilities:' : 'Обязанности:'}
-                    </p>
-                    <ul class="list-disc list-inside space-y-1 text-sm text-light-text-muted dark:text-dark-text-muted">
-                      {exp.responsibilities.map(resp => (
-                        <li>{resp}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {exp.supervisor && (
-                  <p class="text-sm text-light-text-muted dark:text-dark-text-muted mb-4">
-                    <span class="font-medium">{lang === 'en' ? 'Supervisor:' : 'Руководитель:'}</span> {exp.supervisor}
-                  </p>
-                )}
-
-                <div class="flex flex-wrap gap-2">
-                  {exp.stack.map(tech => (
-                    <span class="badge text-xs">{tech}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <ExperienceTimeline
+        experiences={researchExperience}
+        colorScheme="primary"
+        lang={lang}
+      />
     </div>
 
-    <!-- Work Experience -->
-    <div>
+    <div class="mb-20" id="work-experience">
       <h2 class="section-title text-center animate-on-scroll">
-        {t('section.experience')}
+        {t("section.experience")}
       </h2>
+      <ExperienceTimeline
+        experiences={workExperience}
+        colorScheme="accent"
+        lang={lang}
+      />
+    </div>
 
-      <div class="max-w-4xl mx-auto relative">
-        <!-- Timeline line -->
-        <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-accent-500 to-primary-500 opacity-20"></div>
-
-        <div class="space-y-8">
-          {workExperience.map((exp, index) => (
-            <div class={`relative pl-20 animate-on-scroll`} style={`animation-delay: ${index * 100}ms`}>
-              <!-- Timeline dot -->
-              <div class="absolute left-6 top-6 w-4 h-4 rounded-full bg-accent-600 border-4 border-light-bg dark:border-dark-bg"></div>
-
-              <div class="card card-hover">
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                  <div>
-                    <h3 class="text-xl font-bold text-light-text dark:text-dark-text">
-                      {exp.title}
-                    </h3>
-                    <p class="text-accent-600 dark:text-accent-400 font-medium">
-                      {exp.company}
-                    </p>
-                  </div>
-                  <span class="text-sm text-light-text-muted dark:text-dark-text-muted mt-2 md:mt-0">
-                    {exp.period}
-                  </span>
-                </div>
-
-                <p class="text-light-text-muted dark:text-dark-text-muted mb-4">
-                  {exp.description}
-                </p>
-
-                {exp.achievements && (
-                  <div class="mb-4">
-                    <p class="text-sm font-semibold text-light-text dark:text-dark-text mb-2">
-                      {lang === 'en' ? 'Achievements:' : 'Достижения:'}
-                    </p>
-                    <ul class="list-disc list-inside space-y-1 text-sm text-light-text-muted dark:text-dark-text-muted">
-                      {exp.achievements.map(achievement => (
-                        <li>{achievement}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {exp.responsibilities && (
-                  <div class="mb-4">
-                    <p class="text-sm font-semibold text-light-text dark:text-dark-text mb-2">
-                      {lang === 'en' ? 'Responsibilities:' : 'Обязанности:'}
-                    </p>
-                    <ul class="list-disc list-inside space-y-1 text-sm text-light-text-muted dark:text-dark-text-muted">
-                      {exp.responsibilities.map(resp => (
-                        <li>{resp}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {exp.concepts && (
-                  <div class="mb-4">
-                    <p class="text-sm font-semibold text-light-text dark:text-dark-text mb-2">
-                      {lang === 'en' ? 'Concepts:' : 'Концепции:'}
-                    </p>
-                    <div class="flex flex-wrap gap-2">
-                      {exp.concepts.map(concept => (
-                        <span class="text-xs px-2 py-1 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 border border-accent-200 dark:border-accent-800">
-                          {concept}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div class="flex flex-wrap gap-2">
-                  {exp.stack.map(tech => (
-                    <span class="badge text-xs">{tech}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+    <div id="teaching-experience">
+      <h2 class="section-title text-center animate-on-scroll">
+        {t("section.teaching")}
+      </h2>
+      <ExperienceTimeline
+        experiences={teachingExperience}
+        colorScheme="primary"
+        lang={lang}
+      />
     </div>
   </div>
 </section>
