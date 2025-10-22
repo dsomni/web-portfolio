@@ -22,8 +22,8 @@ const socials = (await getCollection("social"))
 
 const quickLinks: { locale_key: keyof Translations; href: string }[] = [
   { locale_key: "nav.home", href: "/" },
-  { locale_key: "nav.projects", href: "/#projects" },
   { locale_key: "nav.about", href: "/#about" },
+  { locale_key: "nav.projects", href: "/#projects" },
   { locale_key: "nav.contact", href: "/#contact" },
 ];
 
@@ -35,21 +35,30 @@ const currentYear = new Date().getFullYear();
 >
   <div class="container-custom py-12">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Brand Section -->
       <div class="space-y-4">
-        <div class="flex items-center gap-2">
+        <a
+          href={localizedUrl(lang, "/")}
+          class="inline-flex items-center gap-2 group"
+        >
           <img
             src={url("/images/logo.svg")}
             alt="logo"
-            class="w-10 h-10 group-hover:scale-110 transition-transform"
-            loading="eager"
+            class="w-10 h-10 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+            loading="lazy"
           />
-          <span class="font-bold text-lg">{t("personal.fullname")}</span>
-        </div>
+          <span
+            class="font-bold text-lg text-light-text dark:text-dark-text group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300"
+          >
+            {t("personal.fullname")}
+          </span>
+        </a>
         <p class="text-sm text-light-text-muted dark:text-dark-text-muted">
           {t("personal.specialty")}
         </p>
       </div>
 
+      <!-- Quick Links Section -->
       <div class="space-y-4">
         <h3
           class="font-semibold text-sm uppercase tracking-wider text-light-text dark:text-dark-text"
@@ -62,9 +71,14 @@ const currentYear = new Date().getFullYear();
               <li>
                 <a
                   href={localizedUrl(lang, link.href)}
-                  class="text-sm text-light-text-muted dark:text-dark-text-muted hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                  class="text-sm text-light-text-muted dark:text-dark-text-muted hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300 inline-flex items-center gap-1 group"
                 >
-                  {t(link.locale_key)}
+                  <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <Icon name="mdi:chevron-right" class="w-4 h-4" />
+                  </span>
+                  <span class="group-hover:translate-x-1 transition-transform duration-300">
+                    {t(link.locale_key)}
+                  </span>
                 </a>
               </li>
             ))
@@ -72,13 +86,14 @@ const currentYear = new Date().getFullYear();
         </ul>
       </div>
 
+      <!-- Connect Section -->
       <div class="space-y-4">
         <h3
           class="font-semibold text-sm uppercase tracking-wider text-light-text dark:text-dark-text"
         >
           {t("footer.connect")}
         </h3>
-        <div class="flex gap-4">
+        <div class="flex flex-wrap gap-3">
           {
             socials.map((social: any) => (
               <SocialLink social={social} lang={lang} variant="icon" />
@@ -88,10 +103,13 @@ const currentYear = new Date().getFullYear();
       </div>
     </div>
 
+    <!-- Footer Bottom -->
     <div
       class="mt-8 pt-8 border-t border-light-border dark:border-dark-border flex flex-col md:flex-row justify-between items-center gap-4"
     >
-      <p class="text-sm text-light-text-muted dark:text-dark-text-muted">
+      <p
+        class="text-sm text-light-text-muted dark:text-dark-text-muted text-center md:text-left"
+      >
         © {currentYear}
         {t("personal.fullname")}. {t("footer.rights")}.
       </p>

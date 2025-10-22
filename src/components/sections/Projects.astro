@@ -4,6 +4,7 @@ import { getCollection } from "astro:content";
 import { useTranslations, type Language } from "../../utils/i18n";
 import { Icon } from "astro-icon/components";
 import PDFButton from "../ui/PDFButton.astro";
+import Link from "../ui/Link.astro";
 import { localizedUrl } from "@/utils/url";
 
 interface File {
@@ -32,14 +33,6 @@ const projects = (await getCollection("projects"))
 
 const sectionLabel =
   "text-xs font-bold uppercase tracking-wider text-light-text dark:text-dark-text mb-3 flex items-center gap-2";
-
-// Icon-only style (when no label)
-const linkIcon =
-  "inline-flex items-center justify-center w-9 h-9 rounded-lg text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors";
-
-// Icon with label style (when label exists)
-const linkBadge =
-  "inline-flex items-center gap-2 text-sm px-4 py-2 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800 font-medium hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors";
 ---
 
 <section id="projects" class="py-20">
@@ -140,7 +133,7 @@ const linkBadge =
                 </div>
               </div>
 
-              {/* Resources (GitHub repos, demos, files) */}
+              {/* Resources - Using consistent Link and PDFButton components */}
               {((project.githubs && project.githubs.length > 0) ||
                 (project.demos && project.demos.length > 0) ||
                 (project.files && project.files.length > 0)) && (
@@ -150,67 +143,49 @@ const linkBadge =
                     {t("common.resources")}
                   </h4>
 
-                  {/* Two-column layout: Links left, Files right on large screens; stacked on small */}
-                  <div class="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:justify-between">
-                    {/* External Links - Left Side */}
-                    {((project.githubs && project.githubs.length > 0) ||
-                      (project.demos && project.demos.length > 0)) && (
-                      <div class="flex flex-wrap gap-2 items-start">
-                        {/* GitHub repos */}
-                        {project.githubs &&
-                          project.githubs.length > 0 &&
-                          project.githubs.map((github: Link) => (
-                            <a
-                              href={github.href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              class={github.label ? linkBadge : linkIcon}
-                              aria-label={
-                                github.label || t("common.sourceCode")
-                              }
-                              title={github.label || t("common.sourceCode")}
-                            >
-                              <Icon name="mdi:github" class="w-6 h-6" />
-                              {github.label && <span>{github.label}</span>}
-                            </a>
-                          ))}
+                  <div class="flex flex-wrap items-center gap-3">
+                    {/* PDF Files */}
+                    {project.files &&
+                      project.files.length > 0 &&
+                      project.files.map((file: File) => (
+                        <PDFButton
+                          filename={file.path}
+                          label={file.title}
+                          colorScheme="primary"
+                          variant="outline"
+                          size="sm"
+                        />
+                      ))}
 
-                        {/* Demo links */}
-                        {project.demos &&
-                          project.demos.length > 0 &&
-                          project.demos.map((demo: Link) => (
-                            <a
-                              href={demo.href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              class={demo.label ? linkBadge : linkIcon}
-                              aria-label={demo.label || t("common.demo")}
-                              title={demo.label || t("common.demo")}
-                            >
-                              <Icon
-                                name={demo.icon || "mdi:external-link"}
-                                class="w-4 h-4"
-                              />
-                              {demo.label && <span>{demo.label}</span>}
-                            </a>
-                          ))}
-                      </div>
-                    )}
+                    {/* Demo links */}
+                    {project.demos &&
+                      project.demos.length > 0 &&
+                      project.demos.map((demo: Link) => (
+                        <Link
+                          href={demo.href}
+                          icon={demo.icon || "mdi:link-variant"}
+                          label={demo.label}
+                          colorScheme="primary"
+                          variant="outline"
+                          size="sm"
+                          ariaLabel={demo.label || t("common.demo")}
+                        />
+                      ))}
 
-                    {/* Files - Right Side on large screens, second row on small */}
-                    {project.files && project.files.length > 0 && (
-                      <div class="flex flex-wrap gap-2 items-start sm:ml-auto">
-                        {project.files.map((file: File) => (
-                          <PDFButton
-                            filename={file.path}
-                            label={file.title}
-                            colorScheme="primary"
-                            variant="outline"
-                            size="sm"
-                          />
-                        ))}
-                      </div>
-                    )}
+                    {/* GitHub repositories */}
+                    {project.githubs &&
+                      project.githubs.length > 0 &&
+                      project.githubs.map((github: Link) => (
+                        <Link
+                          href={github.href}
+                          icon="mdi:github"
+                          label={github.label}
+                          colorScheme="primary"
+                          variant="outline"
+                          size="sm"
+                          ariaLabel={github.label || t("common.sourceCode")}
+                        />
+                      ))}
                   </div>
                 </div>
               )}

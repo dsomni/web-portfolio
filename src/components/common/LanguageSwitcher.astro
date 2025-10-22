@@ -42,11 +42,18 @@ if (altUrl.endsWith("/") && altUrl.length > 1) {
 <a
   href={altUrl}
   id="language-switcher"
-  class="relative p-2 rounded-lg text-light-text dark:text-dark-text hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 flex items-center gap-2 text-sm font-medium"
+  class="relative p-2 rounded-lg text-light-text dark:text-dark-text hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-500 flex items-center gap-2 text-sm font-medium group"
   aria-label={`Switch to ${languages[altLang]}`}
 >
-  <Icon class="w-5 h-5" name="mdi:language" />
-  <span class="hidden sm:inline">{altLang.toUpperCase()}</span>
+  <Icon
+    class="w-5 h-5 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110"
+    name="mdi:translate"
+  />
+  <span
+    class="hidden sm:inline transition-transform duration-300 group-hover:translate-x-0.5"
+  >
+    {altLang.toUpperCase()}
+  </span>
 </a>
 
 <script>

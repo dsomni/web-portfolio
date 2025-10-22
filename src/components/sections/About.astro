@@ -18,15 +18,16 @@ const {
 } = languagesEntry;
 ---
 
-<section id="about" class="py-10">
+<section id="about" class="py-20">
   <div class="container-custom">
     <h2 class="section-title text-center animate-on-scroll">
       {t("section.about")}
     </h2>
 
     <div class="max-w-4xl mx-auto space-y-12">
+      <!-- Introduction Text -->
       <div
-        class="space-y-6 text-lg text-light-text-muted dark:text-dark-text-muted leading-relaxed animate-on-scroll"
+        class="space-y-6 text-lg text-light-text-muted dark:text-dark-text-muted leading-relaxed animate-on-scroll animation-delay-100"
       >
         <p>{about.intro}</p>
         <p>{about.expertise}</p>
@@ -36,22 +37,26 @@ const {
         </p>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-6 mt-12">
+      <!-- Highlights Grid -->
+      <div class="grid md:grid-cols-2 gap-6">
         {
           about.highlights.map((item: any, index: number) => (
             <div
-              class={`card card-hover animate-on-scroll`}
-              style={`animation-delay: ${index * 100}ms`}
+              class="card card-hover group animate-on-scroll relative overflow-hidden transition-all duration-300 hover:scale-105"
+              style={`animation-delay: ${(index + 2) * 100}ms`}
             >
-              <div class="flex items-start gap-4">
-                <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0">
+              {/* Animated background gradient */}
+              <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+
+              <div class="relative z-10 flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-600 group-hover:text-white transition-all duration-300 group-hover:scale-110">
                   <Icon
-                    class="w-6 h-6 text-primary-600 dark:text-primary-400"
+                    class="w-6 h-6 text-primary-600 dark:text-primary-400 group-hover:text-white transition-colors duration-300"
                     name={item.icon}
                   />
                 </div>
-                <div>
-                  <h3 class="font-semibold text-lg text-light-text dark:text-dark-text mb-2">
+                <div class="flex-1">
+                  <h3 class="font-semibold text-lg text-light-text dark:text-dark-text mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
                     {item.title}
                   </h3>
                   <p class="text-light-text-muted dark:text-dark-text-muted">
@@ -63,30 +68,45 @@ const {
           ))
         }
       </div>
-      <h3 class="font-bold text-2xl text-center animate-on-scroll mt-10">
-        {t("subsection.languages")}
-      </h3>
-      <div class="grid md:grid-cols-1 gap-4">
-        {
-          languages.map((language: any) => (
-            <div class="card card-hover animate-on-scroll">
-              <div class="flex justify-between mb-2">
-                <span class="text-md font-medium text-light-text dark:text-dark-text">
-                  {language.title}
-                </span>
-                <span class="text-md text-light-text-muted dark:text-dark-text-muted">
-                  {language.description}
-                </span>
+
+      <!-- Languages Section -->
+      <div class="animate-on-scroll animation-delay-400">
+        <h3
+          class="font-bold text-2xl text-center text-light-text dark:text-dark-text mb-8"
+        >
+          {t("subsection.languages")}
+        </h3>
+
+        <div class="space-y-4">
+          {
+            languages.map((language: any, index: number) => (
+              <div
+                class="card card-hover group relative overflow-hidden transition-all duration-300 hover:scale-[1.02]"
+                style={`animation-delay: ${(index + 6) * 100}ms`}
+              >
+                {/* Animated background gradient */}
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+
+                <div class="relative z-10">
+                  <div class="flex justify-between items-center mb-3">
+                    <span class="text-base font-semibold text-light-text dark:text-dark-text group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
+                      {language.title}
+                    </span>
+                    <span class="text-sm font-medium text-light-text-muted dark:text-dark-text-muted">
+                      {language.description}
+                    </span>
+                  </div>
+                  <div class="h-3 bg-light-elevated dark:bg-dark-elevated rounded-full overflow-hidden">
+                    <div
+                      class="h-full bg-gradient-to-r from-primary-600 to-accent-600 rounded-full transition-all duration-1000 ease-out group-hover:shadow-lg"
+                      style={`width: ${language.level}%`}
+                    />
+                  </div>
+                </div>
               </div>
-              <div class="h-3 bg-light-elevated dark:bg-dark-elevated rounded-full overflow-hidden">
-                <div
-                  class="h-full bg-gradient-to-r from-primary-600 to-accent-600 rounded-full transition-all duration-1000"
-                  style={`width: ${language.level}%`}
-                />
-              </div>
-            </div>
-          ))
-        }
+            ))
+          }
+        </div>
       </div>
     </div>
   </div>

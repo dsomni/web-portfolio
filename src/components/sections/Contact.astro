@@ -24,12 +24,15 @@ const socials = (await getCollection("social"))
 
     <div class="max-w-4xl mx-auto">
       <p
-        class="text-center text-lg text-light-text-muted dark:text-dark-text-muted mb-12 animate-on-scroll"
+        class="text-center text-lg text-light-text-muted dark:text-dark-text-muted mb-12 animate-on-scroll animation-delay-100"
       >
         {t("contacts.target")}
       </p>
 
-      <div class="grid md:grid-cols-2 gap-6">
+      <!-- Social Media Cards Grid -->
+      <div
+        class="grid md:grid-cols-2 gap-6 animate-on-scroll animation-delay-200"
+      >
         {
           socials.map((social: any, index: number) => (
             <SocialLink
@@ -42,15 +45,42 @@ const socials = (await getCollection("social"))
         }
       </div>
 
-      <div class="mt-12 text-center animate-on-scroll">
+      <!-- Primary Email CTA -->
+      <div class="mt-12 text-center animate-on-scroll animation-delay-300">
         <a
           href="mailto:d.beresnev.work@gmail.com"
-          class="btn btn-primary text-lg px-8 py-4 inline-flex items-center gap-3"
+          class="inline-flex items-center gap-3 px-8 py-4 text-lg font-medium rounded-lg bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white transition-all duration-300 hover:shadow-lg hover:scale-105 group relative overflow-hidden"
         >
-          <Icon name="mdi:email-outline" class="w-6 h-6" />
-          <span>{t("contacts.emailMe")}</span>
+          <!-- Animated background gradient -->
+          <div
+            class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"
+          >
+          </div>
+
+          <!-- Content -->
+          <span class="relative z-10 flex items-center gap-3">
+            <Icon
+              name="mdi:email-outline"
+              class="w-6 h-6 transition-transform duration-300 group-hover:scale-110"
+            />
+            <span>{t("contacts.emailMe")}</span>
+          </span>
         </a>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  a[href^="mailto:"] {
+    box-shadow:
+      0 2px 4px -1px rgba(0, 0, 0, 0.06),
+      0 1px 2px -1px rgba(0, 0, 0, 0.04);
+  }
+
+  a[href^="mailto:"]:hover {
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+</style>

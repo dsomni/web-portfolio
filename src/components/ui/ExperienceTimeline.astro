@@ -2,6 +2,7 @@
 import { Icon } from "astro-icon/components";
 import { useTranslations, type Language } from "../../utils/i18n";
 import PDFButton from "./PDFButton.astro";
+import Link from "./Link.astro";
 
 interface File {
     title: string;
@@ -218,36 +219,16 @@ const linkBadge =
 
                                 {/* External Links - Icon-only style like social media */}
                                 {exp.links && exp.links.length > 0 && exp.links.map(link => (
-                                    link.label ? (<a
+                                    <Link
                                         href={link.href}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class={linkBadge}
-                                        aria-label={link.label}
-                                        title={link.label}
-                                    >
-                                    <Icon
-                                        name={link.icon || "mdi:external-link"}
-                                        class="w-4 h-4"
+                                        icon={link.icon || "mdi:external-link"}
+                                        label={link.label}
+                                        colorScheme={colorScheme}
+                                        variant="outline"
+                                        size="sm"
+                                        ariaLabel={link.label || t("common.link")}
                                     />
-                                    { <span>{link.label}</span>}
-                                    </a>) :
-                                    (<a
-                                        href={link.href}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class={linkIcon}
-                                        aria-label={t("common.link")}
-                                        title={t("common.link")}
-                                    >
-                                    <Icon
-                                        name={link.icon || "mdi:external-link"}
-                                        class="w-6 h-6"
-                                    />
-
-                                    </a>)
                                 ))}
-
 
                             </div>
                         </div>

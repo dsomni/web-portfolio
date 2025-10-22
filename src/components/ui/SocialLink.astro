@@ -1,6 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import { useTranslations, type Language } from "../../utils/i18n";
+import Link from "./Link.astro";
 
 interface Props {
   social: {
@@ -20,70 +21,101 @@ const t = useTranslations(lang);
 
 // Get the translated message on the server-side
 const copiedMessage = t("clipboard.copied");
+
+// Shared icon-only button styles (for consistency between copyable and clickable)
+const iconButtonClasses =
+  "w-10 h-10 inline-flex items-center justify-center rounded-lg text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-all duration-300 hover:scale-110 hover:rotate-6 group relative overflow-hidden";
 ---
 
 {
   social.copy_content ? (
+    /* Copyable Content - Button with consistent styling */
     <button
       type="button"
       data-copy={social.url}
       data-message={copiedMessage}
       class={
         variant === "card"
-          ? "card card-hover animate-on-scroll group w-full text-left cursor-pointer"
-          : "w-10 h-10 rounded-full bg-light-elevated dark:bg-dark-elevated flex items-center justify-center text-light-text dark:text-dark-text hover:bg-primary-600 hover:text-white dark:hover:bg-primary-500 transition-all hover:scale-110 cursor-pointer"
+          ? "card card-hover animate-on-scroll group w-full text-left cursor-pointer transition-all duration-300 hover:scale-105"
+          : iconButtonClasses
       }
       style={variant === "card" ? `animation-delay: ${index * 100}ms` : ""}
       aria-label={`Copy ${social.name}`}
     >
       {variant === "card" ? (
         <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-600 group-hover:text-white transition-colors">
-            <Icon name={social.icon} size="20" />
+          <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-600 group-hover:text-white transition-all duration-300">
+            <Icon name={social.icon} class="w-6 h-6" />
           </div>
-          <div>
-            <p class="text-sm font-medium text-light-text-muted dark:text-dark-text-muted">
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium text-light-text-muted dark:text-dark-text-muted mb-1">
               {social.name}
             </p>
-            <p class="text-lg font-semibold text-light-text dark:text-dark-text group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+            <p class="text-lg font-semibold text-light-text dark:text-dark-text group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors truncate">
               {social.value || social.url}
             </p>
           </div>
+          {/* Copy indicator */}
+          <div class="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <Icon
+              name="mdi:content-copy"
+              class="w-5 h-5 text-primary-600 dark:text-primary-400"
+            />
+          </div>
         </div>
       ) : (
-        <Icon name={social.icon} size="20" />
+        <>
+          {/* Pulse effect on hover - matching Link component */}
+          <div class="absolute inset-0 rounded-lg bg-current opacity-0 group-hover:opacity-10 group-hover:scale-150 transition-all duration-500" />
+          <Icon
+            name={social.icon}
+            class="w-6 h-6 relative z-10 transition-transform duration-300 group-hover:scale-110"
+          />
+        </>
       )}
     </button>
+  ) : variant === "icon" ? (
+    /* Icon variant - Use Link component for external links */
+    <Link
+      href={social.url}
+      icon={social.icon}
+      colorScheme="primary"
+      size="sm"
+      ariaLabel={social.name}
+    />
   ) : (
+    /* Card variant - External link with consistent styling */
     <a
       href={social.url}
       target="_blank"
       rel="noopener noreferrer"
-      class={
-        variant === "card"
-          ? "card card-hover animate-on-scroll group"
-          : "w-10 h-10 rounded-full bg-light-elevated dark:bg-dark-elevated flex items-center justify-center text-light-text dark:text-dark-text hover:bg-primary-600 hover:text-white dark:hover:bg-primary-500 transition-all hover:scale-110"
-      }
-      style={variant === "card" ? `animation-delay: ${index * 100}ms` : ""}
+      class="card card-hover animate-on-scroll group transition-all duration-300 hover:scale-105 relative overflow-hidden"
+      style={`animation-delay: ${index * 100}ms`}
       aria-label={social.name}
     >
-      {variant === "card" ? (
-        <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-600 group-hover:text-white transition-colors">
-            <Icon name={social.icon} size="20" />
-          </div>
-          <div>
-            <p class="text-sm font-medium text-light-text-muted dark:text-dark-text-muted">
-              {social.name}
-            </p>
-            <p class="text-lg font-semibold text-light-text dark:text-dark-text group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-              {social.value || social.url}
-            </p>
-          </div>
+      {/* Animated background gradient */}
+      <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+
+      <div class="relative z-10 flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-600 group-hover:text-white transition-all duration-300 group-hover:scale-110">
+          <Icon name={social.icon} class="w-6 h-6" />
         </div>
-      ) : (
-        <Icon name={social.icon} size="20" />
-      )}
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium text-light-text-muted dark:text-dark-text-muted mb-1">
+            {social.name}
+          </p>
+          <p class="text-lg font-semibold text-light-text dark:text-dark-text group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors truncate">
+            {social.value || social.url}
+          </p>
+        </div>
+        {/* External link indicator */}
+        <div class="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1">
+          <Icon
+            name="mdi:arrow-top-right"
+            class="w-5 h-5 text-primary-600 dark:text-primary-400"
+          />
+        </div>
+      </div>
     </a>
   )
 }
@@ -101,7 +133,7 @@ const copiedMessage = t("clipboard.copied");
       toast.setAttribute("role", "status");
       toast.setAttribute("aria-live", "polite");
       toast.className =
-        "fixed bottom-12 left-1/2 -translate-x-1/2 px-4 py-3 rounded-2xl bg-green-600 text-white text-base shadow-lg transition-opacity duration-300 opacity-0 pointer-events-none z-50";
+        "fixed bottom-12 left-1/2 -translate-x-1/2 px-4 py-3 rounded-2xl bg-green-600 text-white text-base font-medium shadow-lg transition-opacity duration-300 opacity-0 pointer-events-none z-50";
       document.body.appendChild(toast);
     }
 

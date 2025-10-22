@@ -1,0 +1,137 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  href: string;
+  icon: string;
+  label?: string;
+  colorScheme?: "primary" | "accent";
+  variant?: "filled" | "outline";
+  size?: "sm" | "md";
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  icon,
+  label,
+  colorScheme = "primary",
+  variant = "outline",
+  size = "sm",
+  ariaLabel,
+} = Astro.props;
+
+const filledColors =
+  colorScheme === "primary"
+    ? "bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white"
+    : "bg-accent-600 hover:bg-accent-700 dark:bg-accent-500 dark:hover:bg-accent-600 text-white";
+
+const outlineColors =
+  colorScheme === "primary"
+    ? "border-primary-600 dark:border-primary-400 text-primary-700 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20"
+    : "border-accent-600 dark:border-accent-400 text-accent-700 dark:text-accent-300 hover:bg-accent-50 dark:hover:bg-accent-900/20";
+
+const buttonColors =
+  variant === "filled" ? filledColors : `border ${outlineColors}`;
+
+const sizeClasses = size === "sm" ? "px-4 py-2 text-sm" : "px-6 py-3";
+
+const iconSize = size === "sm" ? "w-4 h-4" : "w-6 h-6";
+const arrowSize = size === "sm" ? "w-4 h-4" : "w-5 h-5";
+
+// Icon-only styles
+const iconOnlyColors =
+  colorScheme === "primary"
+    ? "text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/30"
+    : "text-accent-600 dark:text-accent-400 hover:bg-accent-100 dark:hover:bg-accent-900/30";
+
+const iconOnlySize = size === "sm" ? "w-9 h-9" : "w-11 h-11";
+const iconOnlyIconSize = size === "sm" ? "w-6 h-6" : "w-7 h-7";
+---
+
+{
+  label ? (
+    <!-- Link with label - full button style -->
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      class={`link-button ${buttonColors} ${sizeClasses} font-medium rounded-lg inline-flex items-center justify-between transition-all duration-300 hover:shadow-lg hover:scale-105 group relative overflow-hidden min-w-fit`}
+      aria-label={ariaLabel || label}
+      title={label}
+    >
+      <!-- Animated background gradient -->
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"
+      >
+      </div>
+
+      <!-- Left side: Icon + Text -->
+      <div class="relative z-10 flex items-center gap-2">
+        <!-- Icon -->
+        <div
+          class={`transform transition-all duration-300 group-hover:rotate-12 group-hover:scale-110 ${iconSize}`}
+        >
+          <Icon name={icon} class={iconSize} />
+        </div>
+
+        <!-- Button text -->
+        <span class="transition-all duration-300 group-hover:translate-x-0.5">
+          {label}
+        </span>
+      </div>
+
+      <!-- Right side: Arrow -->
+      <div
+        class={`relative z-10 ml-2 opacity-0 transition-all duration-300 ${arrowSize} group-hover:opacity-100 group-hover:translate-x-1`}
+      >
+        <Icon name="mdi:arrow-top-right" class={arrowSize} />
+      </div>
+    </a>
+  ) : (
+    <!-- Icon-only link - clean animated style -->
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      class={`icon-link ${iconOnlyColors} ${iconOnlySize} inline-flex items-center justify-center rounded-lg transition-all duration-300 hover:scale-110 hover:rotate-6 group relative overflow-hidden`}
+      aria-label={ariaLabel}
+      title={ariaLabel}
+    >
+      <!-- Pulse effect on hover -->
+      <div
+        class="absolute inset-0 rounded-lg bg-current opacity-0 group-hover:opacity-10 group-hover:scale-150 transition-all duration-500"
+      >
+      </div>
+
+      <!-- Icon -->
+      <div
+        class={`relative z-10 transform transition-all duration-300 group-hover:scale-110 ${iconOnlyIconSize}`}
+      >
+        <Icon name={icon} class={iconOnlyIconSize} />
+      </div>
+    </a>
+  )
+}
+
+<style>
+  .link-button {
+    box-shadow:
+      0 2px 4px -1px rgba(0, 0, 0, 0.06),
+      0 1px 2px -1px rgba(0, 0, 0, 0.04);
+  }
+
+  .link-button:hover {
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .icon-link {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .icon-link:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+</style>
