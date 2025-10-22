@@ -80,12 +80,31 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       })();
     </script>
 
+    <!-- CRITICAL: Scroll restoration for language switching -->
     <script is:inline>
       (function () {
-        // Restore scroll position after page load
-        window.addEventListener("load", () => {
-          const scrollPos = sessionStorage.getItem("scrollPos");
+        // Ensure manual scroll restoration to prevent conflicts
+        if ("scrollRestoration" in history) {
+          history.scrollRestoration = "manual";
+        }
 
+        function restoreScrollPosition() {
+          // Check for language switch scroll position first (priority)
+          const langSwitchScroll = sessionStorage.getItem("lang-switch-scroll");
+
+          if (langSwitchScroll !== null) {
+            const scrollY = parseInt(langSwitchScroll, 10) || 0;
+            sessionStorage.removeItem("lang-switch-scroll");
+
+            // For language switching, ALWAYS restore to exact position, ignore hash
+            requestAnimationFrame(() => {
+              window.scrollTo({ top: scrollY, behavior: "auto" });
+            });
+            return;
+          }
+
+          // Fallback: check for general scroll position
+          const scrollPos = sessionStorage.getItem("scrollPos");
           if (scrollPos !== null) {
             // If there's a hash, let the browser handle scrolling to it
             if (window.location.hash) {
@@ -106,7 +125,19 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
             // Clean up
             sessionStorage.removeItem("scrollPos");
           }
-        });
+        }
+
+        // Restore on full page load
+        if (document.readyState === "complete") {
+          restoreScrollPosition();
+        } else {
+          window.addEventListener("load", restoreScrollPosition, {
+            once: true,
+          });
+        }
+
+        // Restore after Astro view transitions
+        document.addEventListener("astro:page-load", restoreScrollPosition);
       })();
     </script>
 
@@ -146,11 +177,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- Scroll to top button -->
     <button
       id="scroll-to-top"
-      class="fixed bottom-8 right-8 p-3 rounded-full bg-primary-600 text-white shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 z-50"
+      class="fixed bottom-8 right-8 p-3 rounded-full bg-primary-600 text-white shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-primary-700 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-500 z-50"
       aria-label="Scroll to top"
     >
       <svg
-        class="w-6 h-6"
+        class="w-6 h-6 transition-transform duration-300"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"

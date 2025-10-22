@@ -77,8 +77,13 @@ if (altUrl.endsWith("/") && altUrl.length > 1) {
         targetUrl = targetUrl.split("#")[0] + currentHash;
       }
 
-      // Save scroll position
-      sessionStorage.setItem("scrollPos", window.scrollY.toString());
+      // Set manual scroll restoration to prevent browser's native jump
+      if ("scrollRestoration" in history) {
+        history.scrollRestoration = "manual";
+      }
+
+      // Save current scroll position with language-specific key
+      sessionStorage.setItem("lang-switch-scroll", window.scrollY.toString());
 
       // Navigate to new URL
       window.location.href = targetUrl;

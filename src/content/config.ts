@@ -40,7 +40,7 @@ const experience = defineCollection({
         )).optional(),
         links: z.array(z.object({
             href: z.string().url(),
-            icon: z.string(),
+            icon: z.string().optional(),
             label: z.string().optional(),
         }
         )).optional(),
