@@ -119,11 +119,38 @@ const languages = defineCollection({
     }),
 });
 
+
+const collaborations = defineCollection({
+    type: 'content',
+    schema: z.object({
+        order: z.number(),
+        organization: z.string(),
+        role: z.string(),
+        period: z.string(),
+        logo: z.string().optional(),
+        description: z.string(),
+        website: z.string().url().optional(),
+        github: z.string().url().optional(),
+        projects: z.array(z.object({
+            title: z.string(),
+            description: z.string(),
+            tags: z.array(z.string()).optional(),
+            github: z.string().url().optional(),
+            links: z.array(z.object({
+                href: z.string().url(),
+                icon: z.string(),
+                label: z.string().optional(),
+            })).optional(),
+        })),
+    }),
+});
+
 export const collections = {
     about,
     experience,
     projects,
     education,
     social,
-    languages
+    languages,
+    collaborations
 };

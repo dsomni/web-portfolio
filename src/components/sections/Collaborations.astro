@@ -1,0 +1,207 @@
+---
+import { getCollection } from "astro:content";
+import { useTranslations, type Language } from "../../utils/i18n";
+import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+import { url } from "@/utils/url";
+
+interface Project {
+  title: string;
+  description: string;
+  tags?: string[];
+  github?: string;
+  links?: Link[];
+}
+
+interface Link {
+  href: string;
+  icon: string;
+  label?: string;
+}
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Get all collaboration entries for this language
+const collaborations = (await getCollection("collaborations"))
+  .filter((entry: any) => entry.id.split(".")[0].endsWith(`-${lang}`))
+  .map((entry: any) => entry.data)
+  .sort((a: any, b: any) => a.order - b.order);
+
+const sectionLabel =
+  "text-xs font-bold uppercase tracking-wider text-light-text dark:text-dark-text mb-3 flex items-center gap-2";
+
+// Icon-only style (when no label)
+const linkIcon =
+  "inline-flex items-center justify-center w-9 h-9 rounded-lg text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors";
+// Icon with label style (when label exists)
+const linkBadge =
+  "inline-flex items-center gap-2 text-xs px-3 py-2 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800 font-medium hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors";
+---
+
+<section id="collaborations" class="py-20">
+  <div class="container-custom">
+    <h2 class="section-title text-center animate-on-scroll">
+      {t("section.collaborations")}
+    </h2>
+
+    <div class="max-w-5xl mx-auto space-y-8">
+      {
+        collaborations.map((collab: any, index: number) => (
+          <div
+            class="animate-on-scroll"
+            style={`animation-delay: ${index * 100}ms`}
+          >
+            <div class="card card-hover">
+              {/* Header Section with Logo */}
+              <div class="flex items-start gap-6 pb-6 border-b border-light-border dark:border-dark-border">
+                {/* Logo */}
+                {collab.logo && (
+                  <div class="flex-shrink-0">
+                    <div class="w-32 h-32 rounded-lg overflow-hidden bg-light-border/20 dark:bg-dark-border/20 p-2 flex items-center justify-center">
+                      <Image
+                        src={url(collab.logo)}
+                        alt={`${collab.organization} logo`}
+                        width={120}
+                        height={120}
+                        class="w-full h-full object-contain"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Organization Info */}
+                <div class="flex-1 min-w-0">
+                  <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-3">
+                    <div class="flex-1">
+                      <h3 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">
+                        {collab.organization}
+                      </h3>
+                      <p class="text-accent-600 dark:text-accent-400 font-semibold text-lg ">
+                        {collab.role}
+                      </p>
+                    </div>
+                    <span class="text-sm font-semibold text-light-text-muted dark:text-dark-text-muted bg-light-border/30 dark:bg-dark-border/30 px-3 py-1.5 rounded-full whitespace-nowrap self-start">
+                      {collab.period}
+                    </span>
+                  </div>
+
+                  {/* Organization Links */}
+                  {(collab.website || collab.github) && (
+                    <div class="flex flex-wrap gap-2 mt-3">
+                      {collab.website && (
+                        <a
+                          href={collab.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class={linkBadge}
+                          aria-label={t("common.website")}
+                        >
+                          <Icon name="mdi:web" class="w-4 h-4" />
+                          <span>{t("common.website")}</span>
+                        </a>
+                      )}
+                      {collab.github && (
+                        <a
+                          href={collab.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class={linkBadge}
+                          aria-label={t("common.github")}
+                        >
+                          <Icon name="mdi:github" class="w-4 h-4" />
+                          <span>{t("common.github")}</span>
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Description */}
+              <p class="text-base text-light-text-muted dark:text-dark-text-muted leading-relaxed mt-6">
+                {collab.description}
+              </p>
+
+              {/* Projects */}
+              {collab.projects && collab.projects.length > 0 && (
+                <div class="mt-8">
+                  <h4 class={sectionLabel}>
+                    <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                    {t("collaborations.projects")}
+                  </h4>
+
+                  <div class="space-y-6">
+                    {collab.projects.map((project: Project) => (
+                      <div class="p-5 bg-light-surface dark:bg-dark-surface rounded-lg border border-light-border dark:border-dark-border">
+                        {/* Project Header */}
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                          <h5 class="text-lg font-bold text-light-text dark:text-dark-text">
+                            {project.title}
+                          </h5>
+
+                          {/* Project Links */}
+                          {(project.github ||
+                            (project.links && project.links.length > 0)) && (
+                            <div class="flex flex-wrap gap-2 items-start">
+                              {project.github && (
+                                <a
+                                  href={project.github}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  class={linkIcon}
+                                  aria-label={t("common.sourceCode")}
+                                  title={t("common.sourceCode")}
+                                >
+                                  <Icon name="mdi:github" class="w-5 h-5" />
+                                </a>
+                              )}
+                              {project.links &&
+                                project.links.map((link: Link) => (
+                                  <a
+                                    href={link.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class={linkIcon}
+                                    aria-label={link.label || t("common.link")}
+                                    title={link.label || t("common.link")}
+                                  >
+                                    <Icon
+                                      name={link.icon || "mdi:external-link"}
+                                      class="w-5 h-5"
+                                    />
+                                  </a>
+                                ))}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Project Description */}
+                        <p class="text-sm text-light-text-muted dark:text-dark-text-muted leading-relaxed mb-4">
+                          {project.description}
+                        </p>
+
+                        {/* Project Stack */}
+                        {project.tags && project.tags.length > 0 && (
+                          <div class="flex flex-wrap gap-2 mt-3">
+                            {project.tags.map((tech: string) => (
+                              <span class="badge text-xs">{tech}</span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

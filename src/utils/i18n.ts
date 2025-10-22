@@ -52,6 +52,7 @@ export interface Translations {
     'section.projects': string;
     'section.education': string;
     'section.contact': string;
+    'section.collaborations': string;
 
     // Subsections
     'subsection.languages': string;
@@ -66,6 +67,9 @@ export interface Translations {
     // Projects
     "projects.featured": string;
     "projects.achievements": string;
+
+    // Collaborations
+    "collaborations.projects": string;
 
 
     // Common
@@ -87,6 +91,9 @@ export interface Translations {
     'common.relevantCoursework': string;
     'common.thesis': string;
     'common.demo': string;
+    'common.website': string;
+    'common.github': string;
+    'common.link': string;
 
 
     // Contacts
@@ -133,21 +140,7 @@ export function formatDate(date: Date | string, lang: Language): string {
     }).format(d);
 }
 
-// Helper to format date ranges
-export function formatDateRange(
-    start: Date | string,
-    end: Date | string | 'present',
-    lang: Language
-): string {
-    const startFormatted = formatDate(start, lang);
 
-    if (end === 'present') {
-        return `${startFormatted} — ${translations[lang]['common.present']}`;
-    }
-
-    const endFormatted = formatDate(end, lang);
-    return `${startFormatted} — ${endFormatted}`;
-}
 
 // All translations
 const translations: Record<Language, Translations> = {
@@ -177,7 +170,7 @@ Building state-of-the-art ML solutions.`,
         'section.projects': 'Projects',
         'section.education': 'Education',
         'section.contact': 'Get In Touch',
-
+        'section.collaborations': 'Collaborations',
 
         'experience.achievements': 'Achievements',
         'experience.responsibilities': 'Responsibilities',
@@ -186,6 +179,8 @@ Building state-of-the-art ML solutions.`,
 
         "projects.featured": 'Featured',
         "projects.achievements": '✨ Achievements',
+
+        "collaborations.projects": 'Featured projects',
 
         'subsection.languages': 'Languages',
 
@@ -207,8 +202,9 @@ Building state-of-the-art ML solutions.`,
         'common.relevantCoursework': 'Relevant Coursework',
         'common.thesis': 'Thesis',
         'common.demo': 'Demo',
-
-
+        'common.website': 'Website',
+        'common.github': 'GitHub',
+        'common.link': 'Link',
 
         'contacts.emailMe': "Send me an email",
         'contacts.target': "I'm currently seeking interesting R&D opportunities in Machine Learning and AI. Feel free to reach out!",
@@ -247,6 +243,7 @@ Building state-of-the-art ML solutions.`,
         'section.projects': 'Проекты',
         'section.education': 'Образование',
         'section.contact': 'Связаться',
+        'section.collaborations': 'Коллаборации',
 
         'subsection.languages': 'Языки',
         'experience.achievements': 'Достижения',
@@ -254,9 +251,10 @@ Building state-of-the-art ML solutions.`,
         'experience.supervisor': 'Руководитель',
         'experience.concepts': 'Концепции',
 
-
         "projects.featured": 'Избранное',
         "projects.achievements": '✨ Достижения',
+
+        "collaborations.projects": 'Избранные проекты',
 
         'common.resources': 'Ресурсы',
         'common.readMore': 'Подробнее',
@@ -276,7 +274,9 @@ Building state-of-the-art ML solutions.`,
         'common.relevantCoursework': 'Ключевые курсы',
         'common.thesis': 'Дипломная работа',
         'common.demo': 'Демо',
-
+        'common.website': 'Сайт',
+        'common.github': 'GitHub',
+        'common.link': 'Ссылка',
 
         'contacts.emailMe': "Написать мне",
         'contacts.target': "В настоящее время ищу интересные R&D возможности в области машинного обучения и ИИ. Буду рад связи!",
