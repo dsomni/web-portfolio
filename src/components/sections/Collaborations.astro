@@ -58,67 +58,129 @@ const linkBadge =
           >
             <div class="card card-hover">
               {/* Header Section with Logo */}
-              <div class="flex items-start gap-6 pb-6 border-b border-light-border dark:border-dark-border">
-                {/* Logo */}
-                {collab.logo && (
-                  <div class="flex-shrink-0">
-                    <div class="w-32 h-32 rounded-lg overflow-hidden bg-light-border/20 dark:bg-dark-border/20 p-2 flex items-center justify-center">
+              <div class="pb-6 border-b border-light-border dark:border-dark-border">
+                {/* Mobile Layout: Stacked and centered */}
+                <div class="flex sm:hidden flex-col items-center text-center gap-4">
+                  {/* Logo */}
+                  {collab.logo && (
+                    <div class="w-24 h-24 rounded-lg overflow-hidden bg-light-border/20 dark:bg-dark-border/20 p-2 flex items-center justify-center">
                       <Image
                         src={url(collab.logo)}
                         alt={`${collab.organization} logo`}
-                        width={120}
-                        height={120}
+                        width={96}
+                        height={96}
                         class="w-full h-full object-contain"
                       />
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Organization Info */}
-                <div class="flex-1 min-w-0">
-                  <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-3">
-                    <div class="flex-1">
-                      <h3 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">
-                        {collab.organization}
-                      </h3>
-                      <p class="text-accent-600 dark:text-accent-400 font-semibold text-lg ">
-                        {collab.role}
-                      </p>
-                    </div>
-                    <span class="text-sm font-semibold text-light-text-muted dark:text-dark-text-muted bg-light-border/30 dark:bg-dark-border/30 px-3 py-1.5 rounded-full whitespace-nowrap self-start">
+                  {/* Organization Info */}
+                  <div class="w-full">
+                    <h3 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">
+                      {collab.organization}
+                    </h3>
+                    <p class="text-accent-600 dark:text-accent-400 font-semibold text-lg mb-3">
+                      {collab.role}
+                    </p>
+                    <span class="inline-block text-sm font-semibold text-light-text-muted dark:text-dark-text-muted bg-light-border/30 dark:bg-dark-border/30 px-3 py-1.5 rounded-full whitespace-nowrap mb-3">
                       {collab.period}
                     </span>
-                  </div>
 
-                  {/* Organization Links */}
-                  {(collab.website || collab.github) && (
-                    <div class="flex flex-wrap gap-2 mt-3">
-                      {collab.website && (
-                        <a
-                          href={collab.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class={linkBadge}
-                          aria-label={t("common.website")}
-                        >
-                          <Icon name="mdi:web" class="w-4 h-4" />
-                          <span>{t("common.website")}</span>
-                        </a>
-                      )}
-                      {collab.github && (
-                        <a
-                          href={collab.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class={linkBadge}
-                          aria-label={t("common.github")}
-                        >
-                          <Icon name="mdi:github" class="w-4 h-4" />
-                          <span>{t("common.github")}</span>
-                        </a>
-                      )}
+                    {/* Organization Links */}
+                    {(collab.website || collab.github) && (
+                      <div class="flex flex-wrap justify-center gap-2">
+                        {collab.website && (
+                          <a
+                            href={collab.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class={linkBadge}
+                            aria-label={t("common.website")}
+                          >
+                            <Icon name="mdi:web" class="w-4 h-4" />
+                            <span>{t("common.website")}</span>
+                          </a>
+                        )}
+                        {collab.github && (
+                          <a
+                            href={collab.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class={linkBadge}
+                            aria-label={t("common.github")}
+                          >
+                            <Icon name="mdi:github" class="w-4 h-4" />
+                            <span>{t("common.github")}</span>
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Desktop Layout: Side by side */}
+                <div class="hidden sm:flex items-start gap-6">
+                  {/* Logo */}
+                  {collab.logo && (
+                    <div class="flex-shrink-0">
+                      <div class="w-32 h-32 rounded-lg overflow-hidden bg-light-border/20 dark:bg-dark-border/20 p-2 flex items-center justify-center">
+                        <Image
+                          src={url(collab.logo)}
+                          alt={`${collab.organization} logo`}
+                          width={120}
+                          height={120}
+                          class="w-full h-full object-contain"
+                        />
+                      </div>
                     </div>
                   )}
+
+                  {/* Organization Info */}
+                  <div class="flex-1 min-w-0">
+                    <div class="flex flex-row items-start justify-between gap-3 mb-3">
+                      <div class="flex-1">
+                        <h3 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">
+                          {collab.organization}
+                        </h3>
+                        <p class="text-accent-600 dark:text-accent-400 font-semibold text-lg">
+                          {collab.role}
+                        </p>
+                      </div>
+                      <span class="text-sm font-semibold text-light-text-muted dark:text-dark-text-muted bg-light-border/30 dark:bg-dark-border/30 px-3 py-1.5 rounded-full whitespace-nowrap">
+                        {collab.period}
+                      </span>
+                    </div>
+
+                    {/* Organization Links */}
+                    {(collab.website || collab.github) && (
+                      <div class="flex flex-wrap gap-2">
+                        {collab.website && (
+                          <a
+                            href={collab.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class={linkBadge}
+                            aria-label={t("common.website")}
+                          >
+                            <Icon name="mdi:web" class="w-4 h-4" />
+                            <span>{t("common.website")}</span>
+                          </a>
+                        )}
+                        {collab.github && (
+                          <a
+                            href={collab.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class={linkBadge}
+                            aria-label={t("common.github")}
+                          >
+                            <Icon name="mdi:github" class="w-4 h-4" />
+                            <span>{t("common.github")}</span>
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 

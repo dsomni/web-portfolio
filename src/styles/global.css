@@ -305,3 +305,7 @@
     @apply border border-dark-border;
     @apply rounded-xl;
 }
+
+section:nth-of-type(even) {
+    @apply bg-light-surface dark:bg-dark-surface;
+}

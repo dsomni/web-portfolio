@@ -27,15 +27,15 @@ const gpaColor = colorScheme === 'primary'
     : 'text-accent-700 dark:text-accent-300 bg-accent-100 dark:bg-accent-900/30';
 ---
 
-<section id="education" class="py-20 bg-light-surface dark:bg-dark-surface">
+<section id="education" class="py-20">
   <div class="container-custom">
     <h2 class="section-title text-center animate-on-scroll">
       {t("section.education")}
     </h2>
 
     <div class="max-w-4xl mx-auto relative">
-      <!-- Timeline line -->
-      <div class={`absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b ${
+      <!-- Timeline line - much smaller on mobile -->
+      <div class={`absolute left-1.5 sm:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b ${
         colorScheme === 'primary'
           ? 'from-primary-500 to-accent-500'
           : 'from-accent-500 to-primary-500'
@@ -43,42 +43,70 @@ const gpaColor = colorScheme === 'primary'
 
       <div class="space-y-12">
         {education.map((edu: any, index: number) => (
-          <div class="relative pl-20 animate-on-scroll" style={`animation-delay: ${index * 100}ms`}>
-            <!-- Timeline dot -->
-            <div class={`absolute left-6 top-6 w-4 h-4 rounded-full ${dotColor} border-4 border-light-surface dark:border-dark-surface shadow-lg`}></div>
+          <div class="relative pl-8 sm:pl-20 animate-on-scroll" style={`animation-delay: ${index * 100}ms`}>
+            <!-- Timeline dot - much smaller on mobile -->
+            <div class={`absolute left-0.5 sm:left-6 top-6 w-2.5 h-2.5 sm:w-4 sm:h-4 rounded-full ${dotColor} border-2 sm:border-4 border-light-surface dark:border-dark-surface shadow-lg`}></div>
 
             <div class="card card-hover">
               <!-- Header Section -->
-              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 pb-4 border-b border-light-border dark:border-dark-border">
-                <div class="flex-1">
-                  <h3 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">
-                    {edu.degree}
-                  </h3>
-                  <p class={`${accentColor} font-semibold text-lg mb-1`}>
-                    {edu.institution}
-                  </p>
-                  <p class="text-sm text-light-text-muted dark:text-dark-text-muted font-medium">
-                    {edu.location}
-                  </p>
+              <div class="pb-4 border-b border-light-border dark:border-dark-border">
+                <!-- Degree title -->
+                <h3 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">
+                  {edu.degree}
+                </h3>
+
+                <!-- Institution/Location + GPA (small screens), two-column on medium+ -->
+                <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+                  <!-- Left side: Institution and Location with GPA on right for mobile -->
+                  <div class="flex justify-between items-start gap-3 flex-1">
+                    <div class="flex-1">
+                      <p class={`${accentColor} font-semibold text-lg mb-1`}>
+                        {edu.institution}
+                      </p>
+                      <p class="text-sm text-light-text-muted dark:text-dark-text-muted font-medium">
+                        {edu.location}
+                      </p>
+                    </div>
+
+                    {/* GPA - visible on mobile, hidden on md+ */}
+                    {edu.gpa && (
+                      <div class={`md:hidden px-3 py-1.5 rounded-lg ${gpaColor} border border-current/20 flex-shrink-0`}>
+                        <div class="text-center">
+                          <span class="text-lg font-bold block">
+                            {edu.gpa}
+                          </span>
+                          <span class="text-xs font-semibold uppercase tracking-wide">
+                            GPA
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <!-- Right side on desktop: Period and GPA stacked -->
+                  <div class="hidden md:flex md:flex-col md:items-end gap-2">
+                    <span class="text-sm font-semibold text-light-text-muted dark:text-dark-text-muted bg-light-border/30 dark:bg-dark-border/30 px-3 py-1.5 rounded-full whitespace-nowrap">
+                      {edu.period}
+                    </span>
+                    {edu.gpa && (
+                      <div class={`px-4 py-2 rounded-lg ${gpaColor} border border-current/20`}>
+                        <div class="text-center">
+                          <span class="text-2xl font-bold block">
+                            {edu.gpa}
+                          </span>
+                          <span class="text-xs font-semibold uppercase tracking-wide">
+                            GPA
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                <div class="flex flex-col items-end gap-2">
-                  <span class="text-sm font-semibold text-light-text-muted dark:text-dark-text-muted bg-light-border/30 dark:bg-dark-border/30 px-3 py-1.5 rounded-full whitespace-nowrap">
-                    {edu.period}
-                  </span>
-                  {edu.gpa && (
-                    <div class={`px-4 py-2 rounded-lg ${gpaColor} border border-current/20`}>
-                      <div class="text-center">
-                        <span class="text-2xl font-bold block">
-                          {edu.gpa}
-                        </span>
-                        <span class="text-xs font-semibold uppercase tracking-wide">
-                          GPA
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <!-- Period - full width on mobile only -->
+                <span class="md:hidden inline-block mt-3 text-sm font-semibold text-light-text-muted dark:text-dark-text-muted bg-light-border/30 dark:bg-dark-border/30 px-3 py-1.5 rounded-full whitespace-nowrap">
+                  {edu.period}
+                </span>
               </div>
 
               <!-- Field of Study -->

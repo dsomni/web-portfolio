@@ -54,7 +54,7 @@ const linkIcon = colorScheme === 'primary'
 
 <div class="max-w-4xl mx-auto relative">
     <!-- Timeline line -->
-    <div class={`absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b ${
+    <div class={`absolute left-1.5 sm:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b ${
         colorScheme === 'primary'
             ? 'from-primary-500 to-accent-500'
             : 'from-accent-500 to-primary-500'
@@ -62,9 +62,9 @@ const linkIcon = colorScheme === 'primary'
 
     <div class="space-y-12">
         {experiences.map((exp, index) => (
-            <div class="relative pl-20 animate-on-scroll" style={`animation-delay: ${index * 100}ms`}>
+            <div class="relative pl-8 sm:pl-20 animate-on-scroll" style={`animation-delay: ${index * 100}ms`}>
                 <!-- Timeline dot -->
-                <div class={`absolute left-6 top-6 w-4 h-4 rounded-full ${dotColor} border-4 border-light-bg dark:border-dark-bg shadow-lg`}></div>
+                <div class={`absolute left-0.5 sm:left-6 top-6 w-2.5 h-2.5 sm:w-4 sm:h-4 rounded-full ${dotColor} border-2 sm:border-4 border-light-surface dark:border-dark-surface shadow-lg`}></div>
 
                 <div class="card card-hover">
                     <!-- Header Section -->
@@ -97,7 +97,7 @@ const linkIcon = colorScheme === 'primary'
                         <div class="mt-6 p-4 bg-light-border/20 dark:bg-dark-border/20 rounded-lg border border-light-border dark:border-dark-border">
                             {exp.supervisor && (
                                 <p class="text-sm text-light-text-muted dark:text-dark-text-muted">
-                                    <span class="font-bold text-light-text dark:text-dark-text">
+                                    <span class="font-medium text-light-text dark:text-dark-text">
                                         {t('experience.supervisor')}:
                                     </span> {exp.supervisor}
                                 </p>
@@ -105,7 +105,7 @@ const linkIcon = colorScheme === 'primary'
 
                             {exp.coSupervisors && exp.coSupervisors.length > 0 && (
                                 <div class={exp.supervisor ? 'mt-3' : ''}>
-                                    <p class="text-sm font-bold text-light-text dark:text-dark-text mb-1">
+                                    <p class="text-sm font-medium text-light-text dark:text-dark-text mb-1">
                                         {t('common.co-advisors')}:
                                     </p>
                                     <ul class="space-y-1 text-sm text-light-text-muted dark:text-dark-text-muted">

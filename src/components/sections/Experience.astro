@@ -26,39 +26,40 @@ const teachingExperience = experienceEntry.filter(
 );
 ---
 
-<section id="experience" class="py-20 bg-light-surface dark:bg-dark-surface">
+<section id="research-experience" class="py-20">
   <div class="container-custom">
-    <div class="mb-20" id="research-experience">
-      <h2 class="section-title text-center animate-on-scroll">
-        {t("section.research")}
-      </h2>
-      <ExperienceTimeline
-        experiences={researchExperience}
-        colorScheme="primary"
-        lang={lang}
-      />
-    </div>
+    <h2 class="section-title text-center animate-on-scroll">
+      {t("section.research")}
+    </h2>
+    <ExperienceTimeline
+      experiences={researchExperience}
+      colorScheme="primary"
+      lang={lang}
+    />
+  </div>
+</section>
 
-    <div class="mb-20" id="work-experience">
-      <h2 class="section-title text-center animate-on-scroll">
-        {t("section.experience")}
-      </h2>
-      <ExperienceTimeline
-        experiences={workExperience}
-        colorScheme="accent"
-        lang={lang}
-      />
-    </div>
-
-    <div id="teaching-experience">
-      <h2 class="section-title text-center animate-on-scroll">
-        {t("section.teaching")}
-      </h2>
-      <ExperienceTimeline
-        experiences={teachingExperience}
-        colorScheme="primary"
-        lang={lang}
-      />
-    </div>
+<section id="work-experience" class="py-20">
+  <div>
+    <h2 class="section-title text-center animate-on-scroll">
+      {t("section.experience")}
+    </h2>
+    <ExperienceTimeline
+      experiences={workExperience}
+      colorScheme="accent"
+      lang={lang}
+    />
+  </div>
+</section>
+<section id="teaching-experience" class="py-20">
+  <div>
+    <h2 class="section-title text-center animate-on-scroll">
+      {t("section.teaching")}
+    </h2>
+    <ExperienceTimeline
+      experiences={teachingExperience}
+      colorScheme="primary"
+      lang={lang}
+    />
   </div>
 </section>
