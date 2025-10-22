@@ -50,6 +50,11 @@ const conceptBadge = 'text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-acc
 const linkIcon = colorScheme === 'primary'
     ? 'inline-flex items-center justify-center w-9 h-9 rounded-lg text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors'
     : 'inline-flex items-center justify-center w-9 h-9 rounded-lg text-accent-600 dark:text-accent-400 hover:bg-accent-100 dark:hover:bg-accent-900/30 transition-colors';
+
+
+// Icon with label style (when label exists)
+const linkBadge =
+  "inline-flex items-center gap-2 text-sm px-4 py-2 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800 font-medium hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors";
 ---
 
 <div class="max-w-4xl mx-auto relative">
@@ -96,23 +101,27 @@ const linkIcon = colorScheme === 'primary'
                     {(exp.supervisor || (exp.coSupervisors && exp.coSupervisors.length > 0)) && (
                         <div class="mt-6 p-4 bg-light-border/20 dark:bg-dark-border/20 rounded-lg border border-light-border dark:border-dark-border">
                             {exp.supervisor && (
-                                <p class="text-sm text-light-text-muted dark:text-dark-text-muted">
+                                <p class="flex flex-row gap-1 text-sm text-light-text-muted dark:text-dark-text-muted">
+
+                                    {t('experience.supervisor')}:
+
                                     <span class="font-medium text-light-text dark:text-dark-text">
-                                        {t('experience.supervisor')}:
-                                    </span> {exp.supervisor}
+                                        {exp.supervisor}
+                                    </span>
+
                                 </p>
                             )}
 
                             {exp.coSupervisors && exp.coSupervisors.length > 0 && (
                                 <div class={exp.supervisor ? 'mt-3' : ''}>
-                                    <p class="text-sm font-medium text-light-text dark:text-dark-text mb-1">
+                                    <p class="text-sm text-light-text-muted dark:text-dark-text-muted mb-1">
                                         {t('common.co-advisors')}:
                                     </p>
-                                    <ul class="space-y-1 text-sm text-light-text-muted dark:text-dark-text-muted">
+                                    <ul class="space-y-1 text-sm" >
                                         {exp.coSupervisors.map(coSupervisor => (
                                             <li class="flex items-start gap-2 ml-2">
                                                 <span class="text-primary-500 mt-0.5">▸</span>
-                                                <span class="flex-1">{coSupervisor}</span>
+                                                <span class="font-medium text-light-text dark:text-dark-text flex-1">{coSupervisor}</span>
                                             </li>
                                         ))}
                                     </ul>
@@ -209,16 +218,34 @@ const linkIcon = colorScheme === 'primary'
 
                                 {/* External Links - Icon-only style like social media */}
                                 {exp.links && exp.links.length > 0 && exp.links.map(link => (
-                                    <a
+                                    link.label ? (<a
+                                        href={link.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class={linkBadge}
+                                        aria-label={link.label}
+                                        title={link.label}
+                                    >
+                                    <Icon
+                                        name={link.icon || "mdi:external-link"}
+                                        class="w-4 h-4"
+                                    />
+                                    { <span>{link.label}</span>}
+                                    </a>) :
+                                    (<a
                                         href={link.href}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         class={linkIcon}
-                                        aria-label={link.label || link.href}
-                                        title={link.label || link.href}
+                                        aria-label={t("common.link")}
+                                        title={t("common.link")}
                                     >
-                                        <Icon name={link.icon} class="w-5 h-5" />
-                                    </a>
+                                    <Icon
+                                        name={link.icon || "mdi:external-link"}
+                                        class="w-6 h-6"
+                                    />
+
+                                    </a>)
                                 ))}
 
 

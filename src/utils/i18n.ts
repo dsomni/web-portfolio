@@ -40,6 +40,7 @@ export interface Translations {
     // Hero section
     'hero.greeting': string;
     'hero.description': string;
+    'hero.subDescription': string;
     'hero.cta.primary': string;
     'hero.cta.secondary': string;
     'hero.cta.resume': string;
@@ -157,8 +158,9 @@ const translations: Record<Language, Translations> = {
 
         'hero.greeting': 'Hi, I\'m',
         'hero.description': `MSc student specializing in AI and Data Science with
-deep research interest in Mathematical Optimization, LLMs and Deep Reinforcement Learning.
-Building state-of-the-art ML solutions.`,
+deep research interest in Mathematical Optimization, LLMs and Deep Reinforcement Learning.`,
+        'hero.subDescription': 'Building state-of-the-art ML solutions.',
+
         'hero.cta.primary': 'View Projects',
         'hero.cta.secondary': 'Contact Me',
         'hero.cta.resume': 'Resume',
@@ -229,9 +231,9 @@ Building state-of-the-art ML solutions.`,
 
         'hero.greeting': 'Привет, я',
 
-        'hero.description': `Магистр Computer Science, специализирующийся на ИИ и науке о данных
-с глубокой исследовательским интересом в математической оптимизации, LLMs и Deep Reinforcement Learning.
-Создаю передовые ML-решения.`,
+        'hero.description': `Магистрант Computer Science, специализирующийся на ИИ и науке о данных,
+с глубоким исследовательским интересом в математической оптимизации, больших языковых моделях и Deep Reinforcement Learning.`,
+        'hero.subDescription': 'Создаю передовые ML-решения.',
         'hero.cta.primary': 'Проекты',
         'hero.cta.secondary': 'Связаться',
         'hero.cta.resume': 'Резюме',

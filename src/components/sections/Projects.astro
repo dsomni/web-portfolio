@@ -39,7 +39,7 @@ const linkIcon =
 
 // Icon with label style (when label exists)
 const linkBadge =
-  "inline-flex items-center gap-2 text-xs px-3 py-2 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800 font-medium hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors";
+  "inline-flex items-center gap-2 text-sm px-4 py-2 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800 font-medium hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors";
 ---
 
 <section id="projects" class="py-20">
@@ -170,7 +170,7 @@ const linkBadge =
                               }
                               title={github.label || t("common.sourceCode")}
                             >
-                              <Icon name="mdi:github" class="w-4 h-4" />
+                              <Icon name="mdi:github" class="w-6 h-6" />
                               {github.label && <span>{github.label}</span>}
                             </a>
                           ))}

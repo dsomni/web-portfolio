@@ -63,11 +63,22 @@ const t = useTranslations(lang);
           </div>
         </div>
 
+        <div
+          class="flex flex-col gap-4 text-lg text-light-text-muted dark:text-dark-text-muted max-w-2xl leading-relaxed"
+        >
+          <span>{t("hero.description")}</span>
+          <span>{t("hero.subDescription")}</span>
+        </div>
+        <!-- <p
+          class="text-lg text-light-text-muted dark:text-dark-text-muted max-w-2xl leading-relaxed"
+        >
+
+        </p>
         <p
           class="text-lg text-light-text-muted dark:text-dark-text-muted max-w-2xl leading-relaxed"
         >
-          {t("hero.description")}
-        </p>
+
+        </p> -->
 
         <!-- Skills -->
         <div class="flex flex-wrap gap-2">
@@ -112,12 +123,12 @@ const t = useTranslations(lang);
 
           <div class="grid grid-cols-2 gap-3">
             <PDFButton
-              filename="cv/en_new.pdf"
+              filename="cv/en.pdf"
               label="CV (EN)"
               colorScheme="primary"
             />
             <PDFButton
-              filename="cv/ru_new.pdf"
+              filename="cv/ru.pdf"
               label="CV (RU)"
               colorScheme="accent"
             />
