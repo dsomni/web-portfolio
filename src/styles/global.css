@@ -115,6 +115,8 @@
 
     html {
         scroll-behavior: smooth;
+        overflow-x: clip;
+        /* Prevents horizontal scroll */
     }
 
     body {
@@ -123,6 +125,10 @@
         @apply antialiased;
         font-family: var(--font-sans);
         font-feature-settings: 'cv11', 'ss01';
+        overflow-x: clip;
+        /* Prevents horizontal scroll */
+        min-width: 320px;
+        /* Minimum mobile width */
     }
 
     ::selection {
@@ -131,7 +137,16 @@
 
     /* Light mode scrollbar tuned for slate neutrals */
     ::-webkit-scrollbar {
-        @apply w-2;
+        @apply w-2 md:w-2;
+        width: 6px;
+        /* Thinner on mobile */
+    }
+
+    @media (min-width: 768px) {
+        ::-webkit-scrollbar {
+            width: 8px;
+            /* Normal width on desktop */
+        }
     }
 
     ::-webkit-scrollbar-track {
@@ -140,7 +155,6 @@
 
     ::-webkit-scrollbar-thumb {
         background-color: #cbd5e1;
-        /* slate-300 */
         border-radius: 9999px;
     }
 
@@ -148,7 +162,7 @@
         background-color: rgb(14 165 233 / 0.5);
     }
 
-    /* Dark mode scrollbar keeps original intent */
+    /* Dark mode scrollbar */
     .dark ::-webkit-scrollbar-track {
         @apply bg-dark-surface;
     }
@@ -156,11 +170,17 @@
     .dark ::-webkit-scrollbar-thumb {
         @apply bg-dark-border;
     }
+
+    /* Prevent layout shift from scrollbar */
+    html {
+        scrollbar-gutter: stable;
+    }
+
 }
 
 @layer components {
     .container-custom {
-        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+        @apply max-w-7xl mx-auto px-3 sm:px-6 lg:px-8;
     }
 
     .gradient-text {

@@ -194,7 +194,7 @@ const conceptBadge =
                     {collab.projects.map((project: Project) => (
                       <div class="p-5 bg-light-surface dark:bg-dark-surface rounded-lg border border-light-border dark:border-dark-border">
                         {/* Project Header */}
-                        <div class="flex items-start justify-between gap-4 mb-3">
+                        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                           <h5 class="text-lg font-bold text-light-text dark:text-dark-text">
                             {project.title}
                           </h5>
@@ -202,7 +202,7 @@ const conceptBadge =
                           {/* Project Links - Icon-only style */}
                           {(project.github ||
                             (project.links && project.links.length > 0)) && (
-                            <div class="flex flex-wrap gap-2 items-start">
+                            <div class="flex flex-wrap gap-2 sm:items-start">
                               {project.links &&
                                 project.links.map((link: Link) => (
                                   <Link
