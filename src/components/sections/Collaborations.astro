@@ -35,6 +35,9 @@ const collaborations = (await getCollection("collaborations"))
 
 const sectionLabel =
   "text-xs font-bold uppercase tracking-wider text-light-text dark:text-dark-text mb-3 flex items-center gap-2";
+
+const conceptBadge =
+  "text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 border border-accent-200 dark:border-accent-800 font-medium";
 ---
 
 <section id="collaborations" class="py-20">
@@ -233,6 +236,7 @@ const sectionLabel =
                         {project.tags && project.tags.length > 0 && (
                           <div class="flex flex-wrap gap-2 mt-3">
                             {project.tags.map((tech: string) => (
+                              // <span class={conceptBadge}>{tech}</span>
                               <span class="badge text-xs">{tech}</span>
                             ))}
                           </div>
