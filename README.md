@@ -2,6 +2,10 @@
 
 Portfolio website built with Astro 5, showcasing ML/DS/AI experience, research, and projects.
 
+## Before start
+
+Do not forget to create `.env` and `.env.production`!
+
 ## Contact
 
 - **Email**: <d.beresnev.work@gmail.com>
