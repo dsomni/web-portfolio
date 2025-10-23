@@ -6,6 +6,6 @@ yarn build > /dev/null 2> /dev/null
 echo "Deploying"
 rm -rf /var/www/html/portfolio
 mkdir -p /var/www/html/portfolio
-mv ./dist/* /var/www/html/portfolio/
+cp -r ./dist/* /var/www/html/portfolio/
 
 echo "Finished!"

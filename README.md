@@ -6,6 +6,13 @@ Portfolio website built with Astro 5, showcasing ML/DS/AI experience, research, 
 
 Do not forget to create `.env` and `.env.production`!
 
+## Hotfixes
+
+```bash
+sudo chown -R www-data:www-data /path/to/your/astro/dist
+sudo chmod -R 755 /path/to/your/astro/dist
+```
+
 ## Contact
 
 - **Email**: <d.beresnev.work@gmail.com>
