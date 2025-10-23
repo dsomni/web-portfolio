@@ -1,5 +1,4 @@
 ---
-// src/components/sections/Projects.astro
 import { getCollection } from "astro:content";
 import { useTranslations, type Language } from "../../utils/i18n";
 import { Icon } from "astro-icon/components";
@@ -31,11 +30,20 @@ const projects = (await getCollection("projects"))
   .map((entry: any) => entry.data)
   .sort((a: any, b: any) => a.order - b.order);
 
+// Distribute projects into columns for masonry effect
+const column1 = projects.filter((_: any, index: number) => index % 3 === 0);
+const column2 = projects.filter((_: any, index: number) => index % 3 === 1);
+const column3 = projects.filter((_: any, index: number) => index % 3 === 2);
+
+// For 2-column layout (tablet)
+const column1Md = projects.filter((_: any, index: number) => index % 2 === 0);
+const column2Md = projects.filter((_: any, index: number) => index % 2 === 1);
+
 const sectionLabel =
   "text-xs font-bold uppercase tracking-wider text-light-text dark:text-dark-text mb-3 flex items-center gap-2";
 
-const conceptBadge = 'text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 border border-accent-200 dark:border-accent-800 font-medium';
-
+const conceptBadge =
+  "text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 border border-accent-200 dark:border-accent-800 font-medium";
 ---
 
 <section id="projects" class="py-20">
@@ -44,15 +52,15 @@ const conceptBadge = 'text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-acc
       {t("section.projects")}
     </h2>
 
-    <!-- Masonry Grid Layout -->
-    <div class="columns-1 md:columns-2 2xl:columns-3 gap-8 space-y-8">
+    <!-- Mobile: Single Column -->
+    <div class="grid grid-cols-1 gap-8 md:hidden">
       {
         projects.map((project: any, index: number) => (
           <div
-            class="break-inside-avoid animate-on-scroll"
+            class="animate-on-scroll"
             style={`animation-delay: ${index * 100}ms`}
           >
-            <div class="card card-hover mb-8">
+            <div class="card card-hover">
               {/* Featured Badge */}
               {project.featured && (
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 text-xs font-semibold border border-accent-200 dark:border-accent-800 mb-4">
@@ -104,7 +112,7 @@ const conceptBadge = 'text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-acc
                 </div>
               )}
 
-              {/* Key Features / responsibilities */}
+              {/* Responsibilities */}
               {project.responsibilities &&
                 project.responsibilities.length > 0 && (
                   <div class="mt-6">
@@ -123,21 +131,19 @@ const conceptBadge = 'text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-acc
                   </div>
                 )}
 
-              <!-- Concepts -->
+              {/* Concepts */}
               {project.concepts && project.concepts.length > 0 && (
-                  <div class="mt-6">
-                      <h4 class={sectionLabel}>
-                          <span class="w-1 h-4 bg-accent-500 rounded-full"></span>
-                          {t('experience.concepts')}
-                      </h4>
-                      <div class="flex flex-wrap gap-2">
-                          {project.concepts.map((concept:any) => (
-                              <span class={conceptBadge}>
-                                  {concept}
-                              </span>
-                          ))}
-                      </div>
+                <div class="mt-6">
+                  <h4 class={sectionLabel}>
+                    <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                    {t("experience.concepts")}
+                  </h4>
+                  <div class="flex flex-wrap gap-2">
+                    {project.concepts.map((concept: any) => (
+                      <span class={conceptBadge}>{concept}</span>
+                    ))}
                   </div>
+                </div>
               )}
 
               {/* Tech Stack */}
@@ -153,7 +159,7 @@ const conceptBadge = 'text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-acc
                 </div>
               </div>
 
-              {/* Resources - Using consistent Link and PDFButton components */}
+              {/* Resources */}
               {((project.githubs && project.githubs.length > 0) ||
                 (project.demos && project.demos.length > 0) ||
                 (project.files && project.files.length > 0)) && (
@@ -213,6 +219,802 @@ const conceptBadge = 'text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-acc
           </div>
         ))
       }
+    </div>
+
+    <!-- Tablet: 2 Columns Masonry -->
+    <div class="hidden md:grid md:grid-cols-2 2xl:hidden gap-8">
+      {/* Column 1 */}
+      <div class="grid gap-10 content-start">
+        {
+          column1Md.map((project: any, index: number) => (
+            <div
+              class="animate-on-scroll"
+              style={`animation-delay: ${index * 2 * 100}ms`}
+            >
+              <div class="card card-hover">
+                {project.featured && (
+                  <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 text-xs font-semibold border border-accent-200 dark:border-accent-800 mb-4">
+                    <Icon class="w-4 h-4" name="mdi:star" />
+                    {t("projects.featured")}
+                  </div>
+                )}
+
+                <div class="pb-4 border-b border-light-border dark:border-dark-border">
+                  <div class="flex items-start justify-between gap-3 mb-3">
+                    <h3 class="text-2xl font-bold text-light-text dark:text-dark-text">
+                      {project.title}
+                    </h3>
+                    <span class="text-sm font-semibold text-light-text-muted dark:text-dark-text-muted bg-light-border/30 dark:bg-dark-border/30 px-3 py-1.5 rounded-full whitespace-nowrap">
+                      {project.period}
+                    </span>
+                  </div>
+                  <p class="text-primary-600 dark:text-primary-400 font-semibold text-lg mb-1">
+                    {project.role}
+                  </p>
+                  {project.company && (
+                    <p class="text-sm text-light-text-muted dark:text-dark-text-muted font-medium">
+                      {project.company}
+                    </p>
+                  )}
+                </div>
+
+                <p class="text-base text-light-text-muted dark:text-dark-text-muted leading-relaxed mt-4">
+                  {project.description}
+                </p>
+
+                {project.achievements && project.achievements.length > 0 && (
+                  <div class="mt-6 p-4 bg-primary-50 dark:bg-primary-900/10 rounded-lg border border-primary-200 dark:border-primary-800">
+                    <h4 class={sectionLabel}>
+                      <span class="w-1 h-4 bg-primary-500 rounded-full" />
+                      {t("projects.achievements")}
+                    </h4>
+                    <ul class="space-y-2 text-sm text-primary-700 dark:text-primary-300">
+                      {project.achievements.map((achievement: string) => (
+                        <li class="flex items-start gap-3">
+                          <span class="text-primary-500 mt-1">▸</span>
+                          <span class="flex-1">{achievement}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {project.responsibilities &&
+                  project.responsibilities.length > 0 && (
+                    <div class="mt-6">
+                      <h4 class={sectionLabel}>
+                        <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                        {t("common.responsibilities")}
+                      </h4>
+                      <ul class="space-y-2 text-sm text-light-text-muted dark:text-dark-text-muted">
+                        {project.responsibilities.map((highlight: string) => (
+                          <li class="flex items-start gap-3">
+                            <span class="text-accent-500 mt-1">▸</span>
+                            <span class="flex-1">{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                {project.concepts && project.concepts.length > 0 && (
+                  <div class="mt-6">
+                    <h4 class={sectionLabel}>
+                      <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                      {t("experience.concepts")}
+                    </h4>
+                    <div class="flex flex-wrap gap-2">
+                      {project.concepts.map((concept: any) => (
+                        <span class={conceptBadge}>{concept}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div class="mt-6">
+                  <h4 class={sectionLabel}>
+                    <span class="w-1 h-4 bg-primary-500 rounded-full" />
+                    {t("common.stack")}
+                  </h4>
+                  <div class="flex flex-wrap gap-2">
+                    {project.stack.map((tech: string) => (
+                      <span class="badge text-xs">{tech}</span>
+                    ))}
+                  </div>
+                </div>
+
+                {((project.githubs && project.githubs.length > 0) ||
+                  (project.demos && project.demos.length > 0) ||
+                  (project.files && project.files.length > 0)) && (
+                  <div class="mt-6 pt-4 border-t border-light-border dark:border-dark-border">
+                    <h4 class={sectionLabel}>
+                      <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                      {t("common.resources")}
+                    </h4>
+
+                    <div class="flex flex-wrap items-center gap-3">
+                      {project.files &&
+                        project.files.length > 0 &&
+                        project.files.map((file: File) => (
+                          <PDFButton
+                            filename={file.path}
+                            label={file.title}
+                            colorScheme="primary"
+                            variant="outline"
+                            size="sm"
+                          />
+                        ))}
+
+                      {project.demos &&
+                        project.demos.length > 0 &&
+                        project.demos.map((demo: Link) => (
+                          <Link
+                            href={demo.href}
+                            icon={demo.icon || "mdi:link-variant"}
+                            label={demo.label}
+                            colorScheme="primary"
+                            variant="outline"
+                            size="sm"
+                            ariaLabel={demo.label || t("common.demo")}
+                          />
+                        ))}
+
+                      {project.githubs &&
+                        project.githubs.length > 0 &&
+                        project.githubs.map((github: Link) => (
+                          <Link
+                            href={github.href}
+                            icon="mdi:github"
+                            label={github.label}
+                            colorScheme="primary"
+                            variant="outline"
+                            size="sm"
+                            ariaLabel={github.label || t("common.sourceCode")}
+                          />
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      {/* Column 2 */}
+      <div class="grid gap-10 content-start">
+        {
+          column2Md.map((project: any, index: number) => (
+            <div
+              class="animate-on-scroll"
+              style={`animation-delay: ${(index * 2 + 1) * 100}ms`}
+            >
+              <div class="card card-hover">
+                {project.featured && (
+                  <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 text-xs font-semibold border border-accent-200 dark:border-accent-800 mb-4">
+                    <Icon class="w-4 h-4" name="mdi:star" />
+                    {t("projects.featured")}
+                  </div>
+                )}
+
+                <div class="pb-4 border-b border-light-border dark:border-dark-border">
+                  <div class="flex items-start justify-between gap-3 mb-3">
+                    <h3 class="text-2xl font-bold text-light-text dark:text-dark-text">
+                      {project.title}
+                    </h3>
+                    <span class="text-sm font-semibold text-light-text-muted dark:text-dark-text-muted bg-light-border/30 dark:bg-dark-border/30 px-3 py-1.5 rounded-full whitespace-nowrap">
+                      {project.period}
+                    </span>
+                  </div>
+                  <p class="text-primary-600 dark:text-primary-400 font-semibold text-lg mb-1">
+                    {project.role}
+                  </p>
+                  {project.company && (
+                    <p class="text-sm text-light-text-muted dark:text-dark-text-muted font-medium">
+                      {project.company}
+                    </p>
+                  )}
+                </div>
+
+                <p class="text-base text-light-text-muted dark:text-dark-text-muted leading-relaxed mt-4">
+                  {project.description}
+                </p>
+
+                {project.achievements && project.achievements.length > 0 && (
+                  <div class="mt-6 p-4 bg-primary-50 dark:bg-primary-900/10 rounded-lg border border-primary-200 dark:border-primary-800">
+                    <h4 class={sectionLabel}>
+                      <span class="w-1 h-4 bg-primary-500 rounded-full" />
+                      {t("projects.achievements")}
+                    </h4>
+                    <ul class="space-y-2 text-sm text-primary-700 dark:text-primary-300">
+                      {project.achievements.map((achievement: string) => (
+                        <li class="flex items-start gap-3">
+                          <span class="text-primary-500 mt-1">▸</span>
+                          <span class="flex-1">{achievement}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {project.responsibilities &&
+                  project.responsibilities.length > 0 && (
+                    <div class="mt-6">
+                      <h4 class={sectionLabel}>
+                        <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                        {t("common.responsibilities")}
+                      </h4>
+                      <ul class="space-y-2 text-sm text-light-text-muted dark:text-dark-text-muted">
+                        {project.responsibilities.map((highlight: string) => (
+                          <li class="flex items-start gap-3">
+                            <span class="text-accent-500 mt-1">▸</span>
+                            <span class="flex-1">{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                {project.concepts && project.concepts.length > 0 && (
+                  <div class="mt-6">
+                    <h4 class={sectionLabel}>
+                      <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                      {t("experience.concepts")}
+                    </h4>
+                    <div class="flex flex-wrap gap-2">
+                      {project.concepts.map((concept: any) => (
+                        <span class={conceptBadge}>{concept}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div class="mt-6">
+                  <h4 class={sectionLabel}>
+                    <span class="w-1 h-4 bg-primary-500 rounded-full" />
+                    {t("common.stack")}
+                  </h4>
+                  <div class="flex flex-wrap gap-2">
+                    {project.stack.map((tech: string) => (
+                      <span class="badge text-xs">{tech}</span>
+                    ))}
+                  </div>
+                </div>
+
+                {((project.githubs && project.githubs.length > 0) ||
+                  (project.demos && project.demos.length > 0) ||
+                  (project.files && project.files.length > 0)) && (
+                  <div class="mt-6 pt-4 border-t border-light-border dark:border-dark-border">
+                    <h4 class={sectionLabel}>
+                      <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                      {t("common.resources")}
+                    </h4>
+
+                    <div class="flex flex-wrap items-center gap-3">
+                      {project.files &&
+                        project.files.length > 0 &&
+                        project.files.map((file: File) => (
+                          <PDFButton
+                            filename={file.path}
+                            label={file.title}
+                            colorScheme="primary"
+                            variant="outline"
+                            size="sm"
+                          />
+                        ))}
+
+                      {project.demos &&
+                        project.demos.length > 0 &&
+                        project.demos.map((demo: Link) => (
+                          <Link
+                            href={demo.href}
+                            icon={demo.icon || "mdi:link-variant"}
+                            label={demo.label}
+                            colorScheme="primary"
+                            variant="outline"
+                            size="sm"
+                            ariaLabel={demo.label || t("common.demo")}
+                          />
+                        ))}
+
+                      {project.githubs &&
+                        project.githubs.length > 0 &&
+                        project.githubs.map((github: Link) => (
+                          <Link
+                            href={github.href}
+                            icon="mdi:github"
+                            label={github.label}
+                            colorScheme="primary"
+                            variant="outline"
+                            size="sm"
+                            ariaLabel={github.label || t("common.sourceCode")}
+                          />
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Desktop: 3 Columns Masonry -->
+    <div class="hidden 2xl:grid 2xl:grid-cols-3 gap-8">
+      {/* Column 1 */}
+      <div class="grid gap-10 content-start">
+        {
+          column1.map((project: any, index: number) => (
+            <div
+              class="animate-on-scroll"
+              style={`animation-delay: ${index * 3 * 100}ms`}
+            >
+              <div class="card card-hover">
+                {project.featured && (
+                  <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 text-xs font-semibold border border-accent-200 dark:border-accent-800 mb-4">
+                    <Icon class="w-4 h-4" name="mdi:star" />
+                    {t("projects.featured")}
+                  </div>
+                )}
+
+                <div class="pb-4 border-b border-light-border dark:border-dark-border">
+                  <div class="flex items-start justify-between gap-3 mb-3">
+                    <h3 class="text-2xl font-bold text-light-text dark:text-dark-text">
+                      {project.title}
+                    </h3>
+                    <span class="text-sm font-semibold text-light-text-muted dark:text-dark-text-muted bg-light-border/30 dark:bg-dark-border/30 px-3 py-1.5 rounded-full whitespace-nowrap">
+                      {project.period}
+                    </span>
+                  </div>
+                  <p class="text-primary-600 dark:text-primary-400 font-semibold text-lg mb-1">
+                    {project.role}
+                  </p>
+                  {project.company && (
+                    <p class="text-sm text-light-text-muted dark:text-dark-text-muted font-medium">
+                      {project.company}
+                    </p>
+                  )}
+                </div>
+
+                <p class="text-base text-light-text-muted dark:text-dark-text-muted leading-relaxed mt-4">
+                  {project.description}
+                </p>
+
+                {project.achievements && project.achievements.length > 0 && (
+                  <div class="mt-6 p-4 bg-primary-50 dark:bg-primary-900/10 rounded-lg border border-primary-200 dark:border-primary-800">
+                    <h4 class={sectionLabel}>
+                      <span class="w-1 h-4 bg-primary-500 rounded-full" />
+                      {t("projects.achievements")}
+                    </h4>
+                    <ul class="space-y-2 text-sm text-primary-700 dark:text-primary-300">
+                      {project.achievements.map((achievement: string) => (
+                        <li class="flex items-start gap-3">
+                          <span class="text-primary-500 mt-1">▸</span>
+                          <span class="flex-1">{achievement}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {project.responsibilities &&
+                  project.responsibilities.length > 0 && (
+                    <div class="mt-6">
+                      <h4 class={sectionLabel}>
+                        <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                        {t("common.responsibilities")}
+                      </h4>
+                      <ul class="space-y-2 text-sm text-light-text-muted dark:text-dark-text-muted">
+                        {project.responsibilities.map((highlight: string) => (
+                          <li class="flex items-start gap-3">
+                            <span class="text-accent-500 mt-1">▸</span>
+                            <span class="flex-1">{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                {project.concepts && project.concepts.length > 0 && (
+                  <div class="mt-6">
+                    <h4 class={sectionLabel}>
+                      <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                      {t("experience.concepts")}
+                    </h4>
+                    <div class="flex flex-wrap gap-2">
+                      {project.concepts.map((concept: any) => (
+                        <span class={conceptBadge}>{concept}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div class="mt-6">
+                  <h4 class={sectionLabel}>
+                    <span class="w-1 h-4 bg-primary-500 rounded-full" />
+                    {t("common.stack")}
+                  </h4>
+                  <div class="flex flex-wrap gap-2">
+                    {project.stack.map((tech: string) => (
+                      <span class="badge text-xs">{tech}</span>
+                    ))}
+                  </div>
+                </div>
+
+                {((project.githubs && project.githubs.length > 0) ||
+                  (project.demos && project.demos.length > 0) ||
+                  (project.files && project.files.length > 0)) && (
+                  <div class="mt-6 pt-4 border-t border-light-border dark:border-dark-border">
+                    <h4 class={sectionLabel}>
+                      <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                      {t("common.resources")}
+                    </h4>
+
+                    <div class="flex flex-wrap items-center gap-3">
+                      {project.files &&
+                        project.files.length > 0 &&
+                        project.files.map((file: File) => (
+                          <PDFButton
+                            filename={file.path}
+                            label={file.title}
+                            colorScheme="primary"
+                            variant="outline"
+                            size="sm"
+                          />
+                        ))}
+
+                      {project.demos &&
+                        project.demos.length > 0 &&
+                        project.demos.map((demo: Link) => (
+                          <Link
+                            href={demo.href}
+                            icon={demo.icon || "mdi:link-variant"}
+                            label={demo.label}
+                            colorScheme="primary"
+                            variant="outline"
+                            size="sm"
+                            ariaLabel={demo.label || t("common.demo")}
+                          />
+                        ))}
+
+                      {project.githubs &&
+                        project.githubs.length > 0 &&
+                        project.githubs.map((github: Link) => (
+                          <Link
+                            href={github.href}
+                            icon="mdi:github"
+                            label={github.label}
+                            colorScheme="primary"
+                            variant="outline"
+                            size="sm"
+                            ariaLabel={github.label || t("common.sourceCode")}
+                          />
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      {/* Column 2 */}
+      <div class="grid gap-10 content-start">
+        {
+          column2.map((project: any, index: number) => (
+            <div
+              class="animate-on-scroll"
+              style={`animation-delay: ${(index * 3 + 1) * 100}ms`}
+            >
+              <div class="card card-hover">
+                {project.featured && (
+                  <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 text-xs font-semibold border border-accent-200 dark:border-accent-800 mb-4">
+                    <Icon class="w-4 h-4" name="mdi:star" />
+                    {t("projects.featured")}
+                  </div>
+                )}
+
+                <div class="pb-4 border-b border-light-border dark:border-dark-border">
+                  <div class="flex items-start justify-between gap-3 mb-3">
+                    <h3 class="text-2xl font-bold text-light-text dark:text-dark-text">
+                      {project.title}
+                    </h3>
+                    <span class="text-sm font-semibold text-light-text-muted dark:text-dark-text-muted bg-light-border/30 dark:bg-dark-border/30 px-3 py-1.5 rounded-full whitespace-nowrap">
+                      {project.period}
+                    </span>
+                  </div>
+                  <p class="text-primary-600 dark:text-primary-400 font-semibold text-lg mb-1">
+                    {project.role}
+                  </p>
+                  {project.company && (
+                    <p class="text-sm text-light-text-muted dark:text-dark-text-muted font-medium">
+                      {project.company}
+                    </p>
+                  )}
+                </div>
+
+                <p class="text-base text-light-text-muted dark:text-dark-text-muted leading-relaxed mt-4">
+                  {project.description}
+                </p>
+
+                {project.achievements && project.achievements.length > 0 && (
+                  <div class="mt-6 p-4 bg-primary-50 dark:bg-primary-900/10 rounded-lg border border-primary-200 dark:border-primary-800">
+                    <h4 class={sectionLabel}>
+                      <span class="w-1 h-4 bg-primary-500 rounded-full" />
+                      {t("projects.achievements")}
+                    </h4>
+                    <ul class="space-y-2 text-sm text-primary-700 dark:text-primary-300">
+                      {project.achievements.map((achievement: string) => (
+                        <li class="flex items-start gap-3">
+                          <span class="text-primary-500 mt-1">▸</span>
+                          <span class="flex-1">{achievement}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {project.responsibilities &&
+                  project.responsibilities.length > 0 && (
+                    <div class="mt-6">
+                      <h4 class={sectionLabel}>
+                        <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                        {t("common.responsibilities")}
+                      </h4>
+                      <ul class="space-y-2 text-sm text-light-text-muted dark:text-dark-text-muted">
+                        {project.responsibilities.map((highlight: string) => (
+                          <li class="flex items-start gap-3">
+                            <span class="text-accent-500 mt-1">▸</span>
+                            <span class="flex-1">{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                {project.concepts && project.concepts.length > 0 && (
+                  <div class="mt-6">
+                    <h4 class={sectionLabel}>
+                      <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                      {t("experience.concepts")}
+                    </h4>
+                    <div class="flex flex-wrap gap-2">
+                      {project.concepts.map((concept: any) => (
+                        <span class={conceptBadge}>{concept}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div class="mt-6">
+                  <h4 class={sectionLabel}>
+                    <span class="w-1 h-4 bg-primary-500 rounded-full" />
+                    {t("common.stack")}
+                  </h4>
+                  <div class="flex flex-wrap gap-2">
+                    {project.stack.map((tech: string) => (
+                      <span class="badge text-xs">{tech}</span>
+                    ))}
+                  </div>
+                </div>
+
+                {((project.githubs && project.githubs.length > 0) ||
+                  (project.demos && project.demos.length > 0) ||
+                  (project.files && project.files.length > 0)) && (
+                  <div class="mt-6 pt-4 border-t border-light-border dark:border-dark-border">
+                    <h4 class={sectionLabel}>
+                      <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                      {t("common.resources")}
+                    </h4>
+
+                    <div class="flex flex-wrap items-center gap-3">
+                      {project.files &&
+                        project.files.length > 0 &&
+                        project.files.map((file: File) => (
+                          <PDFButton
+                            filename={file.path}
+                            label={file.title}
+                            colorScheme="primary"
+                            variant="outline"
+                            size="sm"
+                          />
+                        ))}
+
+                      {project.demos &&
+                        project.demos.length > 0 &&
+                        project.demos.map((demo: Link) => (
+                          <Link
+                            href={demo.href}
+                            icon={demo.icon || "mdi:link-variant"}
+                            label={demo.label}
+                            colorScheme="primary"
+                            variant="outline"
+                            size="sm"
+                            ariaLabel={demo.label || t("common.demo")}
+                          />
+                        ))}
+
+                      {project.githubs &&
+                        project.githubs.length > 0 &&
+                        project.githubs.map((github: Link) => (
+                          <Link
+                            href={github.href}
+                            icon="mdi:github"
+                            label={github.label}
+                            colorScheme="primary"
+                            variant="outline"
+                            size="sm"
+                            ariaLabel={github.label || t("common.sourceCode")}
+                          />
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      {/* Column 3 */}
+      <div class="grid gap-10 content-start">
+        {
+          column3.map((project: any, index: number) => (
+            <div
+              class="animate-on-scroll"
+              style={`animation-delay: ${(index * 3 + 2) * 100}ms`}
+            >
+              <div class="card card-hover">
+                {project.featured && (
+                  <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 text-xs font-semibold border border-accent-200 dark:border-accent-800 mb-4">
+                    <Icon class="w-4 h-4" name="mdi:star" />
+                    {t("projects.featured")}
+                  </div>
+                )}
+
+                <div class="pb-4 border-b border-light-border dark:border-dark-border">
+                  <div class="flex items-start justify-between gap-3 mb-3">
+                    <h3 class="text-2xl font-bold text-light-text dark:text-dark-text">
+                      {project.title}
+                    </h3>
+                    <span class="text-sm font-semibold text-light-text-muted dark:text-dark-text-muted bg-light-border/30 dark:bg-dark-border/30 px-3 py-1.5 rounded-full whitespace-nowrap">
+                      {project.period}
+                    </span>
+                  </div>
+                  <p class="text-primary-600 dark:text-primary-400 font-semibold text-lg mb-1">
+                    {project.role}
+                  </p>
+                  {project.company && (
+                    <p class="text-sm text-light-text-muted dark:text-dark-text-muted font-medium">
+                      {project.company}
+                    </p>
+                  )}
+                </div>
+
+                <p class="text-base text-light-text-muted dark:text-dark-text-muted leading-relaxed mt-4">
+                  {project.description}
+                </p>
+
+                {project.achievements && project.achievements.length > 0 && (
+                  <div class="mt-6 p-4 bg-primary-50 dark:bg-primary-900/10 rounded-lg border border-primary-200 dark:border-primary-800">
+                    <h4 class={sectionLabel}>
+                      <span class="w-1 h-4 bg-primary-500 rounded-full" />
+                      {t("projects.achievements")}
+                    </h4>
+                    <ul class="space-y-2 text-sm text-primary-700 dark:text-primary-300">
+                      {project.achievements.map((achievement: string) => (
+                        <li class="flex items-start gap-3">
+                          <span class="text-primary-500 mt-1">▸</span>
+                          <span class="flex-1">{achievement}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {project.responsibilities &&
+                  project.responsibilities.length > 0 && (
+                    <div class="mt-6">
+                      <h4 class={sectionLabel}>
+                        <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                        {t("common.responsibilities")}
+                      </h4>
+                      <ul class="space-y-2 text-sm text-light-text-muted dark:text-dark-text-muted">
+                        {project.responsibilities.map((highlight: string) => (
+                          <li class="flex items-start gap-3">
+                            <span class="text-accent-500 mt-1">▸</span>
+                            <span class="flex-1">{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                {project.concepts && project.concepts.length > 0 && (
+                  <div class="mt-6">
+                    <h4 class={sectionLabel}>
+                      <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                      {t("experience.concepts")}
+                    </h4>
+                    <div class="flex flex-wrap gap-2">
+                      {project.concepts.map((concept: any) => (
+                        <span class={conceptBadge}>{concept}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div class="mt-6">
+                  <h4 class={sectionLabel}>
+                    <span class="w-1 h-4 bg-primary-500 rounded-full" />
+                    {t("common.stack")}
+                  </h4>
+                  <div class="flex flex-wrap gap-2">
+                    {project.stack.map((tech: string) => (
+                      <span class="badge text-xs">{tech}</span>
+                    ))}
+                  </div>
+                </div>
+
+                {((project.githubs && project.githubs.length > 0) ||
+                  (project.demos && project.demos.length > 0) ||
+                  (project.files && project.files.length > 0)) && (
+                  <div class="mt-6 pt-4 border-t border-light-border dark:border-dark-border">
+                    <h4 class={sectionLabel}>
+                      <span class="w-1 h-4 bg-accent-500 rounded-full" />
+                      {t("common.resources")}
+                    </h4>
+
+                    <div class="flex flex-wrap items-center gap-3">
+                      {project.files &&
+                        project.files.length > 0 &&
+                        project.files.map((file: File) => (
+                          <PDFButton
+                            filename={file.path}
+                            label={file.title}
+                            colorScheme="primary"
+                            variant="outline"
+                            size="sm"
+                          />
+                        ))}
+
+                      {project.demos &&
+                        project.demos.length > 0 &&
+                        project.demos.map((demo: Link) => (
+                          <Link
+                            href={demo.href}
+                            icon={demo.icon || "mdi:link-variant"}
+                            label={demo.label}
+                            colorScheme="primary"
+                            variant="outline"
+                            size="sm"
+                            ariaLabel={demo.label || t("common.demo")}
+                          />
+                        ))}
+
+                      {project.githubs &&
+                        project.githubs.length > 0 &&
+                        project.githubs.map((github: Link) => (
+                          <Link
+                            href={github.href}
+                            icon="mdi:github"
+                            label={github.label}
+                            colorScheme="primary"
+                            variant="outline"
+                            size="sm"
+                            ariaLabel={github.label || t("common.sourceCode")}
+                          />
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))
+        }
+      </div>
     </div>
   </div>
 </section>
