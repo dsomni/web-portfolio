@@ -54,11 +54,11 @@ const projects = defineCollection({
         title: z.string(),
         role: z.string(),
         period: z.string(),
-        subtitle: z.string().optional(),
         description: z.string(),
         achievements: z.array(z.string()).optional(),
         responsibilities: z.array(z.string()).optional(),
         stack: z.array(z.string()),
+        concepts: z.array(z.string()).optional(),
         featured: z.boolean().optional(),
         githubs: z.array(z.object({
             href: z.string(),

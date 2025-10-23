@@ -33,6 +33,9 @@ const projects = (await getCollection("projects"))
 
 const sectionLabel =
   "text-xs font-bold uppercase tracking-wider text-light-text dark:text-dark-text mb-3 flex items-center gap-2";
+
+const conceptBadge = 'text-xs px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 border border-accent-200 dark:border-accent-800 font-medium';
+
 ---
 
 <section id="projects" class="py-20">
@@ -119,6 +122,23 @@ const sectionLabel =
                     </ul>
                   </div>
                 )}
+
+              <!-- Concepts -->
+              {project.concepts && project.concepts.length > 0 && (
+                  <div class="mt-6">
+                      <h4 class={sectionLabel}>
+                          <span class="w-1 h-4 bg-accent-500 rounded-full"></span>
+                          {t('experience.concepts')}
+                      </h4>
+                      <div class="flex flex-wrap gap-2">
+                          {project.concepts.map((concept:any) => (
+                              <span class={conceptBadge}>
+                                  {concept}
+                              </span>
+                          ))}
+                      </div>
+                  </div>
+              )}
 
               {/* Tech Stack */}
               <div class="mt-6">
