@@ -114,6 +114,7 @@
     }
 
     html {
+        transition: background-color 0.3s ease, color 0.3s ease;
         scroll-behavior: smooth;
         overflow-x: clip;
         /* Prevents horizontal scroll */
@@ -129,6 +130,20 @@
         /* Prevents horizontal scroll */
         min-width: 320px;
         /* Minimum mobile width */
+    }
+
+    body,
+    section,
+    .card,
+    header,
+    footer,
+    span,
+    nav,
+    div {
+        /* Ensure these inherit or have their own smooth transition */
+        transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms;
     }
 
     ::selection {
