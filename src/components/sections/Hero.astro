@@ -95,16 +95,25 @@ const yearsOfExperience = currentYear - 2023;
         </div>
 
         <!-- Skills -->
-        <div class="flex flex-wrap gap-2">
-          {
-            [
-              "AI Research",
-              "Data Science",
-              "ML Optimization",
-              "LLM",
-              "Deep Learning",
-            ].map((skill) => <span class="badge text-xs">{skill}</span>)
-          }
+        <div class="space-y-3">
+          <h3 class="text-sm font-semibold text-light-text-muted dark:text-dark-text-muted uppercase tracking-wider">
+            Core Expertise
+          </h3>
+          <div class="flex flex-wrap gap-2">
+            {
+              [
+                "AI Research",
+                "Data Science",
+                "ML Optimization",
+                "LLM",
+                "Deep Learning",
+              ].map((skill) => (
+                <span class="badge text-xs hover:scale-105 hover:shadow-md transition-all duration-200 cursor-default">
+                  {skill}
+                </span>
+              ))
+            }
+          </div>
         </div>
 
         <div class="space-y-4 pt-2">
@@ -232,9 +241,8 @@ const yearsOfExperience = currentYear - 2023;
             </div>
           </div>
 
-          <!-- Availability Status - Top Center (Different style for emphasis) -->
           <div
-            class="absolute -top-6 left-1/2 -translate-x-1/2 card p-2 px-4 shadow-xl animate-float animation-delay-400 border-2 border-green-500/20"
+            class="absolute -top-6 left-1/2 -translate-x-1/2 card p-2 px-4 shadow-xl animate-float animation-delay-400 border-2 border-green-500/30 bg-white/95 dark:bg-dark-surface/95 backdrop-blur-sm"
           >
             <div class="flex items-center gap-2">
               <span class="relative flex h-2 w-2">
@@ -248,10 +256,11 @@ const yearsOfExperience = currentYear - 2023;
               <div
                 class="text-xs font-semibold text-green-600 dark:text-green-400"
               >
-                Available for Communication
+                Open to Opportunities
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>

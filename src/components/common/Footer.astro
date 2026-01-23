@@ -103,16 +103,20 @@ const currentYear = new Date().getFullYear();
       </div>
     </div>
 
-    <!-- Footer Bottom -->
-    <div
-      class="mt-8 pt-8 border-t border-light-border dark:border-dark-border flex flex-col md:flex-row justify-between items-center gap-4"
+  <!-- Footer Bottom -->
+  <div
+    class="mt-8 pt-8 border-t border-light-border dark:border-dark-border flex flex-col md:flex-row justify-between items-center gap-4"
+  >
+    <p
+      class="text-sm text-light-text-muted dark:text-dark-text-muted text-center md:text-left"
     >
-      <p
-        class="text-sm text-light-text-muted dark:text-dark-text-muted text-center md:text-left"
-      >
-        © {currentYear}
-        {t("personal.fullname")}. {t("footer.rights")}.
-      </p>
-    </div>
+      © <span id="current-year">{currentYear}</span>
+      {t("personal.fullname")}. {t("footer.rights")}.
+    </p>
   </div>
+
+  <script>
+    // Update year on client side to show actual current year, not build time
+    document.getElementById('current-year')!.textContent = new Date().getFullYear().toString();
+  </script>
 </footer>
