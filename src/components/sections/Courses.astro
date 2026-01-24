@@ -10,7 +10,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
-const projects = (await getCollection("projects"))
+const courses = (await getCollection("courses"))
   .filter((entry: any) => entry.id.split(".")[0].endsWith(`-${lang}`))
   .map((entry: any) => entry.data)
   .sort((a: any, b: any) => a.order - b.order);
@@ -20,20 +20,20 @@ const distributeIntoColumns = (items: any[], numColumns: number) =>
     items.filter((_, index) => index % numColumns === colIndex)
   );
 
-const [column1Md, column2Md] = distributeIntoColumns(projects, 2);
-const [column1, column2, column3] = distributeIntoColumns(projects, 3);
+const [column1Md, column2Md] = distributeIntoColumns(courses, 2);
+const [column1, column2, column3] = distributeIntoColumns(courses, 3);
 ---
 
-<section id="projects" class="py-20">
+<section id="courses" class="py-20">
   <div class="container-custom">
     <h2 class="section-title text-center animate-on-scroll">
-      {t("section.projects")}
+      {t("section.courses")}
     </h2>
 
-    <!-- Mobile: Single Column (below md) -->
-    <div class="grid grid-cols-1 gap-8 lg:hidden">
+    <!-- Mobile: Single Column -->
+    <div class="grid grid-cols-1 gap-8 md:hidden">
       {
-        projects.map((project: any, index: number) => (
+        courses.map((project: any, index: number) => (
           <ProjectCard
             project={project}
             animationDelay={index * 100}
@@ -43,8 +43,8 @@ const [column1, column2, column3] = distributeIntoColumns(projects, 3);
       }
     </div>
 
-    <!-- Desktop: 2 Columns (md to lg) -->
-    <div class="hidden lg:grid lg:grid-cols-2 gap-8">
+    <!-- Desktop: 2 Columns -->
+    <div class="hidden md:grid md:grid-cols-2 xl:hidden gap-8">
       {
         [column1Md, column2Md].map((column, colIndex) => (
           <div class="grid gap-10 content-start">
@@ -60,8 +60,8 @@ const [column1, column2, column3] = distributeIntoColumns(projects, 3);
       }
     </div>
 
-    <!-- Large Desktop: 3 Columns (lg and above) with reduced padding -->
-    <!-- <div class="hidden 3xl:grid 3xl:grid-cols-3 gap-6 px-4">
+    <!-- Large Desktop: 3 Columns with reduced padding -->
+    <div class="hidden xl:grid xl:grid-cols-3 gap-6 px-4">
       {
         [column1, column2, column3].map((column, colIndex) => (
           <div class="grid gap-10 content-start">
@@ -75,6 +75,6 @@ const [column1, column2, column3] = distributeIntoColumns(projects, 3);
           </div>
         ))
       }
-    </div> -->
+    </div>
   </div>
 </section>

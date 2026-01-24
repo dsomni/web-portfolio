@@ -145,6 +145,33 @@ const collaborations = defineCollection({
     }),
 });
 
+const courses = defineCollection({
+    type: 'content',
+    schema: z.object({
+        title: z.string(),
+        period: z.string(),
+        description: z.string(),
+        achievements: z.array(z.string()).optional(),
+        stack: z.array(z.string()),
+        concepts: z.array(z.string()).optional(),
+        featured: z.boolean().optional(),
+        githubs: z.array(z.object({
+            href: z.string(),
+            label: z.string().optional(),
+        })).optional(),
+        demos: z.array(z.object({
+            href: z.string(),
+            icon: z.string().optional(),
+            label: z.string().optional(),
+        })).optional(),
+        files: z.array(z.object({
+            title: z.string(),
+            path: z.string(),
+        })).optional(),
+        order: z.number(),
+    }),
+});
+
 export const collections = {
     about,
     experience,
@@ -152,5 +179,6 @@ export const collections = {
     education,
     social,
     languages,
-    collaborations
+    collaborations,
+    courses,
 };

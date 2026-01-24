@@ -50,11 +50,11 @@ const hasResources =
           {project.period}
         </span>
       </div>
-      <p
+      {project?.role && <p
         class="text-primary-600 dark:text-primary-400 font-semibold text-lg mb-1"
       >
         {project.role}
-      </p>
+      </p>}
       {
         project.company && (
           <p class="text-sm text-light-text-muted dark:text-dark-text-muted font-medium">
