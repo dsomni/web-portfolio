@@ -166,7 +166,7 @@ deep research interest in Mathematical Optimization, LLMs and Deep Reinforcement
         'hero.cta.resume': 'Resume',
 
         'section.about': 'About Me',
-        'section.experience': 'Work Experience',
+        'section.experience': 'Industrial Experience',
         'section.research': 'Research Experience',
         'section.teaching': 'Teaching Experience',
         'section.projects': 'Projects',
@@ -239,7 +239,7 @@ deep research interest in Mathematical Optimization, LLMs and Deep Reinforcement
         'hero.cta.resume': 'Резюме',
 
         'section.about': 'О себе',
-        'section.experience': 'Опыт работы',
+        'section.experience': 'Индустриальный опыт',
         'section.research': 'Исследовательский опыт',
         'section.teaching': 'Опыт преподавания',
         'section.projects': 'Проекты',
