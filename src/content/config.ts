@@ -152,7 +152,7 @@ const courses = defineCollection({
         period: z.string(),
         description: z.string(),
         achievements: z.array(z.string()).optional(),
-        stack: z.array(z.string()),
+        stack: z.array(z.string()).optional(),
         concepts: z.array(z.string()).optional(),
         featured: z.boolean().optional(),
         githubs: z.array(z.object({

@@ -31,7 +31,7 @@ const [column1, column2, column3] = distributeIntoColumns(courses, 3);
     </h2>
 
     <!-- Mobile: Single Column -->
-    <div class="grid grid-cols-1 gap-8 md:hidden">
+    <div class="grid grid-cols-1 gap-8 lg:hidden">
       {
         courses.map((project: any, index: number) => (
           <ProjectCard
@@ -44,7 +44,7 @@ const [column1, column2, column3] = distributeIntoColumns(courses, 3);
     </div>
 
     <!-- Desktop: 2 Columns -->
-    <div class="hidden md:grid md:grid-cols-2 xl:hidden gap-8">
+    <div class="hidden lg:grid lg:grid-cols-2 2xl:hidden gap-8">
       {
         [column1Md, column2Md].map((column, colIndex) => (
           <div class="grid gap-10 content-start">
@@ -61,7 +61,7 @@ const [column1, column2, column3] = distributeIntoColumns(courses, 3);
     </div>
 
     <!-- Large Desktop: 3 Columns with reduced padding -->
-    <div class="hidden xl:grid xl:grid-cols-3 gap-6 px-4">
+    <div class="hidden 2xl:grid 2xl:grid-cols-3 gap-6 px-4">
       {
         [column1, column2, column3].map((column, colIndex) => (
           <div class="grid gap-10 content-start">
