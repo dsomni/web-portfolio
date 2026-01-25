@@ -54,6 +54,7 @@ export interface Translations {
     'section.education': string;
     'section.contact': string;
     'section.collaborations': string;
+    'section.courses': string;
 
     // Subsections
     'subsection.languages': string;
@@ -166,13 +167,14 @@ deep research interest in Mathematical Optimization, LLMs and Deep Reinforcement
         'hero.cta.resume': 'Resume',
 
         'section.about': 'About Me',
-        'section.experience': 'Work Experience',
+        'section.experience': 'Industrial Experience',
         'section.research': 'Research Experience',
         'section.teaching': 'Teaching Experience',
         'section.projects': 'Projects',
         'section.education': 'Education',
         'section.contact': 'Get In Touch',
         'section.collaborations': 'Collaborations',
+        'section.courses': 'Professional Development',
 
         'experience.achievements': 'Achievements',
         'experience.responsibilities': 'Responsibilities',
@@ -239,13 +241,14 @@ deep research interest in Mathematical Optimization, LLMs and Deep Reinforcement
         'hero.cta.resume': 'Резюме',
 
         'section.about': 'О себе',
-        'section.experience': 'Опыт работы',
+        'section.experience': 'Индустриальный опыт',
         'section.research': 'Исследовательский опыт',
         'section.teaching': 'Опыт преподавания',
         'section.projects': 'Проекты',
         'section.education': 'Образование',
         'section.contact': 'Связаться',
         'section.collaborations': 'Коллаборации',
+        'section.courses': 'Профессиональное развитие',
 
         'subsection.languages': 'Языки',
         'experience.achievements': 'Достижения',

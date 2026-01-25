@@ -1,4 +1,5 @@
-<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+<svg width="180" height="180" viewBox="0 0 180 180"
+     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DB sets mapping logo (optically centered)">
   <defs>
     <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <!-- Adjust these colors to match your primary-600 and accent-600 values -->
@@ -6,21 +7,64 @@
       <stop offset="100%" style="stop-color:#c026d3;stop-opacity:1" />
     </linearGradient>
   </defs>
+  <style>
+    :root { --fg:#fff; --bg:url(#logoGradient); }
+    .stroke { stroke: var(--fg); }
+    .dot { fill: var(--fg); }
+    .hole { fill: var(--bg); }
+  </style>
 
-  <!-- Rounded rectangle background -->
-  <rect x="0" y="0" width="40" height="40" rx="8" ry="8" fill="url(#logoGradient)"/>
+  <!-- Filled background + outline shape -->
+  <rect x="0" y="0" width="180" height="180" rx="44"
+        fill="var(--bg)" stroke="var(--fg)" stroke-width="0"/>
 
-  <!-- DB text -->
-  <text
-    x="50%"
-    y="50%"
-    dominant-baseline="middle"
-    text-anchor="middle"
-    fill="white"
-    font-family="system-ui, -apple-system, sans-serif"
-    font-weight="bold"
-    font-size="20"
-  >
-    DB
-  </text>
+  <!-- Optically centered monogram group -->
+  <g transform="translate(-42 -28)">
+    <!-- D -->
+    <path d="M72 76
+             L72 164
+             M72 76
+             L104 76
+             Q132 76 132 104
+             L132 136
+             Q132 164 104 164
+             L72 164"
+          fill="none" class="stroke" stroke-width="10"
+          stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- B (lower bowl bigger) -->
+    <path d="M148 76
+             L148 164
+
+             M148 76
+             L174 76
+             Q194 76 194 96
+             L194 108
+             Q194 126 174 126
+             L148 126
+
+             M148 126
+             L178 126
+             Q200 126 200 148
+             L200 152
+             Q200 164 186 164
+             L148 164"
+          fill="none" class="stroke" stroke-width="10"
+          stroke-linecap="round" stroke-linejoin="round"/>
+
+
+    <!-- Source dots (inside D) -->
+    <!-- <circle cx="90" cy="96"  r="4.2" class="dot"/> -->
+    <!-- <circle cx="108" cy="122" r="4.2" class="dot"/> -->
+    <!-- <circle cx="98" cy="148" r="4.2" class="dot"/> -->
+
+    <!-- Target dots (inside B holes) -->
+    <!-- <circle cx="176" cy="103" r="4.2" class="dot"/> -->
+    <!-- <circle cx="178" cy="142" r="4.2" class="dot"/> -->
+
+    <!-- Straight mapping lines -->
+    <!-- <line x1="90" y1="96"  x2="176" y2="103" class="stroke" stroke-width="2.6" opacity="0.85" stroke-linecap="round"/> -->
+    <!-- <line x1="108" y1="122" x2="178" y2="142" class="stroke" stroke-width="2.6" opacity="0.85" stroke-linecap="round"/> -->
+    <!-- <line x1="98" y1="148" x2="178" y2="142" class="stroke" stroke-width="2.6" opacity="0.85" stroke-linecap="round"/> -->
+  </g>
 </svg>

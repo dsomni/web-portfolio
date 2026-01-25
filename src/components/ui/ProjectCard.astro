@@ -50,11 +50,11 @@ const hasResources =
           {project.period}
         </span>
       </div>
-      <p
+      {project?.role && <p
         class="text-primary-600 dark:text-primary-400 font-semibold text-lg mb-1"
       >
         {project.role}
-      </p>
+      </p>}
       {
         project.company && (
           <p class="text-sm text-light-text-muted dark:text-dark-text-muted font-medium">
@@ -129,19 +129,23 @@ const hasResources =
     }
 
     {/* Tech Stack */}
-    <div class="mt-6">
-      <h4 class={sectionLabel}>
-        <span class="w-1 h-4 bg-primary-500 rounded-full"></span>
-        {t("common.stack")}
-      </h4>
-      <div class="flex flex-wrap gap-2">
-        {
-          project.stack.map((tech: string) => (
-            <span class="badge text-xs">{tech}</span>
-          ))
-        }
-      </div>
-    </div>
+    {
+      project.stack?.length > 0 && (
+        <div class="mt-6">
+          <h4 class={sectionLabel}>
+            <span class="w-1 h-4 bg-primary-500 rounded-full"></span>
+            {t("common.stack")}
+          </h4>
+          <div class="flex flex-wrap gap-2">
+            {
+              project.stack.map((tech: string) => (
+                <span class="badge text-xs">{tech}</span>
+              ))
+            }
+          </div>
+        </div>
+      )
+    }
 
     {/* Resources */}
     {

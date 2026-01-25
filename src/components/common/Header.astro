@@ -172,4 +172,17 @@ const navItems = [
 
   // Re-run after Astro view transitions
   document.addEventListener("astro:page-load", setupMobileMenu);
+
+
+  // Close mobile menu when clicking nav links
+  const mobileMenuLinks = document.querySelectorAll('[data-mobile-nav-link]');
+  const mobileMenuToggle = document.querySelector('[data-mobile-menu-toggle]');
+
+  mobileMenuLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (mobileMenuToggle instanceof HTMLElement) {
+        mobileMenuToggle.click(); // Close the menu
+      }
+    });
+  });
 </script>
