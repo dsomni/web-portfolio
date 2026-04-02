@@ -159,8 +159,8 @@ const translations: Record<Language, Translations> = {
 
         'hero.greeting': 'Hi, I\'m',
         'hero.description': `MSc student specializing in AI and Data Science with
-deep research interest in Mathematical Optimization, LLMs and Deep Reinforcement Learning.`,
-        'hero.subDescription': 'Building state-of-the-art ML solutions.',
+research focus on LLMs, reasoning-oriented learning, and ML optimization.`,
+        'hero.subDescription': 'Building LLM systems, reasoning pipelines, and applied ML products.',
 
         'hero.cta.primary': 'View Projects',
         'hero.cta.secondary': 'Contact Me',
@@ -234,8 +234,8 @@ deep research interest in Mathematical Optimization, LLMs and Deep Reinforcement
         'hero.greeting': 'Привет, я',
 
         'hero.description': `Магистрант Computer Science, специализирующийся на ИИ и науке о данных,
-с глубоким исследовательским интересом в математической оптимизации, больших языковых моделях и Deep Reinforcement Learning.`,
-        'hero.subDescription': 'Создаю передовые ML-решения.',
+с исследовательским фокусом на LLM, reasoning-oriented learning и оптимизации в ML.`,
+        'hero.subDescription': 'Создаю LLM-системы, reasoning-пайплайны и прикладные ML-продукты.',
         'hero.cta.primary': 'Проекты',
         'hero.cta.secondary': 'Связаться',
         'hero.cta.resume': 'Резюме',

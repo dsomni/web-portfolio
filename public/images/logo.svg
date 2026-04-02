@@ -51,20 +51,5 @@
              L148 164"
           fill="none" class="stroke" stroke-width="10"
           stroke-linecap="round" stroke-linejoin="round"/>
-
-
-    <!-- Source dots (inside D) -->
-    <!-- <circle cx="90" cy="96"  r="4.2" class="dot"/> -->
-    <!-- <circle cx="108" cy="122" r="4.2" class="dot"/> -->
-    <!-- <circle cx="98" cy="148" r="4.2" class="dot"/> -->
-
-    <!-- Target dots (inside B holes) -->
-    <!-- <circle cx="176" cy="103" r="4.2" class="dot"/> -->
-    <!-- <circle cx="178" cy="142" r="4.2" class="dot"/> -->
-
-    <!-- Straight mapping lines -->
-    <!-- <line x1="90" y1="96"  x2="176" y2="103" class="stroke" stroke-width="2.6" opacity="0.85" stroke-linecap="round"/> -->
-    <!-- <line x1="108" y1="122" x2="178" y2="142" class="stroke" stroke-width="2.6" opacity="0.85" stroke-linecap="round"/> -->
-    <!-- <line x1="98" y1="148" x2="178" y2="142" class="stroke" stroke-width="2.6" opacity="0.85" stroke-linecap="round"/> -->
   </g>
 </svg>
